@@ -1,0 +1,1083 @@
+:root {
+  /*            */
+  /*    MISC    */
+  /*            */
+
+  --dioxico-fonts: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+  --dioxico-background-color-1: #1a1c1f;
+  --dioxico-background-color-2: #1e2023;
+  --dioxico-background-color-3: #222427;
+  --dioxico-background-color-4: #26282b;
+  --dioxico-background-color-5: #2a2c2f;
+  --dioxico-background-color-6: #2e3033;
+
+  --dioxico-text-color: #ffffff;
+
+  --dioxico-selection-color: hsla(220, 100%, 50%, 0.4);
+  --dioxico-error-color: #cf0000;
+  --dioxico-mid-color: #7f7f7f;
+
+  --dioxico-primary-color: #2851ff; /* #006f00 */ /* 6928ff */
+  /* ### --dioxico-primary-color-hover: darken(var(--dioxico-primary-color), 5%); ### */
+  /* ### --dioxico-primary-color-active: darken(var(--dioxico-primary-color), 8%); ### */
+  /* ### --dioxico-primary-color-disabled: mix(
+    var(--dioxico-primary-color),
+    var(--dioxico-mid-color),
+    30%
+  ); ### */
+  --dioxico-primary-text-color: #ffffff;
+  /* ### --dioxico-primary-text-color-disabled: mix(
+    var(--dioxico-primary-text-color),
+    var(--dioxico-mid-color),
+    40%
+  ); ### */
+  /* ### --dioxico-primary-text-label-color-1: mix(
+    var(--dioxico-primary-text-color),
+    var(--dioxico-mid-color),
+    70%
+  ); ### */
+  /* ### --dioxico-primary-text-label-color-2: mix(
+    var(--dioxico-primary-text-color),
+    var(--dioxico-mid-color),
+    60%
+  ); ### */
+  /* ### --dioxico-primary-text-label-color-3: mix(
+    var(--dioxico-primary-text-color),
+    var(--dioxico-mid-color),
+    50%
+  ); ### */
+  --dioxico-primary-svg-filter: invert(100%) sepia(100%) saturate(0%)
+    hue-rotate(177deg) brightness(102%) contrast(101%); /* https://codepen.io/sosuke/pen/Pjoqqp */
+  --dioxico-primary-svg-filter-disabled: invert(81%) sepia(0%) saturate(0%)
+    hue-rotate(170deg) brightness(89%) contrast(92%);
+
+  --dioxico-secondary-color: #5a5c5f;
+  /* ### --dioxico-secondary-color-hover: darken(var(--dioxico-secondary-color), 5%); ### */
+  /* ### --dioxico-secondary-color-active: darken(
+    var(--dioxico-secondary-color),
+    8%
+  ); ### */
+  /* ### --dioxico-secondary-color-disabled: mix(
+    var(--dioxico-secondary-color),
+    var(--dioxico-mid-color),
+    50%
+  ); ### */
+  --dioxico-secondary-text-color: #ffffff;
+  /* ### --dioxico-secondary-text-color-disabled: mix(
+    var(--dioxico-secondary-text-color),
+    var(--dioxico-mid-color),
+    40%
+  ); ### */
+  /* ### --dioxico-secondary-text-label-color-1: mix(
+    var(--dioxico-secondary-text-color),
+    var(--dioxico-mid-color),
+    70%
+  ); ### */
+  /* ### --dioxico-secondary-text-label-color-2: mix(
+    var(--dioxico-secondary-text-color),
+    var(--dioxico-mid-color),
+    60%
+  ); ### */
+  /* ### --dioxico-secondary-text-label-color-3: mix(
+    var(--dioxico-secondary-text-color),
+    var(--dioxico-mid-color),
+    50%
+  ); ### */
+
+  --dioxico-transparent-color: #00000000;
+  /* ### --dioxico-transparent-color-hover: darken(
+    var(--dioxico-transparent-color),
+    5%
+  ); ### */
+  /* ### --dioxico-transparent-color-active: darken(
+    var(--dioxico-transparent-color),
+    8%
+  ); ### */
+  --dioxico-transparent-color-disabled: var(--dioxico-transparent-color);
+  --dioxico-transparent-text-color: var(--dioxico-text-color);
+  /* ### --dioxico-transparent-text-color-disabled: mix(
+    var(--dioxico-transparent-text-color),
+    var(--dioxico-mid-color),
+    40%
+  ); ### */
+  /* ### --dioxico-transparent-text-label-color-1: mix(
+    var(--dioxico-transparent-text-color),
+    var(--dioxico-mid-color),
+    70%
+  ); ### */
+  /* ### --dioxico-transparent-text-label-color-2: mix(
+    var(--dioxico-transparent-text-color),
+    var(--dioxico-mid-color),
+    60%
+  ); ### */
+  /* ### --dioxico-transparent-text-label-color-3: mix(
+    var(--dioxico-transparent-text-color),
+    var(--dioxico-mid-color),
+    50%
+  ); ### */
+
+  --dioxico-danger-color: #af0000;
+  /* ### --dioxico-danger-color-hover: darken(var(--dioxico-danger-color), 5%); ### */
+  /* ### --dioxico-danger-color-active: darken(var(--dioxico-danger-color), 8%); ### */
+  /* ### --dioxico-danger-color-disabled: mix(
+    var(--dioxico-danger-color),
+    var(--dioxico-mid-color),
+    50%
+  ); ### */
+  --dioxico-danger-text-color: #ffffff;
+  /* ### --dioxico-danger-text-color-disabled: mix(
+    var(--dioxico-danger-text-color),
+    var(--dioxico-mid-color),
+    40%
+  ); ### */
+  /* ### --dioxico-danger-text-label-color-1: mix(
+    var(--dioxico-danger-text-color),
+    var(--dioxico-mid-color),
+    70%
+  ); ### */
+  /* ### --dioxico-danger-text-label-color-2: mix(
+    var(--dioxico-danger-text-color),
+    var(--dioxico-mid-color),
+    60%
+  ); ### */
+  /* ### --dioxico-danger-text-label-color-3: mix(
+    var(--dioxico-danger-text-color),
+    var(--dioxico-mid-color),
+    50%
+  ); ### */
+
+  --dioxico-padding-small: 4px;
+  --dioxico-padding-medium: 8px;
+  --dioxico-padding-large: 16px;
+  --dioxico-form-padding: var(--dioxico-padding-medium) 0;
+
+  --dioxico-border-color: #4a4c4f;
+  --dioxico-standard-border: 1px solid var(--dioxico-border-color);
+  --dioxico-focus-border-color: #6a6c6f;
+  --dioxico-focus-border: 1px solid var(--dioxico-focus-border-color);
+  --dioxico-error-border-color: var(--dioxico-error-color);
+  --dioxico-error-border: 1px solid var(--dioxico-error-border-color);
+  --dioxico-border-radius-small: 2px;
+  --dioxico-border-radius-medium: 4px;
+  --dioxico-border-radius-large: 8px;
+
+  --dioxico-standard-box-shadow: 0 0 8px #0000007f;
+
+  --dioxico-hover-zoom-scale: 1.05;
+
+  --dioxico-standard-label-size: 0.9em;
+
+  /*             */
+  /*    INPUT    */
+  /*             */
+
+  --dioxico-input-background-color: var(--dioxico-background-color-1);
+  --dioxico-input-text-color: var(--dioxico-text-color);
+  --dioxico-input-text-color-disabled: var(--dioxico-text-color-disabled);
+  --dioxico-input-border-radius: var(--dioxico-border-radius-medium);
+
+  /*                */
+  /*    TEXTAREA    */
+  /*                */
+
+  --dioxico-textarea-background-color: var(--dioxico-input-background-color);
+  --dioxico-textarea-text-color: var(--dioxico-input-text-color);
+  --dioxico-textarea-text-color-disabled: var(
+    --dioxico-input-text-color-disabled
+  );
+  --dioxico-textarea-border-radius: var(--dioxico-input-border-radius);
+
+  /*              */
+  /*    BUTTON    */
+  /*              */
+
+  --dioxico-button-primary-background-color: var(--dioxico-primary-color);
+  --dioxico-button-primary-background-color-hover: var(
+    --dioxico-primary-color-hover
+  );
+  --dioxico-button-primary-background-color-active: var(
+    --dioxico-primary-color-active
+  );
+  --dioxico-button-primary-background-color-disabled: var(
+    --dioxico-primary-color-disabled
+  );
+  --dioxico-button-primary-text-color: var(--dioxico-primary-text-color);
+  --dioxico-button-primary-text-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-button-secondary-background-color: var(--dioxico-secondary-color);
+  --dioxico-button-secondary-background-color-hover: var(
+    --dioxico-secondary-color-hover
+  );
+  --dioxico-button-secondary-background-color-active: var(
+    --dioxico-secondary-color-active
+  );
+  --dioxico-button-secondary-background-color-disabled: var(
+    --dioxico-secondary-color-disabled
+  );
+  --dioxico-button-secondary-text-color: var(--dioxico-secondary-text-color);
+  --dioxico-button-secondary-text-color-disabled: var(
+    --dioxico-secondary-text-color-disabled
+  );
+  --dioxico-button-transparent-background-color: var(
+    --dioxico-transparent-color
+  );
+  --dioxico-button-transparent-background-color-hover: var(
+    --dioxico-transparent-color-hover
+  );
+  --dioxico-button-transparent-background-color-active: var(
+    --dioxico-transparent-color-active
+  );
+  --dioxico-button-transparent-background-color-disabled: var(
+    --dioxico-transparent-color-disabled
+  );
+  --dioxico-button-transparent-text-color: var(
+    --dioxico-transparent-text-color
+  );
+  --dioxico-button-transparent-text-color-disabled: var(
+    --dioxico-transparent-text-color-disabled
+  );
+  --dioxico-button-danger-background-color: var(--dioxico-danger-color);
+  --dioxico-button-danger-background-color-hover: var(
+    --dioxico-danger-color-hover
+  );
+  --dioxico-button-danger-background-color-active: var(
+    --dioxico-danger-color-active
+  );
+  --dioxico-button-danger-background-color-disabled: var(
+    --dioxico-danger-color-disabled
+  );
+  --dioxico-button-danger-text-color: var(--dioxico-danger-text-color);
+  --dioxico-button-danger-text-color-disabled: var(
+    --dioxico-danger-text-color-disabled
+  );
+  --dioxico-button-border-radius: var(--dioxico-border-radius-medium);
+
+  /*                */
+  /*    CHECKBOX    */
+  /*                */
+
+  --dioxico-checkbox-background-color-checked: var(--dioxico-primary-color);
+  --dioxico-checkbox-background-color-checked-disabled: var(
+    --dioxico-primary-color-disabled
+  );
+  --dioxico-checkbox-background-color-unchecked: var(
+    --dioxico-input-background-color
+  );
+  --dioxico-checkbox-label-color: var(--dioxico-primary-text-color);
+  --dioxico-checkbox-label-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-checkbox-size: 18px;
+  --dioxico-checkbox-label-offset-left: calc(
+    var(--dioxico-checkbox-size) + 10px
+  );
+  --dioxico-checkbox-border-radius: var(--dioxico-border-radius-medium);
+  --dioxico-checkbox-icon-size: calc(var(--dioxico-checkbox-size) * 0.9);
+  --dioxico-checkbox-icon-filter: var(--dioxico-primary-svg-filter);
+  --dioxico-checkbox-icon-filter-disabled: var(
+    --dioxico-primary-svg-filter-disabled
+  );
+
+  /*              */
+  /*    SWITCH    */
+  /*              */
+
+  --dioxico-switch-head-background-color: var(--dioxico-primary-text-color);
+  --dioxico-switch-head-background-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-switch-height: 18px;
+  --dioxico-switch-width: calc(var(--dioxico-switch-height) * 2);
+  --dioxico-switch-inner-padding: 2px;
+  --dioxico-switch-head-size: calc(
+    var(--dioxico-switch-height) - (var(--dioxico-switch-inner-padding) * 2)
+  );
+  --dioxico-switch-head-offset-off: var(--dioxico-switch-inner-padding);
+  --dioxico-switch-head-offset-on: calc(
+    var(--dioxico-switch-width) - var(--dioxico-switch-head-size) -
+      var(--dioxico-switch-inner-padding)
+  );
+  --dioxico-switch-label-offset-left: calc(var(--dioxico-switch-width) + 10px);
+  --dioxico-switch-label-color: var(--dioxico-primary-text-color);
+  --dioxico-switch-background-color-checked: var(--dioxico-primary-color);
+  --dioxico-switch-background-color-checked-disabled: var(
+    --dioxico-primary-color-disabled
+  );
+  --dioxico-switch-background-color-unchecked: var(
+    --dioxico-input-background-color
+  );
+  --dioxico-switch-label-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+
+  /*             */
+  /*    RADIO    */
+  /*             */
+
+  --dioxico-radio-size: 18px;
+  --dioxico-radio-border-size-checked: calc(var(--dioxico-radio-size) * 0.3);
+  --dioxico-radio-border-color-checked: var(--dioxico-primary-color);
+  --dioxico-radio-border-color-checked-disabled: var(
+    --dioxico-primary-color-disabled
+  );
+  --dioxico-radio-background-color-checked: var(--dioxico-primary-text-color);
+  --dioxico-radio-background-color-checked-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-radio-background-color-unchecked: var(
+    --dioxico-input-background-color
+  );
+  --dioxico-radio-label-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+
+  /*              */
+  /*    SLIDER    */
+  /*              */
+
+  --dioxico-slider-track-size: 8px;
+  --dioxico-slider-track-size-inner: calc(
+    var(--dioxico-slider-track-size) - 2px
+  );
+  --dioxico-slider-thumb-size: 16px;
+  --dioxico-slider-width-inner: calc(100% - 2px);
+  --dioxico-slider-margin: var(--dioxico-padding-small);
+  --dioxico-slider-track-offset: calc(
+    (var(--dioxico-slider-thumb-size) - var(--dioxico-slider-track-size)) * 0.5
+  );
+  --dioxico-slider-thumb-container-size: calc(
+    100% - var(--dioxico-slider-thumb-size)
+  );
+  --dioxico-slider-track-empty-color: var(--dioxico-input-background-color);
+  --dioxico-slider-track-empty-border: var(--dioxico-standard-border);
+  --dioxico-slider-track-filled-color: var(--dioxico-primary-color);
+  --dioxico-slider-track-filled-color-disabled: var(
+    --dioxico-primary-color-disabled
+  );
+  --dioxico-slider-track-filled-border: 1px solid var(--dioxico-primary-color);
+  --dioxico-slider-track-filled-border-disabled: 1px solid
+    var(--dioxico-primary-color-disabled);
+  --dioxico-slider-thumb-color: var(--dioxico-primary-text-color);
+  --dioxico-slider-thumb-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-slider-label-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+
+  /*            */
+  /*    ICON    */
+  /*            */
+
+  --dioxico-icon-size-small: 9px;
+  --dioxico-icon-size-medium: 12px;
+  --dioxico-icon-size-large: 16px;
+  --dioxico-icon-filter: var(--dioxico-primary-svg-filter);
+  --dioxico-icon-filter-disabled: var(--dioxico-primary-svg-filter-disabled);
+
+  /*                   */
+  /*    ICON BUTTON    */
+  /*                   */
+
+  --dioxico-button-icon-size-small: var(--dioxico-icon-size-small);
+  --dioxico-button-icon-size-medium: var(--dioxico-icon-size-medium);
+  --dioxico-button-icon-size-large: var(--dioxico-icon-size-large);
+  --dioxico-button-icon-scale: 1.8;
+  --dioxico-button-icon-button-size-small: calc(
+    var(--dioxico-button-icon-size-small) * var(--dioxico-button-icon-scale)
+  );
+  --dioxico-button-icon-button-size-medium: calc(
+    var(--dioxico-button-icon-size-medium) * var(--dioxico-button-icon-scale)
+  );
+  --dioxico-button-icon-button-size-large: calc(
+    var(--dioxico-button-icon-size-large) * var(--dioxico-button-icon-scale)
+  );
+  --dioxico-button-icon-border-radius: 100vw;
+  --dioxico-button-icon-button-background-color: #7f7f7f00;
+  --dioxico-button-icon-button-background-color-hover: #7f7f7f30;
+  --dioxico-button-icon-button-background-color-active: #7f7f7f40;
+  --dioxico-button-icon-filter: var(--dioxico-primary-svg-filter);
+  --dioxico-button-icon-filter-disabled: var(
+    --dioxico-primary-svg-filter-disabled
+  );
+
+  /*              */
+  /*    SELECT    */
+  /*              */
+
+  --dioxico-select-button-background-color: var(--dioxico-background-color-1);
+  --dioxico-select-button-text-color: var(--dioxico-primary-text-color);
+  --dioxico-select-button-text-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-select-button-border-radius: var(--dioxico-border-radius-medium);
+  --dioxico-select-label-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-select-popup-background-color: var(--dioxico-background-color-3);
+  --dioxico-select-popup-background-color-hover: var(
+    --dioxico-background-color-5
+  );
+  --dioxico-select-popup-background-color-active: var(
+    --dioxico-background-color-6
+  );
+  --dioxico-select-popup-border-radius: var(--dioxico-border-radius-medium);
+  --dioxico-select-popup-max-height: 300px;
+  --dioxico-select-option-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+
+  /*              */
+  /*    DIALOG    */
+  /*              */
+
+  --dioxico-dialog-overlay-background-color: #00000060;
+  --dioxico-dialog-background-color: var(--dioxico-background-color-3);
+  --dioxico-dialog-margin: 32px;
+  --dioxico-dialog-padding: var(--dioxico-padding-large);
+  --dioxico-dialog-border-radius: var(--dioxico-border-radius-large);
+  --dioxico-dialog-width-small: 400px;
+  --dioxico-dialog-width-medium: 800px;
+  --dioxico-dialog-width-large: 1200px;
+  --dioxico-dialog-section-gap: var(--dioxico-padding-medium);
+  --dioxico-dialog-actions-gap: var(--dioxico-padding-medium);
+
+  /*             */
+  /*    ALERT    */
+  /*             */
+
+  --dioxico-alert-background-color: var(--dioxico-background-color-4);
+  --dioxico-alert-margin: 16px;
+  --dioxico-alert-padding: var(--dioxico-padding-large);
+  --dioxico-alert-border-radius: var(--dioxico-border-radius-large);
+  --dioxico-alert-max-width: 400px;
+  --dioxico-alert-section-gap: var(--dioxico-padding-medium);
+
+  /*            */
+  /*    CARD    */
+  /*            */
+
+  --dioxico-card-padding: var(--dioxico-padding-large);
+  --dioxico-card-border-radius: var(--dioxico-border-radius-large);
+  --dioxico-card-background-color: var(--dioxico-background-color-4);
+
+  /*                    */
+  /*    PROGRESS BAR    */
+  /*                    */
+
+  --dioxico-progress-bar-height: 8px;
+  --dioxico-progress-bar-empty-width: calc(100% - 2px);
+  --dioxico-progress-bar-empty-height: calc(
+    var(--dioxico-progress-bar-height) - 2px
+  );
+  --dioxico-progress-bar-empty-color: var(--dioxico-input-background-color);
+  --dioxico-progress-bar-filled-color: var(--dioxico-primary-color);
+  --dioxico-progress-bar-filled-color-disabled: var(
+    --dioxico-primary-color-disabled
+  );
+
+  /*               */
+  /*    SPINNER    */
+  /*               */
+
+  --dioxico-spinner-color: var(--dioxico-primary-color);
+  --dioxico-spinner-size-small: 25px;
+  --dioxico-spinner-size-medium: 40px;
+  --dioxico-spinner-size-large: 60px;
+  --dioxico-spinner-animation-simple: spinner-dash-simple 1.5s linear infinite;
+  --dioxico-spinner-animation-dynamic: spinner-dash-dynamic 1.5s ease-in-out
+    infinite;
+
+  /*             */
+  /*    CHIPS    */
+  /*             */
+
+  --dioxico-chips-container-padding: var(--dioxico-padding-medium);
+  --dioxico-chips-chip-list-padding: var(--dioxico-padding-small);
+  --dioxico-chips-chip-padding: 2px 8px;
+  --dioxico-chips-chip-inner-padding: 4px;
+  --dioxico-chips-chip-background-color: var(--dioxico-background-color-5);
+  --dioxico-chips-chip-text-color: var(--dioxico-primary-text-color);
+  --dioxico-chips-chip-text-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-chips-chip-label-size: 0.8em;
+  --dioxico-chips-popup-background-color: var(
+    --dioxico-select-popup-background-color
+  );
+  --dioxico-chips-popup-border-radius: var(
+    --dioxico-select-popup-border-radius
+  );
+  --dioxico-chips-popup-max-height: var(--dioxico-select-popup-max-height);
+  --dioxico-chips-popup-background-color-hover: var(
+    --dioxico-select-popup-background-color-hover
+  );
+  --dioxico-chips-popup-background-color-active: var(
+    --dioxico-select-popup-background-color-active
+  );
+
+  /*               */
+  /*    TOOLTIP    */
+  /*               */
+
+  --dioxico-tooltip-background-color: #4f4f4fef;
+  --dioxico-tooltip-text-color: var(--dioxico-primary-text-color);
+  --dioxico-tooltip-font-size: 0.8em;
+  --dioxico-tooltip-border-radius: var(--dioxico-border-radius-small);
+
+  /*             */
+  /*    BADGE    */
+  /*             */
+
+  --dioxico-badge-height: 14px;
+  --dioxico-badge-padding: 0 calc(var(--dioxico-badge-height) * 0.5);
+  --dioxico-badge-font-size: calc(var(--dioxico-badge-height) * 0.75);
+  --dioxico-badge-primary-background-color: var(--dioxico-primary-color);
+  --dioxico-badge-primary-text-color: var(--dioxico-primary-text-color);
+  --dioxico-badge-secondary-background-color: var(--dioxico-secondary-color);
+  --dioxico-badge-secondary-text-color: var(--dioxico-secondary-text-color);
+  --dioxico-badge-danger-background-color: var(--dioxico-danger-color);
+  --dioxico-badge-danger-text-color: var(--dioxico-danger-text-color);
+
+  /*                   */
+  /*    DATE PICKER    */
+  /*                   */
+
+  --dioxico-date-picker-container-padding: var(--dioxico-padding-medium);
+  --dioxico-date-picker-text-color: var(--dioxico-primary-text-color);
+  --dioxico-date-picker-text-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-date-picker-input-font-size: 0.9em;
+  --dioxico-date-picker-popup-background-color: var(
+    --dioxico-select-popup-background-color
+  );
+  --dioxico-date-picker-popup-border-radius: var(
+    --dioxico-select-popup-border-radius
+  );
+  --dioxico-date-picker-popup-padding: var(--dioxico-padding-medium);
+  --dioxico-date-picker-calendar-section-padding: var(--dioxico-padding-medium);
+  --dioxico-date-picker-calendar-font-size: 0.8em;
+  --dioxico-date-picker-calendar-days-of-week-padding: var(
+    --dioxico-padding-small
+  );
+  --dioxico-date-picker-day-size: 30px;
+  --dioxico-date-picker-day-text-color: var(--dioxico-primary-text-color);
+  --dioxico-date-picker-day-text-color-disabled: var(
+    --dioxico-primary-text-color-disabled
+  );
+  --dioxico-date-picker-day-background-color-hover: var(
+    --dioxico-select-popup-background-color-hover
+  );
+  --dioxico-date-picker-day-background-color-active: var(
+    --dioxico-select-popup-background-color-active
+  );
+  --dioxico-date-picker-day-background-color-selected: var(
+    --dioxico-primary-color
+  );
+}
+
+/*              */
+/*    GLOBAL    */
+/*              */
+
+* {
+  font-family: var(--dioxico-fonts);
+}
+
+html,
+body {
+  background-color: var(--dioxico-background-color-2);
+  color: var(--dioxico-text-color);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 18px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(127, 127, 127, 0.4);
+  border-radius: 100vmin;
+  border: 6px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(127, 127, 127, 0.5);
+}
+
+::selection {
+  background-color: var(--dioxico-selection-color);
+}
+
+/*            */
+/*    MISC    */
+/*            */
+
+.dioxico-text-smaller {
+  font-size: 0.8em;
+}
+
+.dioxico-text-small {
+  font-size: 0.9em;
+}
+
+.dioxico-text-medium {
+  font-size: 1em;
+}
+
+.dioxico-text-large {
+  font-size: 1.25em;
+}
+
+.dioxico-text-larger {
+  font-size: 1.5em;
+}
+
+.dioxico-required-mark {
+  color: var(--dioxico-error-color);
+}
+
+/*            */
+/*    DEMO    */
+/*            */
+
+.dioxico-demo {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem;
+}
+
+.dioxico-demo-item {
+  background-color: var(--dioxico-background-color-4);
+  padding: var(--dioxico-padding-large);
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-border-radius-large);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-padding-medium);
+}
+
+.dioxico-demo-item-label {
+  text-align: center;
+}
+
+.dioxico-demo h1,
+.dioxico-demo h2,
+.dioxico-demo h3,
+.dioxico-demo h4,
+.dioxico-demo h5,
+.dioxico-demo h6,
+.dioxico-demo p {
+  margin: 0;
+}
+
+.dioxico-demo-item-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/*             */
+/*    ERROR    */
+/*             */
+
+.dioxico-error {
+  color: var(--dioxico-error-color);
+}
+
+/*             */
+/*    INPUT    */
+/*             */
+
+.dioxico-input-container {
+  padding: var(--dioxico-form-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-padding-small);
+}
+
+.dioxico-input {
+  background-color: var(--dioxico-input-background-color);
+  color: var(--dioxico-input-text-color);
+  padding: 6px 7px;
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-input-border-radius);
+  outline: none;
+  transition: border 0.1s ease;
+}
+
+.dioxico-input:focus {
+  border: var(--dioxico-focus-border);
+}
+
+.dioxico-input-invalid,
+.dioxico-input-invalid:focus {
+  border: var(--dioxico-error-border);
+}
+
+.dioxico-input-container-disabled .dioxico-input {
+  color: var(--dioxico-input-text-color-disabled);
+}
+
+.dioxico-input-label {
+  color: var(--dioxico-primary-text-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-input-container-disabled .dioxico-input-label {
+  color: var(--dioxico-primary-text-color-disabled);
+}
+
+/*                */
+/*    TEXTAREA    */
+/*                */
+
+.dioxico-textarea-container {
+  padding: var(--dioxico-form-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-padding-small);
+}
+
+.dioxico-textarea {
+  background-color: var(--dioxico-textarea-background-color);
+  color: var(--dioxico-textarea-text-color);
+  padding: 6px 7px;
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-textarea-border-radius);
+  outline: none;
+  transition: border 0.1s ease;
+}
+
+.dioxico-textarea:focus {
+  border: var(--dioxico-focus-border);
+}
+
+.dioxico-textarea-resize-none {
+  resize: none;
+}
+
+.dioxico-textarea-resize-horizontal {
+  resize: horizontal;
+}
+
+.dioxico-textarea-resize-vertical {
+  resize: vertical;
+}
+
+.dioxico-textarea-resize-both {
+  resize: both;
+}
+
+.dioxico-textarea-invalid,
+.dioxico-textarea-invalid:focus {
+  border: var(--dioxico-error-border);
+}
+
+.dioxico-textarea-container-disabled .dioxico-textarea {
+  color: var(--dioxico-textarea-text-color-disabled);
+}
+
+.dioxico-textarea-label {
+  color: var(--dioxico-primary-text-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-textarea-container-disabled .dioxico-textarea-label {
+  color: var(--dioxico-primary-text-color-disabled);
+}
+
+/*              */
+/*    BUTTON    */
+/*              */
+
+.dioxico-button {
+  border: 0;
+  border-radius: var(--dioxico-button-border-radius);
+  padding: 6px 12px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.dioxico-button:disabled {
+  cursor: default;
+}
+
+.dioxico-button-primary {
+  background-color: var(--dioxico-button-primary-background-color);
+  color: var(--dioxico-button-primary-text-color);
+}
+
+.dioxico-button-primary:hover {
+  background-color: var(--dioxico-button-primary-background-color-hover);
+}
+
+.dioxico-button-primary:active {
+  background-color: var(--dioxico-button-primary-background-color-active);
+}
+
+.dioxico-button-primary:disabled {
+  background-color: var(--dioxico-button-primary-background-color-disabled);
+  color: var(--dioxico-button-primary-text-color-disabled);
+}
+
+.dioxico-button-secondary {
+  background-color: var(--dioxico-button-secondary-background-color);
+  color: var(--dioxico-button-secondary-text-color);
+}
+
+.dioxico-button-secondary:hover {
+  background-color: var(--dioxico-button-secondary-background-color-hover);
+}
+
+.dioxico-button-secondary:active {
+  background-color: var(--dioxico-button-secondary-background-color-active);
+}
+
+.dioxico-button-secondary:disabled {
+  background-color: var(--dioxico-button-secondary-background-color-disabled);
+  color: var(--dioxico-button-secondary-text-color-disabled);
+}
+
+.dioxico-button-transparent {
+  background-color: var(--dioxico-button-transparent-background-color);
+  color: var(--dioxico-button-transparent-text-color);
+}
+
+.dioxico-button-transparent:hover {
+  background-color: var(--dioxico-button-transparent-background-color-hover);
+}
+
+.dioxico-button-transparent:active {
+  background-color: var(--dioxico-button-transparent-background-color-active);
+}
+
+.dioxico-button-transparent:disabled {
+  background-color: var(--dioxico-button-transparent-background-color-disabled);
+  color: var(--dioxico-button-transparent-text-color-disabled);
+}
+
+.dioxico-button-danger {
+  background-color: var(--dioxico-button-danger-background-color);
+  color: var(--dioxico-button-danger-text-color);
+}
+
+.dioxico-button-danger:hover {
+  background-color: var(--dioxico-button-danger-background-color-hover);
+}
+
+.dioxico-button-danger:active {
+  background-color: var(--dioxico-button-danger-background-color-active);
+}
+
+.dioxico-button-danger:disabled {
+  background-color: var(--dioxico-button-danger-background-color-disabled);
+  color: var(--dioxico-button-danger-text-color-disabled);
+}
+
+/*                */
+/*    CHECKBOX    */
+/*                */
+
+.dioxico-checkbox-container {
+  width: 100%;
+  display: flex;
+}
+
+.dioxico-checkbox-label {
+  color: var(--dioxico-checkbox-label-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-checkbox {
+  display: flex;
+  position: relative;
+  padding-left: var(--dioxico-checkbox-label-offset-left);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dioxico-checkbox .dioxico-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dioxico-checkbox:hover .dioxico-checkbox-input ~ .dioxico-checkmark {
+  transition: all 0.075s ease-in-out;
+}
+
+.dioxico-checkbox .dioxico-checkbox-input:checked ~ .dioxico-checkmark {
+  background-color: var(--dioxico-checkbox-background-color-checked);
+  border-color: var(--dioxico-checkbox-background-color-checked);
+}
+
+.dioxico-checkbox .dioxico-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--dioxico-checkbox-size);
+  width: var(--dioxico-checkbox-size);
+  background-color: var(--dioxico-checkbox-background-color-unchecked);
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-checkbox-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dioxico-checkmark-icon {
+  width: var(--dioxico-checkbox-icon-size);
+  height: var(--dioxico-checkbox-icon-size);
+  filter: var(--dioxico-checkbox-icon-filter);
+  background-image: var(--dioxico-checkmark-icon);
+  background-repeat: no-repeat;
+  background-position: center;
+  visibility: hidden;
+}
+
+.dioxico-checkbox
+  .dioxico-checkbox-input:checked
+  ~ .dioxico-checkmark
+  .dioxico-checkmark-icon {
+  visibility: visible;
+}
+
+.dioxico-checkbox-disabled .dioxico-checkbox-label {
+  color: var(--dioxico-checkbox-label-color-disabled);
+  cursor: default;
+}
+
+.dioxico-checkbox-disabled,
+.dioxico-checkbox-disabled .dioxico-checkbox-input,
+.dioxico-checkbox-disabled .dioxico-checkmark {
+  cursor: default;
+}
+
+.dioxico-checkbox-disabled
+  .dioxico-checkbox-input:checked
+  ~ .dioxico-checkmark {
+  background-color: var(--dioxico-checkbox-background-color-checked-disabled);
+  border-color: var(--dioxico-checkbox-background-color-checked-disabled);
+}
+
+.dioxico-checkbox-disabled
+  .dioxico-checkbox-input:checked
+  ~ .dioxico-checkmark
+  .dioxico-checkmark-icon {
+  filter: var(--dioxico-checkbox-icon-filter-disabled);
+}
+
+/*              */
+/*    SWITCH    */
+/*              */
+
+.dioxico-switch-container {
+  width: 100%;
+  display: flex;
+}
+
+.dioxico-switch-label {
+  color: var(--dioxico-switch-label-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-switch {
+  display: flex;
+  position: relative;
+  padding-left: var(--dioxico-switch-label-offset-left);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dioxico-switch .dioxico-switch-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dioxico-switch:hover .dioxico-switch-input ~ .dioxico-switch-toggle {
+  transition: all 0.075s ease-in-out;
+}
+
+.dioxico-switch .dioxico-switch-input:checked ~ .dioxico-switch-toggle {
+  background-color: var(--dioxico-switch-background-color-checked);
+  border-color: var(--dioxico-switch-background-color-checked);
+}
+
+.dioxico-switch .dioxico-switch-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--dioxico-switch-height);
+  width: var(--dioxico-switch-width);
+  background-color: var(--dioxico-switch-background-color-unchecked);
+  border: var(--dioxico-standard-border);
+  border-radius: 100vw;
+}
+
+.dioxico-switch .dioxico-switch-toggle:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.dioxico-switch .dioxico-switch-toggle:after {
+  display: block;
+  left: var(--dioxico-switch-head-offset-off);
+  top: var(--dioxico-switch-inner-padding);
+  width: var(--dioxico-switch-head-size);
+  height: var(--dioxico-switch-head-size);
+  background-color: var(--dioxico-switch-head-background-color);
+  border-radius: 100vw;
+  transition: left 0.075s ease-out;
+}
+
+.dioxico-switch .dioxico-switch-input:checked ~ .dioxico-switch-toggle:after {
+  left: var(--dioxico-switch-head-offset-on);
+}
+
+.dioxico-switch-disabled .dioxico-switch-label {
+  color: var(--dioxico-switch-label-color-disabled);
+  cursor: default;
+}
+
+.dioxico-switch-disabled,
+.dioxico-switch-disabled .dioxico-switch-input,
+.dioxico-switch-disabled .dioxico-switch-toggle {
+  cursor: default;
+}
+
+.dioxico-switch-disabled
+  .dioxico-switch-input:checked
+  ~ .dioxico-switch-toggle {
+  background-color: var(--dioxico-switch-background-color-checked-disabled);
+  border-color: var(--dioxico-switch-background-color-checked-disabled);
+}
+
+.dioxico-switch-disabled .dioxico-switch-toggle:after {
+  background-color: var(--dioxico-switch-head-background-color-disabled);
+}

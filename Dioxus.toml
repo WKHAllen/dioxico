@@ -1,0 +1,13 @@
+[application]
+name = "dioxico"
+default_platform = "web"
+
+[web.app]
+
+[web.watcher]
+
+[web.resource]
+
+[web.resource.dev]
+
+[bundle]
