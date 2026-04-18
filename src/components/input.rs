@@ -1,5 +1,6 @@
 use super::error::*;
 use crate::classes::*;
+use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
 
@@ -35,7 +36,7 @@ impl InputType {
 /// An input element.
 #[component]
 pub fn Input(
-    state: Signal<String>,
+    #[props(into)] state: State<String>,
     #[props(default)] input_type: InputType,
     #[props(default)] label: String,
     #[props(default)] placeholder: String,
@@ -76,7 +77,7 @@ pub fn Input(
 
             input {
                 class: "{input_class}",
-                value: "{state()}",
+                value: "{state.get()}",
                 oninput: move |event| state.set(event.value()),
                 id: "{id}",
                 r#type: "{html_input_type}",

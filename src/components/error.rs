@@ -1,4 +1,5 @@
 use crate::classes::*;
+use crate::state::ReadState;
 use dioxus::prelude::*;
 
 /// The size of an error message.
@@ -32,14 +33,14 @@ impl ErrorSize {
 
 /// An error element.
 #[component]
-pub fn Error(message: ReadSignal<String>, size: ErrorSize) -> Element {
+pub fn Error(#[props(into)] message: ReadState<String>, size: ErrorSize) -> Element {
     let class = classes!("dioxico-error", format!("dioxico-text-{}", size.as_str()));
 
     rsx! {
         span {
             class: "{class}",
 
-            "{message()}"
+            "{message.get()}"
         }
     }
 }
