@@ -1,15 +1,8 @@
-use crate::util::*;
 use csscolorparser::Color;
 use dioxus::prelude::*;
-use gloo_timers::callback::Timeout;
-use js_sys::encode_uri_component;
-use wasm_bindgen::{JsCast, UnwrapThrowExt};
 
 /// The full content of the CSS stylesheet.
-const STYLES: &str = include_str!("assets/css/dioxico.css");
-
-/// The content of the checkmark SVG.
-const CHECKMARK_ICON: &str = include_str!("assets/svg/check-solid.svg");
+pub const STYLES: &str = include_str!("assets/css/dioxico.css");
 
 /// Fonts to fall back to if no other fonts are available.
 const FALLBACK_FONTS: &[&str] = &[
@@ -81,7 +74,10 @@ const LIGHT_BORDER_COLOR: Color = Color::new(0.69020, 0.69804, 0.70980, 1.0);
 const LIGHT_FOCUS_BORDER_COLOR: Color = Color::new(0.56471, 0.57255, 0.58431, 1.0);
 
 /// Median color, used for color mixing.
-const DEFAULT_MID_COLOR: Color = Color::new(0.5, 0.5, 0.5, 1.0);
+const MID_COLOR: Color = Color::new(0.5, 0.5, 0.5, 1.0);
+
+/// Transparent color.
+const TRANSPARENT_COLOR: Color = Color::new(0.0, 0.0, 0.0, 0.0);
 
 /// The default color for error text.
 const DEFAULT_ERROR_COLOR: Color = Color::new(0.81176, 0.0, 0.0, 1.0);
@@ -92,17 +88,14 @@ const DEFAULT_PRIMARY_COLOR: Color = Color::new(0.15686, 0.31765, 1.0, 1.0);
 /// The default secondary color.
 const DEFAULT_SECONDARY_COLOR: Color = Color::new(0.35294, 0.36078, 0.37255, 1.0);
 
-/// The default transparent color.
-const DEFAULT_TRANSPARENT_COLOR: Color = Color::new(0.0, 0.0, 0.0, 0.0);
-
 /// The default danger color.
 const DEFAULT_DANGER_COLOR: Color = Color::new(0.68627, 0.0, 0.0, 1.0);
 
 /// The amount to darken a color when hovering.
-const HOVER_DARKEN_AMOUNT: f64 = 0.15;
+const HOVER_DARKEN_AMOUNT: f32 = 0.15;
 
 /// The amount to darken a color when active.
-const ACTIVE_DARKEN_AMOUNT: f64 = 0.25;
+const ACTIVE_DARKEN_AMOUNT: f32 = 0.25;
 
 /// The color mode. Defaults to dark mode.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -123,6 +116,29 @@ impl ColorMode {
     /// Is this light mode?
     pub fn is_light(&self) -> bool {
         matches!(self, Self::Light)
+    }
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+struct StyleRules {
+    rules: Vec<(String, String)>,
+}
+
+impl StyleRules {
+    fn new() -> Self {
+        Self::default()
+    }
+
+    fn add(&mut self, name: impl Into<String>, rule: impl Into<String>) {
+        self.rules.push((name.into(), rule.into()));
+    }
+
+    fn into_styles(self) -> String {
+        self.rules
+            .into_iter()
+            .map(|(name, rule)| format!("{name}: {rule};"))
+            .collect::<Vec<_>>()
+            .join("\n")
     }
 }
 
@@ -255,17 +271,263 @@ impl Theme {
         self.add_font(font);
         self
     }
+
+    /// Returns the root style string for this theme.
+    pub fn root_style(&self) -> String {
+        let mut rules = StyleRules::new();
+
+        let mut fonts = self.fonts.iter().map(|s| s.as_ref()).collect::<Vec<_>>();
+        fonts.extend(FALLBACK_FONTS);
+        rules.add("--dioxico-fonts", fonts.join(", "));
+
+        let background_colors = match self.color_mode {
+            ColorMode::Dark => DARK_BACKGROUND_COLORS,
+            ColorMode::Light => LIGHT_BACKGROUND_COLORS,
+        };
+        background_colors
+            .iter()
+            .enumerate()
+            .for_each(|(index, background_color)| {
+                rules.add(
+                    format!("--dioxico-background-color-{}", index + 1),
+                    background_color.to_css_hex(),
+                );
+            });
+
+        let text_color = match self.color_mode {
+            ColorMode::Dark => DARK_TEXT_COLOR,
+            ColorMode::Light => LIGHT_TEXT_COLOR,
+        };
+        rules.add("--dioxico-text-color", text_color.to_css_hex());
+
+        let svg_filter = match self.color_mode {
+            ColorMode::Dark => DARK_SVG_FILTER,
+            ColorMode::Light => LIGHT_SVG_FILTER,
+        };
+        rules.add("--dioxico-primary-svg-filter", svg_filter);
+
+        let svg_filter_disabled = match self.color_mode {
+            ColorMode::Dark => DARK_SVG_FILTER_DISABLED,
+            ColorMode::Light => LIGHT_SVG_FILTER_DISABLED,
+        };
+        rules.add("--dioxico-primary-svg-filter-disabled", svg_filter_disabled);
+
+        let border_color = match self.color_mode {
+            ColorMode::Dark => DARK_BORDER_COLOR,
+            ColorMode::Light => LIGHT_BORDER_COLOR,
+        };
+        rules.add("--dioxico-border-color", border_color.to_css_hex());
+
+        let focus_border_color = match self.color_mode {
+            ColorMode::Dark => DARK_FOCUS_BORDER_COLOR,
+            ColorMode::Light => LIGHT_FOCUS_BORDER_COLOR,
+        };
+        rules.add(
+            "--dioxico-focus-border-color",
+            focus_border_color.to_css_hex(),
+        );
+
+        let mid_color = MID_COLOR;
+
+        let transparent_color = TRANSPARENT_COLOR;
+
+        rules.add(
+            "--dioxico-text-color-disabled",
+            mix(&text_color, &mid_color, 0.4).to_css_hex(),
+        );
+
+        rules.add("--dioxico-primary-color", self.primary_color.to_css_hex());
+
+        rules.add(
+            "--dioxico-primary-color-hover",
+            darken(&self.primary_color, HOVER_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-primary-color-active",
+            darken(&self.primary_color, ACTIVE_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-primary-color-disabled",
+            mix(&self.primary_color, &mid_color, 0.3).to_css_hex(),
+        );
+
+        let primary_text_color = derive_text_color(&self.primary_color);
+        rules.add(
+            "--dioxico-primary-text-color",
+            primary_text_color.to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-primary-text-color-disabled",
+            mix(&primary_text_color, &mid_color, 0.4).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-primary-text-label-color-1",
+            mix(&primary_text_color, &mid_color, 0.7).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-primary-text-label-color-2",
+            mix(&primary_text_color, &mid_color, 0.6).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-primary-text-label-color-3",
+            mix(&primary_text_color, &mid_color, 0.5).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-color",
+            self.secondary_color.to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-color-hover",
+            darken(&self.secondary_color, HOVER_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-color-active",
+            darken(&self.secondary_color, ACTIVE_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-color-disabled",
+            mix(&self.secondary_color, &mid_color, 0.5).to_css_hex(),
+        );
+
+        let secondary_text_color = derive_text_color(&self.secondary_color);
+        rules.add(
+            "--dioxico-secondary-text-color",
+            secondary_text_color.to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-text-color-disabled",
+            mix(&secondary_text_color, &mid_color, 0.4).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-text-label-color-1",
+            mix(&secondary_text_color, &mid_color, 0.7).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-text-label-color-2",
+            mix(&secondary_text_color, &mid_color, 0.6).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-secondary-text-label-color-3",
+            mix(&secondary_text_color, &mid_color, 0.5).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-transparent-color-hover",
+            darken(&transparent_color, HOVER_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-transparent-color-active",
+            darken(&transparent_color, ACTIVE_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        let transparent_text_color = text_color;
+        rules.add(
+            "--dioxico-transparent-text-color",
+            transparent_text_color.to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-transparent-text-color-disabled",
+            mix(&transparent_text_color, &mid_color, 0.4).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-transparent-text-label-color-1",
+            mix(&transparent_text_color, &mid_color, 0.7).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-transparent-text-label-color-2",
+            mix(&transparent_text_color, &mid_color, 0.6).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-transparent-text-label-color-3",
+            mix(&transparent_text_color, &mid_color, 0.5).to_css_hex(),
+        );
+
+        rules.add("--dioxico-danger-color", self.danger_color.to_css_hex());
+
+        rules.add(
+            "--dioxico-danger-color-hover",
+            darken(&self.danger_color, HOVER_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-danger-color-active",
+            darken(&self.danger_color, ACTIVE_DARKEN_AMOUNT).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-danger-color-disabled",
+            mix(&self.danger_color, &mid_color, 0.5).to_css_hex(),
+        );
+
+        let danger_text_color = derive_text_color(&self.danger_color);
+        rules.add(
+            "--dioxico-danger-text-color",
+            danger_text_color.to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-danger-text-color-disabled",
+            mix(&danger_text_color, &mid_color, 0.4).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-danger-text-label-color-1",
+            mix(&danger_text_color, &mid_color, 0.7).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-danger-text-label-color-2",
+            mix(&danger_text_color, &mid_color, 0.6).to_css_hex(),
+        );
+
+        rules.add(
+            "--dioxico-danger-text-label-color-3",
+            mix(&danger_text_color, &mid_color, 0.5).to_css_hex(),
+        );
+
+        rules.add("--dioxico-error-color", self.error_color.to_css_hex());
+
+        format!(":root {{ {} }}", rules.into_styles())
+    }
 }
 
 /// Mixes two colors together. The `amount` is the amount of `color1` that
 /// should be mixed into `color2`.
-fn mix(color1: &Color, color2: &Color, amount: f64) -> Color {
+#[inline]
+fn mix(color1: &Color, color2: &Color, amount: f32) -> Color {
     color1.interpolate_rgb(color2, 1.0 - amount)
 }
 
 /// Darkens a color by the specified amount.
-fn darken(color: &Color, amount: f64) -> Color {
+#[inline]
+fn darken(color: &Color, amount: f32) -> Color {
     mix(color, &Color::new(0.0, 0.0, 0.0, color.a), 1.0 - amount)
+}
+
+/// Lightens a color by the specified amount.
+#[allow(dead_code)]
+#[inline]
+fn lighten(color: &Color, amount: f32) -> Color {
+    mix(color, &Color::new(1.0, 1.0, 1.0, color.a), 1.0 - amount)
 }
 
 /// Determines the text color to use based on the background color.
@@ -277,319 +539,18 @@ fn derive_text_color(background_color: &Color) -> Color {
     }
 }
 
-/// Encodes an SVG for use as a background image.
-fn svg_background_image(svg_content: &str) -> String {
-    format!(
-        "url('data:image/svg+xml;utf8,{}')",
-        encode_uri_component(svg_content)
-    )
-}
-
-/// Gets a CSS variable.
-fn get_css_var(name: &str) -> String {
-    let root = document().document_element().unwrap();
-
-    if let Some(style) = window().get_computed_style(&root).unwrap() {
-        style.get_property_value(name).unwrap()
-    } else {
-        "".to_owned()
-    }
-}
-
-/// Sets a CSS variable.
-fn set_css_var(name: &str, value: &str) {
-    let name = name.to_owned();
-    let value = value.to_owned();
-
-    Timeout::new(0, move || {
-        let root = document().document_element().unwrap();
-        let root: web_sys::HtmlElement = root.dyn_into().unwrap_throw();
-        root.style().set_property(&name, &value).unwrap();
-    })
-    .forget();
-}
-
-/// Applies a styling theme.
-fn apply_theme(theme: &Theme) {
-    let mut fonts = theme.fonts.iter().map(|s| s.as_ref()).collect::<Vec<_>>();
-    fonts.extend(FALLBACK_FONTS);
-    set_css_var("--dioxico-fonts", &fonts.join(", "));
-
-    let background_colors = match theme.color_mode {
-        ColorMode::Dark => DARK_BACKGROUND_COLORS,
-        ColorMode::Light => LIGHT_BACKGROUND_COLORS,
-    };
-    background_colors
-        .iter()
-        .enumerate()
-        .for_each(|(index, background_color)| {
-            set_css_var(
-                &format!("--dioxico-background-color-{}", index + 1),
-                &background_color.to_hex_string(),
-            );
-        });
-
-    let text_color = match theme.color_mode {
-        ColorMode::Dark => DARK_TEXT_COLOR,
-        ColorMode::Light => LIGHT_TEXT_COLOR,
-    };
-    set_css_var("--dioxico-text-color", &text_color.to_hex_string());
-
-    let svg_filter = match theme.color_mode {
-        ColorMode::Dark => DARK_SVG_FILTER,
-        ColorMode::Light => LIGHT_SVG_FILTER,
-    };
-    set_css_var("--dioxico-primary-svg-filter", svg_filter);
-
-    let svg_filter_disabled = match theme.color_mode {
-        ColorMode::Dark => DARK_SVG_FILTER_DISABLED,
-        ColorMode::Light => LIGHT_SVG_FILTER_DISABLED,
-    };
-    set_css_var("--dioxico-primary-svg-filter-disabled", svg_filter_disabled);
-
-    let border_color = match theme.color_mode {
-        ColorMode::Dark => DARK_BORDER_COLOR,
-        ColorMode::Light => LIGHT_BORDER_COLOR,
-    };
-    set_css_var("--dioxico-border-color", &border_color.to_hex_string());
-
-    let focus_border_color = match theme.color_mode {
-        ColorMode::Dark => DARK_FOCUS_BORDER_COLOR,
-        ColorMode::Light => LIGHT_FOCUS_BORDER_COLOR,
-    };
-    set_css_var(
-        "--dioxico-focus-border-color",
-        &focus_border_color.to_hex_string(),
-    );
-
-    let mid_color = get_css_var("--dioxico-mid-color")
-        .parse::<Color>()
-        .unwrap_or(DEFAULT_MID_COLOR);
-
-    let transparent_color = get_css_var("--dioxico-transparent-color")
-        .parse::<Color>()
-        .unwrap_or(DEFAULT_TRANSPARENT_COLOR);
-
-    set_css_var(
-        "--dioxico-text-color-disabled",
-        &mix(&text_color, &mid_color, 0.4).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-color",
-        &theme.primary_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-color-hover",
-        &darken(&theme.primary_color, HOVER_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-color-active",
-        &darken(&theme.primary_color, ACTIVE_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-color-disabled",
-        &mix(&theme.primary_color, &mid_color, 0.3).to_hex_string(),
-    );
-
-    let primary_text_color = derive_text_color(&theme.primary_color);
-    set_css_var(
-        "--dioxico-primary-text-color",
-        &primary_text_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-text-color-disabled",
-        &mix(&primary_text_color, &mid_color, 0.4).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-text-label-color-1",
-        &mix(&primary_text_color, &mid_color, 0.7).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-text-label-color-2",
-        &mix(&primary_text_color, &mid_color, 0.6).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-primary-text-label-color-3",
-        &mix(&primary_text_color, &mid_color, 0.5).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-color",
-        &theme.secondary_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-color-hover",
-        &darken(&theme.secondary_color, HOVER_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-color-active",
-        &darken(&theme.secondary_color, ACTIVE_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-color-disabled",
-        &mix(&theme.secondary_color, &mid_color, 0.5).to_hex_string(),
-    );
-
-    let secondary_text_color = derive_text_color(&theme.secondary_color);
-    set_css_var(
-        "--dioxico-secondary-text-color",
-        &secondary_text_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-text-color-disabled",
-        &mix(&secondary_text_color, &mid_color, 0.4).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-text-label-color-1",
-        &mix(&secondary_text_color, &mid_color, 0.7).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-text-label-color-2",
-        &mix(&secondary_text_color, &mid_color, 0.6).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-secondary-text-label-color-3",
-        &mix(&secondary_text_color, &mid_color, 0.5).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-transparent-color-hover",
-        &darken(&transparent_color, HOVER_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-transparent-color-active",
-        &darken(&transparent_color, ACTIVE_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    let transparent_text_color = text_color;
-    set_css_var(
-        "--dioxico-transparent-text-color",
-        &transparent_text_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-transparent-text-color-disabled",
-        &mix(&transparent_text_color, &mid_color, 0.4).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-transparent-text-label-color-1",
-        &mix(&transparent_text_color, &mid_color, 0.7).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-transparent-text-label-color-2",
-        &mix(&transparent_text_color, &mid_color, 0.6).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-transparent-text-label-color-3",
-        &mix(&transparent_text_color, &mid_color, 0.5).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-color",
-        &theme.danger_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-color-hover",
-        &darken(&theme.danger_color, HOVER_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-color-active",
-        &darken(&theme.danger_color, ACTIVE_DARKEN_AMOUNT).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-color-disabled",
-        &mix(&theme.danger_color, &mid_color, 0.5).to_hex_string(),
-    );
-
-    let danger_text_color = derive_text_color(&theme.danger_color);
-    set_css_var(
-        "--dioxico-danger-text-color",
-        &danger_text_color.to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-text-color-disabled",
-        &mix(&danger_text_color, &mid_color, 0.4).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-text-label-color-1",
-        &mix(&danger_text_color, &mid_color, 0.7).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-text-label-color-2",
-        &mix(&danger_text_color, &mid_color, 0.6).to_hex_string(),
-    );
-
-    set_css_var(
-        "--dioxico-danger-text-label-color-3",
-        &mix(&danger_text_color, &mid_color, 0.5).to_hex_string(),
-    );
-
-    set_css_var("--dioxico-error-color", &theme.error_color.to_hex_string());
-
-    set_css_var(
-        "--dioxico-checkmark-icon",
-        &svg_background_image(CHECKMARK_ICON),
-    );
-}
-
-/// Injects all library styles into the document head. If the styles are
-/// already present, this does nothing. When the scope is disposed, the styles
-/// will be removed.
-fn inject_styles() {
-    let doc = document();
-    let head = doc.head().unwrap();
-
-    let existing_styles = head
-        .query_selector("style[data-dioxico=\"styles\"]")
-        .unwrap();
-
-    if existing_styles.is_none() {
-        let style_tag = doc.create_element("style").unwrap();
-        style_tag.set_attribute("data-dioxico", "styles").unwrap();
-        style_tag.set_text_content(Some(STYLES));
-        head.append_child(&style_tag).unwrap();
-    }
-}
-
-type UseTheme = UseSharedState<Theme>;
-
-/// Apply a styling theme. The default theme will be used initially, but it
-/// can be altered via the returned signals.
+/// Applies a styling theme. The default theme will be used initially, but it
+/// can be altered via the returned signal.
 ///
 /// ```
 /// # use dioxico::use_theme;
 /// # use dioxus::prelude::*;
 /// #
-/// # fn Demo(cx: Scope) -> Element {
-/// let theme = use_theme(cx);
+/// # fn Demo() -> Element {
+/// let mut theme = use_theme();
 /// theme.write().set_primary_color((105, 40, 255));
 /// #
-/// # cx.render(rsx! { Fragment { } })
+/// # rsx! { Fragment { } }
 /// # }
 /// ```
 ///
@@ -597,15 +558,6 @@ type UseTheme = UseSharedState<Theme>;
 /// disposed, the styles will be removed. For these reasons, this should
 /// probably be called immediately and at the highest level of the
 /// application.
-pub fn use_theme(cx: &ScopeState) -> &UseTheme {
-    inject_styles();
-
-    use_shared_state_provider(cx, Theme::default);
-    let theme = use_shared_state::<Theme>(cx).expect("theme state not set");
-
-    use_effect(cx, (theme,), |(theme,)| async move {
-        apply_theme(&theme.read());
-    });
-
-    theme
+pub fn use_theme() -> Signal<Theme> {
+    use_context()
 }

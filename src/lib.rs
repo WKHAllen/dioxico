@@ -12,4 +12,4 @@ mod theme;
 mod util;
 
 pub use components::*;
-pub use theme::*;
+pub use theme::{use_theme, ColorMode, Theme};

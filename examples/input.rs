@@ -2,31 +2,35 @@ use dioxico::Input;
 use dioxus::prelude::*;
 
 #[allow(non_snake_case)]
-pub fn Demo(cx: Scope) -> Element {
-    let state = use_state(cx, || "Input value".to_owned());
-    let error = state.is_empty().then_some("Please enter a value");
+pub fn Demo() -> Element {
+    let state = use_signal(|| "Input value".to_owned());
+    let error = if state.is_empty() {
+        "Please enter a value".to_owned()
+    } else {
+        String::new()
+    };
 
-    cx.render(rsx! {
+    rsx! {
         Input {
             state: state,
             label: "Input label",
             placeholder: "Placeholder!",
             required: true,
-            error: error
+            error: error,
         }
         span {
             "Value: "
-            state.as_str()
+            "{state()}"
         }
         Input {
             state: state,
             label: "Disabled input",
-            disabled: true
+            disabled: true,
         }
-    })
+    }
 }
 
 #[allow(dead_code)]
 fn main() {
-    dioxus_web::launch(Demo);
+    launch(Demo);
 }

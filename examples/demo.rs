@@ -1,4 +1,5 @@
 use convert_case::{Case, Casing};
+use dioxico::ConfigProvider;
 use dioxus::prelude::*;
 
 mod error;
@@ -31,18 +32,44 @@ macro_rules! demo_views {
 }
 
 #[allow(non_snake_case)]
-fn Demo(cx: Scope) -> Element {
+fn Demo() -> Element {
     let demos = demo_views!(theme, error, input);
 
-    cx.render(rsx! {
-        div {
-            class: "dioxico-demo",
-
-            demos
+    rsx! {
+        Title {
+            "Dioxico demo"
         }
-    })
+
+        ConfigProvider {
+            div {
+                class: "dioxico-demo",
+
+                {demos}
+            }
+        }
+    }
 }
 
 fn main() {
-    dioxus_web::launch(Demo);
+    #[cfg(target_arch = "wasm32")]
+    {
+        launch(Demo);
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        use dioxus::desktop::{Config, WindowBuilder};
+
+        let window_config = WindowBuilder::new()
+            .with_always_on_bottom(false)
+            .with_always_on_top(false)
+            .with_title("Dioxico demo");
+
+        let launch_config = Config::new()
+            .with_menu(None)
+            .with_disable_context_menu(false)
+            .with_window(window_config);
+
+        LaunchBuilder::new().with_cfg(launch_config).launch(Demo);
+    }
 }

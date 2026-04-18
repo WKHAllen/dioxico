@@ -21,7 +21,7 @@ pub enum InputType {
 
 impl InputType {
     /// Gets the HTML input element type corresponding to the current input type.
-    pub fn html_input_type(&self) -> &'static str {
+    pub fn as_str(&self) -> &'static str {
         match *self {
             Self::Text => "text",
             Self::Email => "email",
@@ -32,57 +32,35 @@ impl InputType {
     }
 }
 
-/// Input properties.
-#[derive(Props)]
-pub struct InputProps<'a> {
-    /// The input state.
-    state: &'a UseState<String>,
-    /// The input type.
-    #[props(default)]
-    input_type: InputType,
-    /// The input label.
-    label: Option<&'a str>,
-    /// Input placeholder text.
-    placeholder: Option<&'a str>,
-    /// The maximum number of characters allowed.
-    #[props(default = 524288)]
-    max_length: usize,
-    /// Whether the input is required to be filled out.
-    #[props(default = false)]
-    required: bool,
-    /// Whether the input is disabled.
-    #[props(default = false)]
-    disabled: bool,
-    /// An optional error message.
-    #[props(!optional, default)]
-    error: Option<&'a str>,
-}
-
 /// An input element.
-pub fn Input<'a>(cx: Scope<'a, InputProps<'a>>) -> Element {
-    let id = use_state(cx, new_id);
-    let html_input_type = cx.props.input_type.html_input_type();
-    let label = cx.props.label.unwrap_or_default();
-    let placeholder = cx.props.placeholder.unwrap_or_default();
-    let max_length = cx.props.max_length;
+#[component]
+pub fn Input(
+    state: Signal<String>,
+    #[props(default)] input_type: InputType,
+    #[props(default)] label: String,
+    #[props(default)] placeholder: String,
+    #[props(default = 524288)] max_length: usize,
+    #[props(default)] required: ReadSignal<bool>,
+    #[props(default)] disabled: ReadSignal<bool>,
+    #[props(default)] error: ReadSignal<String>,
+) -> Element {
+    let id = use_id();
+    let html_input_type = input_type.as_str();
     let container_class = classes!(
         "dioxico-input-container",
-        cx.props
-            .disabled
-            .then_some("dioxico-input-container-disabled")
+        disabled().then_some("dioxico-input-container-disabled")
     );
     let input_class = classes!(
         "dioxico-input",
-        cx.props.error.map(|_| "dioxico-input-invalid")
+        (!error.read().is_empty()).then_some("dioxico-input-invalid")
     );
 
-    cx.render(rsx! {
+    rsx! {
         div {
             class: "{container_class}",
 
             label {
                 class: "dioxico-input-label",
-
                 r#for: "{id}",
 
                 "{label}"
@@ -90,27 +68,28 @@ pub fn Input<'a>(cx: Scope<'a, InputProps<'a>>) -> Element {
                 span {
                     class: "dioxico-required-mark",
 
-                    cx.props.required.then(|| rsx! { " *" })
+                    if required() {
+                        " *"
+                    }
                 }
             }
 
             input {
                 class: "{input_class}",
-
-                value: "{cx.props.state}",
-                oninput: move |e| cx.props.state.set(e.value.clone()),
+                value: "{state()}",
+                oninput: move |event| state.set(event.value()),
                 id: "{id}",
                 r#type: "{html_input_type}",
                 placeholder: "{placeholder}",
                 maxlength: "{max_length}",
-                required: "{cx.props.required}",
-                disabled: "{cx.props.disabled}"
+                required: "{required()}",
+                disabled: "{disabled()}",
             }
 
             Error {
-                message: cx.props.error,
-                size: ErrorSize::Small
+                message: error,
+                size: ErrorSize::Small,
             }
         }
-    })
+    }
 }

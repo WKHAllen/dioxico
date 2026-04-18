@@ -4,13 +4,18 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-csscolorparser = "0.6.2"
-dioxus = "0.4.0"
-gloo-timers = "0.2.6"
-js-sys = "0.3"
-wasm-bindgen = { version = "0.2.83" }
-web-sys = { version = "0.3.60", features = ["console", "CssStyleDeclaration", "Document", "Element", "HtmlElement", "HtmlHeadElement", "Node", "Range", "Selection", "Window"] }
+csscolorparser = "0.8"
+dioxus = "0.7"
+rand = "0.10"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.4", features = ["wasm_js"] }
 
 [dev-dependencies]
-convert_case = "0.6.0"
-dioxus-web = "0.4.0"
+convert_case = "0.11"
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+dioxus = { version = "0.7", features = ["web"] }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+dioxus = { version = "0.7", features = ["desktop"] }

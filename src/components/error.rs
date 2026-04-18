@@ -19,7 +19,7 @@ pub enum ErrorSize {
 
 impl ErrorSize {
     /// Gets the name of the error message size.
-    pub fn size_name(&self) -> &'static str {
+    pub fn as_str(&self) -> &'static str {
         match *self {
             Self::Smaller => "smaller",
             Self::Small => "small",
@@ -30,30 +30,16 @@ impl ErrorSize {
     }
 }
 
-/// Error properties.
-#[derive(Props)]
-pub struct ErrorProps<'a> {
-    /// The error message.
-    #[props(!optional, default)]
-    message: Option<&'a str>,
-    /// The size of the error message.
-    #[props(default)]
-    size: ErrorSize,
-}
-
 /// An error element.
-pub fn Error<'a>(cx: Scope<'a, ErrorProps<'a>>) -> Element {
-    let message = cx.props.message.unwrap_or_default();
-    let class = classes!(
-        "dioxico-error",
-        format!("dioxico-text-{}", cx.props.size.size_name())
-    );
+#[component]
+pub fn Error(message: ReadSignal<String>, size: ErrorSize) -> Element {
+    let class = classes!("dioxico-error", format!("dioxico-text-{}", size.as_str()));
 
-    cx.render(rsx! {
+    rsx! {
         span {
             class: "{class}",
 
-            "{message}"
+            "{message()}"
         }
-    })
+    }
 }

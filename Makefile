@@ -10,7 +10,10 @@ lint:
 	cargo clippy -- -D warnings
 
 demo:
-	dx serve --hot-reload --example demo
+	dx serve --example demo --platform desktop
+
+demo-web:
+	dx serve --example demo --platform web
 
 clean:
 	cargo clean
