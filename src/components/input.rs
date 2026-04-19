@@ -36,15 +36,33 @@ impl InputType {
 /// An input element.
 #[component]
 pub fn Input(
-    #[props(into)] state: State<String>,
-    #[props(default)] input_type: InputType,
-    #[props(default)] label: String,
-    #[props(default)] placeholder: String,
-    #[props(default = 524288)] max_length: usize,
-    #[props(default)] on_submit: EventHandler<()>,
-    #[props(default)] required: bool,
-    #[props(default)] disabled: bool,
-    #[props(default)] error: String,
+    /// The input state.
+    #[props(into)]
+    state: State<String>,
+    /// Input type.
+    #[props(default)]
+    input_type: InputType,
+    /// Input label text.
+    #[props(default)]
+    label: String,
+    /// Placeholder text for when the input box is empty.
+    #[props(default)]
+    placeholder: String,
+    /// Maximum number of characters allowed.
+    #[props(default = 524288)]
+    max_length: usize,
+    /// Callback called when the enter key is pressed.
+    #[props(default)]
+    on_submit: EventHandler<()>,
+    /// Is this field required?
+    #[props(default)]
+    required: bool,
+    /// Is this field disabled?
+    #[props(default)]
+    disabled: bool,
+    /// An optional error message. If missing or empty, no error will be shown.
+    #[props(default)]
+    error: String,
 ) -> Element {
     let id = use_id();
     let invalid = !error.is_empty();

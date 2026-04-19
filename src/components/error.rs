@@ -32,7 +32,14 @@ impl ErrorSize {
 
 /// An error element.
 #[component]
-pub fn Error(#[props(into)] message: String, size: ErrorSize) -> Element {
+pub fn Error(
+    /// Error message. If missing or empty, no error will be shown.
+    #[props(into)]
+    message: String,
+    /// Error message size.
+    #[props(default)]
+    size: ErrorSize,
+) -> Element {
     rsx! {
         span {
             class: classes!("dioxico-error", format!("dioxico-text-{}", size.as_str())),

@@ -33,15 +33,33 @@ impl TextareaResize {
 /// A textarea element.
 #[component]
 pub fn Textarea(
-    #[props(into)] state: State<String>,
-    #[props(default)] label: String,
-    #[props(default)] placeholder: String,
-    #[props(default = 524288)] max_length: usize,
-    #[props(default = 3)] rows: usize,
-    #[props(default)] resize: TextareaResize,
-    #[props(default)] required: bool,
-    #[props(default)] disabled: bool,
-    #[props(default)] error: String,
+    /// The textarea input state.
+    #[props(into)]
+    state: State<String>,
+    /// Textarea label text.
+    #[props(default)]
+    label: String,
+    /// Placeholder text for when the textarea is empty.
+    #[props(default)]
+    placeholder: String,
+    /// Maximum number of characters allowed.
+    #[props(default = 524288)]
+    max_length: usize,
+    /// Number of rows of text within the box.
+    #[props(default = 3)]
+    rows: usize,
+    /// Resizing options for the textarea.
+    #[props(default)]
+    resize: TextareaResize,
+    /// Is this field required?
+    #[props(default)]
+    required: bool,
+    /// Is this field disabled?
+    #[props(default)]
+    disabled: bool,
+    /// An optional error message. If missing or empty, no error will be shown.
+    #[props(default)]
+    error: String,
 ) -> Element {
     let id = use_id();
     let invalid = !error.is_empty();

@@ -221,13 +221,27 @@ where
 /// A number input component.
 #[component]
 pub fn NumberInput<N>(
-    #[props(into)] state: State<NumberState<N>>,
-    #[props(default)] label: String,
-    #[props(default)] placeholder: String,
-    #[props(default)] on_submit: EventHandler<()>,
-    #[props(default)] required: bool,
-    #[props(default)] disabled: bool,
-    #[props(default)] error: String,
+    /// The number input state.
+    #[props(into)]
+    state: State<NumberState<N>>,
+    /// Number input label text.
+    #[props(default)]
+    label: String,
+    /// Placeholder text for when the number input box is empty.
+    #[props(default)]
+    placeholder: String,
+    /// Callback called when the enter key is pressed.
+    #[props(default)]
+    on_submit: EventHandler<()>,
+    /// Is this field required?
+    #[props(default)]
+    required: bool,
+    /// Is this field disabled?
+    #[props(default)]
+    disabled: bool,
+    /// An optional error message. If missing or empty, no error will be shown.
+    #[props(default)]
+    error: String,
 ) -> Element
 where
     N: Number + 'static,
