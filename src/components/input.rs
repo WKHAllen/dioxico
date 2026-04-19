@@ -1,4 +1,4 @@
-use super::error::*;
+use super::{Error, ErrorSize};
 use crate::classes::*;
 use crate::state::State;
 use crate::util::*;
@@ -41,24 +41,16 @@ pub fn Input(
     #[props(default)] label: String,
     #[props(default)] placeholder: String,
     #[props(default = 524288)] max_length: usize,
-    #[props(default)] required: ReadSignal<bool>,
-    #[props(default)] disabled: ReadSignal<bool>,
-    #[props(default)] error: ReadSignal<String>,
+    #[props(default)] required: bool,
+    #[props(default)] disabled: bool,
+    #[props(default)] error: String,
 ) -> Element {
     let id = use_id();
-    let html_input_type = input_type.as_str();
-    let container_class = classes!(
-        "dioxico-input-container",
-        disabled().then_some("dioxico-input-container-disabled")
-    );
-    let input_class = classes!(
-        "dioxico-input",
-        (!error.read().is_empty()).then_some("dioxico-input-invalid")
-    );
+    let invalid = !error.is_empty();
 
     rsx! {
         div {
-            class: "{container_class}",
+            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled")),
 
             label {
                 class: "dioxico-input-label",
@@ -69,22 +61,26 @@ pub fn Input(
                 span {
                     class: "dioxico-required-mark",
 
-                    if required() {
+                    if required {
                         " *"
                     }
                 }
             }
 
-            input {
-                class: "{input_class}",
-                value: "{state.get()}",
-                oninput: move |event| state.set(event.value()),
-                id: "{id}",
-                r#type: "{html_input_type}",
-                placeholder: "{placeholder}",
-                maxlength: "{max_length}",
-                required: "{required()}",
-                disabled: "{disabled()}",
+            div {
+                class: "dioxico-input-box-container",
+
+                input {
+                    r#type: input_type.as_str(),
+                    class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
+                    id,
+                    value: "{state.get()}",
+                    oninput: move |event| state.set(event.value()),
+                    placeholder,
+                    maxlength: max_length,
+                    required,
+                    disabled,
+                }
             }
 
             Error {

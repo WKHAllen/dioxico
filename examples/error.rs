@@ -1,7 +1,7 @@
 use dioxico::{Error, ErrorSize};
 use dioxus::prelude::*;
 
-#[allow(non_snake_case)]
+#[component]
 pub fn Demo() -> Element {
     rsx! {
         Error {

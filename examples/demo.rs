@@ -4,6 +4,8 @@ use dioxus::prelude::*;
 
 mod error;
 mod input;
+mod number_input;
+mod textarea;
 mod theme;
 
 macro_rules! demo_views {
@@ -31,9 +33,9 @@ macro_rules! demo_views {
     };
 }
 
-#[allow(non_snake_case)]
+#[component]
 fn Demo() -> Element {
-    let demos = demo_views!(theme, error, input);
+    let demos = demo_views!(theme, error, input, textarea, number_input);
 
     rsx! {
         Title {

@@ -1,7 +1,7 @@
 use dioxico::use_theme;
 use dioxus::prelude::*;
 
-#[allow(non_snake_case)]
+#[component]
 pub fn Demo() -> Element {
     let _theme = use_theme();
 

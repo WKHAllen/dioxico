@@ -70,7 +70,7 @@ impl Display for Classes {
 
 /// Creates a list of CSS classes.
 macro_rules! classes {
-    ( $($class:expr),* ) => {{
+    ( $($class:expr),* $(,)? ) => {{
         #[allow(unused_mut)]
         let mut classes = $crate::classes::Classes::new();
         $(

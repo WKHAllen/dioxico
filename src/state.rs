@@ -37,6 +37,32 @@ where
             Self::Signal(sig) => sig.set(new_value),
         }
     }
+
+    /// Runs a closure that immutably borrows the inner value.
+    pub fn with<O>(&self, f: impl FnOnce(&T) -> O) -> O {
+        match self {
+            Self::Value(value) => f(value),
+            Self::ValueCallback(value, _) => f(value),
+            Self::Signal(sig) => f(&sig.read()),
+        }
+    }
+
+    /// Runs a closure that mutably borrows the inner value.
+    pub fn with_mut<O>(&mut self, f: impl FnOnce(&mut T) -> O) -> O {
+        match self {
+            Self::Value(value) => {
+                let mut value_clone = value.clone();
+                f(&mut value_clone)
+            }
+            Self::ValueCallback(value, callback) => {
+                let mut value_clone = value.clone();
+                let ret = f(&mut value_clone);
+                callback.call(value_clone);
+                ret
+            }
+            Self::Signal(sig) => f(&mut sig.write()),
+        }
+    }
 }
 
 impl<T> From<T> for State<T>
