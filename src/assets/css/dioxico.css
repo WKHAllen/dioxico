@@ -818,3 +818,93 @@ body {
 .dioxico-textarea-container-disabled .dioxico-textarea-label {
   color: var(--dioxico-text-color-disabled);
 }
+
+/*              */
+/*    BUTTON    */
+/*              */
+
+.dioxico-button {
+  border: 0;
+  border-radius: var(--dioxico-button-border-radius);
+  padding: 6px 12px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  cursor: pointer;
+}
+
+.dioxico-button:disabled {
+  cursor: default;
+}
+
+.dioxico-button-primary {
+  background-color: var(--dioxico-button-primary-background-color);
+  color: var(--dioxico-button-primary-text-color);
+}
+
+.dioxico-button-primary:hover {
+  background-color: var(--dioxico-button-primary-background-color-hover);
+}
+
+.dioxico-button-primary:active {
+  background-color: var(--dioxico-button-primary-background-color-active);
+}
+
+.dioxico-button-primary:disabled {
+  background-color: var(--dioxico-button-primary-background-color-disabled);
+  color: var(--dioxico-button-primary-text-color-disabled);
+}
+
+.dioxico-button-secondary {
+  background-color: var(--dioxico-button-secondary-background-color);
+  color: var(--dioxico-button-secondary-text-color);
+}
+
+.dioxico-button-secondary:hover {
+  background-color: var(--dioxico-button-secondary-background-color-hover);
+}
+
+.dioxico-button-secondary:active {
+  background-color: var(--dioxico-button-secondary-background-color-active);
+}
+
+.dioxico-button-secondary:disabled {
+  background-color: var(--dioxico-button-secondary-background-color-disabled);
+  color: var(--dioxico-button-secondary-text-color-disabled);
+}
+
+.dioxico-button-transparent {
+  background-color: var(--dioxico-button-transparent-background-color);
+  color: var(--dioxico-button-transparent-text-color);
+}
+
+.dioxico-button-transparent:hover {
+  background-color: var(--dioxico-button-transparent-background-color-hover);
+}
+
+.dioxico-button-transparent:active {
+  background-color: var(--dioxico-button-transparent-background-color-active);
+}
+
+.dioxico-button-transparent:disabled {
+  background-color: var(--dioxico-button-transparent-background-color-disabled);
+  color: var(--dioxico-button-transparent-text-color-disabled);
+}
+
+.dioxico-button-danger {
+  background-color: var(--dioxico-button-danger-background-color);
+  color: var(--dioxico-button-danger-text-color);
+}
+
+.dioxico-button-danger:hover {
+  background-color: var(--dioxico-button-danger-background-color-hover);
+}
+
+.dioxico-button-danger:active {
+  background-color: var(--dioxico-button-danger-background-color-active);
+}
+
+.dioxico-button-danger:disabled {
+  background-color: var(--dioxico-button-danger-background-color-disabled);
+  color: var(--dioxico-button-danger-text-color-disabled);
+}

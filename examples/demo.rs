@@ -2,6 +2,7 @@ use convert_case::{Case, Casing};
 use dioxico::ConfigProvider;
 use dioxus::prelude::*;
 
+mod button;
 mod error;
 mod input;
 mod number_input;
@@ -35,7 +36,7 @@ macro_rules! demo_views {
 
 #[component]
 fn Demo() -> Element {
-    let demos = demo_views!(theme, error, input, textarea, number_input);
+    let demos = demo_views!(theme, error, input, textarea, number_input, button);
 
     rsx! {
         Title {
