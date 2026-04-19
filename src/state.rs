@@ -56,7 +56,7 @@ impl From<&str> for State<String> {
 
 impl From<&String> for State<String> {
     fn from(value: &String) -> Self {
-        Self::Value(value.to_owned())
+        Self::Value(value.clone())
     }
 }
 
@@ -68,6 +68,26 @@ where
 {
     fn super_from(input: (T, F)) -> Self {
         Self::ValueCallback(input.0, Callback::new(input.1))
+    }
+}
+
+impl<F, Spawn, Marker> SuperFrom<(&str, F), MarkerWrapper<Marker>> for State<String>
+where
+    F: FnMut(String) -> Spawn + 'static,
+    Spawn: SpawnIfAsync<Marker> + 'static,
+{
+    fn super_from(input: (&str, F)) -> Self {
+        Self::ValueCallback(input.0.to_owned(), Callback::new(input.1))
+    }
+}
+
+impl<F, Spawn, Marker> SuperFrom<(&String, F), MarkerWrapper<Marker>> for State<String>
+where
+    F: FnMut(String) -> Spawn + 'static,
+    Spawn: SpawnIfAsync<Marker> + 'static,
+{
+    fn super_from(input: (&String, F)) -> Self {
+        Self::ValueCallback(input.0.clone(), Callback::new(input.1))
     }
 }
 
@@ -122,7 +142,7 @@ impl From<&str> for ReadState<String> {
 
 impl From<&String> for ReadState<String> {
     fn from(value: &String) -> Self {
-        Self::Value(value.to_owned())
+        Self::Value(value.clone())
     }
 }
 
