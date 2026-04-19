@@ -4,6 +4,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let int_state = use_signal(|| NumberState::new(3u16).min(0).max(100));
+    let mut submitted_times = use_signal(|| 0usize);
     let int_error = if *int_state() == 3 {
         "How about something other than 3"
     } else {
@@ -21,11 +22,17 @@ pub fn Demo() -> Element {
             state: int_state,
             label: "Int number input",
             placeholder: "Placeholder!",
+            on_submit: move |_| {
+                submitted_times += 1;
+            },
             required: true,
             error: int_error,
         }
         span {
             "Value: {*int_state()}"
+        }
+        span {
+            "Submitted {submitted_times} times"
         }
         NumberInput {
             state: float_state,

@@ -41,6 +41,7 @@ pub fn Input(
     #[props(default)] label: String,
     #[props(default)] placeholder: String,
     #[props(default = 524288)] max_length: usize,
+    #[props(default)] on_submit: EventHandler<()>,
     #[props(default)] required: bool,
     #[props(default)] disabled: bool,
     #[props(default)] error: String,
@@ -76,6 +77,11 @@ pub fn Input(
                     id,
                     value: "{state.get()}",
                     oninput: move |event| state.set(event.value()),
+                    onkeydown: move |event| {
+                        if event.key() == Key::Enter {
+                            on_submit.call(());
+                        }
+                    },
                     placeholder,
                     maxlength: max_length,
                     required,

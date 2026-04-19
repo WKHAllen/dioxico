@@ -4,6 +4,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let state1 = use_signal(|| "Input value".to_owned());
+    let mut submitted_times = use_signal(|| 0usize);
     let error = if state1.is_empty() {
         "Please enter a value"
     } else {
@@ -18,11 +19,17 @@ pub fn Demo() -> Element {
             state: state1,
             label: "Signal input label",
             placeholder: "Placeholder!",
+            on_submit: move |_| {
+                submitted_times += 1;
+            },
             required: true,
             error,
         }
         span {
             "Value: {state1()}"
+        }
+        span {
+            "Submitted {submitted_times} times"
         }
         Input {
             state: state1,

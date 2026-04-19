@@ -224,6 +224,7 @@ pub fn NumberInput<N>(
     #[props(into)] state: State<NumberState<N>>,
     #[props(default)] label: String,
     #[props(default)] placeholder: String,
+    #[props(default)] on_submit: EventHandler<()>,
     #[props(default)] required: bool,
     #[props(default)] disabled: bool,
     #[props(default)] error: String,
@@ -264,6 +265,11 @@ where
                     oninput: move |event| {
                         let new_value_str = event.value();
                         state.with_mut(move |num| num.set(&new_value_str));
+                    },
+                    onkeydown: move |event| {
+                        if event.key() == Key::Enter {
+                            on_submit.call(());
+                        }
                     },
                     placeholder,
                     required,
