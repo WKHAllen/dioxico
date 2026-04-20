@@ -4,13 +4,15 @@ use dioxus::prelude::*;
 
 mod button;
 mod error;
+mod icon;
+mod icon_button;
 mod input;
 mod number_input;
 mod textarea;
 mod theme;
 
 macro_rules! demo_views {
-    ( $( $demo:ident ),* ) => {
+    ( $( $demo:ident ),* $(,)? ) => {
         rsx! {
             $({
                 use crate::$demo::Demo;
@@ -36,7 +38,16 @@ macro_rules! demo_views {
 
 #[component]
 fn Demo() -> Element {
-    let demos = demo_views!(theme, error, input, textarea, number_input, button);
+    let demos = demo_views!(
+        theme,
+        error,
+        input,
+        textarea,
+        number_input,
+        button,
+        icon,
+        icon_button,
+    );
 
     rsx! {
         Title {

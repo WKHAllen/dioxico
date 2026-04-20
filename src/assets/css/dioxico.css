@@ -908,3 +908,96 @@ body {
   background-color: var(--dioxico-button-danger-background-color-disabled);
   color: var(--dioxico-button-danger-text-color-disabled);
 }
+
+/*            */
+/*    ICON    */
+/*            */
+
+.dioxico-icon {
+  filter: var(--dioxico-icon-filter);
+}
+
+.dioxico-icon-disabled {
+  filter: var(--dioxico-icon-filter-disabled);
+}
+
+.dioxico-icon-small {
+  width: var(--dioxico-icon-size-small);
+  height: var(--dioxico-icon-size-small);
+}
+
+.dioxico-icon-medium {
+  width: var(--dioxico-icon-size-medium);
+  height: var(--dioxico-icon-size-medium);
+}
+
+.dioxico-icon-large {
+  width: var(--dioxico-icon-size-large);
+  height: var(--dioxico-icon-size-large);
+}
+
+/*                   */
+/*    ICON BUTTON    */
+/*                   */
+
+.dioxico-icon-button {
+  background-color: var(--dioxico-button-icon-button-background-color);
+  border: 0;
+  border-radius: var(--dioxico-button-icon-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.1s linear;
+}
+
+.dioxico-icon-button:hover {
+  background-color: var(--dioxico-button-icon-button-background-color-hover);
+}
+
+.dioxico-icon-button:active {
+  background-color: var(--dioxico-button-icon-button-background-color-active);
+}
+
+.dioxico-icon-button-icon {
+  filter: var(--dioxico-button-icon-filter);
+}
+
+.dioxico-icon-button:disabled {
+  background-color: var(--dioxico-button-icon-button-background-color);
+  cursor: default;
+}
+
+.dioxico-icon-button:disabled .dioxico-icon-button-icon {
+  filter: var(--dioxico-button-icon-filter-disabled);
+}
+
+.dioxico-icon-button-small {
+  width: var(--dioxico-button-icon-button-size-small);
+  height: var(--dioxico-button-icon-button-size-small);
+}
+
+.dioxico-icon-button-medium {
+  width: var(--dioxico-button-icon-button-size-medium);
+  height: var(--dioxico-button-icon-button-size-medium);
+}
+
+.dioxico-icon-button-large {
+  width: var(--dioxico-button-icon-button-size-large);
+  height: var(--dioxico-button-icon-button-size-large);
+}
+
+.dioxico-icon-button-small .dioxico-icon-button-icon {
+  width: var(--dioxico-button-icon-size-small);
+  height: var(--dioxico-button-icon-size-small);
+}
+
+.dioxico-icon-button-medium .dioxico-icon-button-icon {
+  width: var(--dioxico-button-icon-size-medium);
+  height: var(--dioxico-button-icon-size-medium);
+}
+
+.dioxico-icon-button-large .dioxico-icon-button-icon {
+  width: var(--dioxico-button-icon-size-large);
+  height: var(--dioxico-button-icon-size-large);
+}
