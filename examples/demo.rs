@@ -3,11 +3,13 @@ use dioxico::ConfigProvider;
 use dioxus::prelude::*;
 
 mod button;
+mod checkbox;
 mod error;
 mod icon;
 mod icon_button;
 mod input;
 mod number_input;
+mod switch;
 mod textarea;
 mod theme;
 
@@ -47,6 +49,8 @@ fn Demo() -> Element {
         button,
         icon,
         icon_button,
+        checkbox,
+        switch,
     );
 
     rsx! {

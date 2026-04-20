@@ -1001,3 +1001,194 @@ body {
   width: var(--dioxico-button-icon-size-large);
   height: var(--dioxico-button-icon-size-large);
 }
+
+/*                */
+/*    CHECKBOX    */
+/*                */
+
+.dioxico-checkbox-container {
+  width: 100%;
+  display: flex;
+}
+
+.dioxico-checkbox-label {
+  color: var(--dioxico-checkbox-label-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-checkbox {
+  display: flex;
+  position: relative;
+  padding-left: var(--dioxico-checkbox-label-offset-left);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dioxico-checkbox .dioxico-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dioxico-checkbox:hover .dioxico-checkbox-input ~ .dioxico-checkmark {
+  transition: all 0.075s ease-in-out;
+}
+
+.dioxico-checkbox .dioxico-checkbox-input:checked ~ .dioxico-checkmark {
+  background-color: var(--dioxico-checkbox-background-color-checked);
+  border-color: var(--dioxico-checkbox-background-color-checked);
+}
+
+.dioxico-checkbox .dioxico-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--dioxico-checkbox-size);
+  width: var(--dioxico-checkbox-size);
+  background-color: var(--dioxico-checkbox-background-color-unchecked);
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-checkbox-border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dioxico-checkmark-icon {
+  width: var(--dioxico-checkbox-icon-size);
+  height: var(--dioxico-checkbox-icon-size);
+  filter: var(--dioxico-checkbox-icon-filter);
+  visibility: hidden;
+}
+
+.dioxico-checkbox
+  .dioxico-checkbox-input:checked
+  ~ .dioxico-checkmark
+  .dioxico-checkmark-icon {
+  visibility: visible;
+}
+
+.dioxico-checkbox-disabled .dioxico-checkbox-label {
+  color: var(--dioxico-checkbox-label-color-disabled);
+  cursor: default;
+}
+
+.dioxico-checkbox-disabled,
+.dioxico-checkbox-disabled .dioxico-checkbox-input,
+.dioxico-checkbox-disabled .dioxico-checkmark {
+  cursor: default;
+}
+
+.dioxico-checkbox-disabled
+  .dioxico-checkbox-input:checked
+  ~ .dioxico-checkmark {
+  background-color: var(--dioxico-checkbox-background-color-checked-disabled);
+  border-color: var(--dioxico-checkbox-background-color-checked-disabled);
+}
+
+.dioxico-checkbox-disabled
+  .dioxico-checkbox-input:checked
+  ~ .dioxico-checkmark
+  .dioxico-checkmark-icon {
+  filter: var(--dioxico-checkbox-icon-filter-disabled);
+}
+
+/*              */
+/*    SWITCH    */
+/*              */
+
+.dioxico-switch-container {
+  width: 100%;
+  display: flex;
+}
+
+.dioxico-switch-label {
+  color: var(--dioxico-switch-label-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-switch {
+  display: flex;
+  position: relative;
+  padding-left: var(--dioxico-switch-label-offset-left);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.dioxico-switch .dioxico-switch-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dioxico-switch:hover .dioxico-switch-input ~ .dioxico-switch-toggle {
+  transition: all 0.075s ease-in-out;
+}
+
+.dioxico-switch .dioxico-switch-input:checked ~ .dioxico-switch-toggle {
+  background-color: var(--dioxico-switch-background-color-checked);
+  border-color: var(--dioxico-switch-background-color-checked);
+}
+
+.dioxico-switch .dioxico-switch-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--dioxico-switch-height);
+  width: var(--dioxico-switch-width);
+  background-color: var(--dioxico-switch-background-color-unchecked);
+  border: var(--dioxico-standard-border);
+  border-radius: 100vw;
+}
+
+.dioxico-switch .dioxico-switch-toggle:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.dioxico-switch .dioxico-switch-toggle:after {
+  display: block;
+  left: var(--dioxico-switch-head-offset-off);
+  top: var(--dioxico-switch-inner-padding);
+  width: var(--dioxico-switch-head-size);
+  height: var(--dioxico-switch-head-size);
+  background-color: var(--dioxico-switch-head-background-color);
+  border-radius: 100vw;
+  transition: left 0.075s ease-out;
+}
+
+.dioxico-switch .dioxico-switch-input:checked ~ .dioxico-switch-toggle:after {
+  left: var(--dioxico-switch-head-offset-on);
+}
+
+.dioxico-switch-disabled .dioxico-switch-label {
+  color: var(--dioxico-switch-label-color-disabled);
+  cursor: default;
+}
+
+.dioxico-switch-disabled,
+.dioxico-switch-disabled .dioxico-switch-input,
+.dioxico-switch-disabled .dioxico-switch-toggle {
+  cursor: default;
+}
+
+.dioxico-switch-disabled
+  .dioxico-switch-input:checked
+  ~ .dioxico-switch-toggle {
+  background-color: var(--dioxico-switch-background-color-checked-disabled);
+  border-color: var(--dioxico-switch-background-color-checked-disabled);
+}
+
+.dioxico-switch-disabled .dioxico-switch-toggle:after {
+  background-color: var(--dioxico-switch-head-background-color-disabled);
+}
