@@ -2,7 +2,7 @@ use csscolorparser::Color;
 use dioxus::prelude::*;
 
 /// The full content of the CSS stylesheet.
-pub const STYLES: &str = include_str!("assets/css/dioxico.css");
+pub const STYLES: Asset = asset!("src/assets/css/dioxico.css");
 
 /// Fonts to fall back to if no other fonts are available.
 const FALLBACK_FONTS: &[&str] = &[

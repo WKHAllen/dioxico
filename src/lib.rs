@@ -9,6 +9,7 @@
 mod classes;
 mod components;
 mod state;
+mod style;
 mod theme;
 mod util;
 

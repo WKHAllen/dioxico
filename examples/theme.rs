@@ -1,15 +1,16 @@
-use dioxico::use_theme;
+use dioxico::{use_theme, ColorMode, Switch};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
-    let _theme = use_theme();
-
-    // TODO: add switch for light/dark mode
+    let mut theme = use_theme();
 
     rsx! {
-        div {
-            "Theme customization placeholder"
+        Switch {
+            state: (theme.read().color_mode.is_dark(), move |is_dark| {
+                theme.write().color_mode = if is_dark { ColorMode::Dark } else { ColorMode::Light };
+            }),
+            label: "Color mode",
         }
     }
 }

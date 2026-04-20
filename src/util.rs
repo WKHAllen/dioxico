@@ -4,7 +4,7 @@ use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 
 /// Generates a random ID for an element.
-fn new_id() -> String {
+pub fn new_id() -> String {
     let value = rand::random::<u32>();
     let hex_value = format!("{value:x}");
     hex_value

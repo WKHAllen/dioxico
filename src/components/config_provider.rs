@@ -1,5 +1,5 @@
+use crate::style::DynamicStyle;
 use crate::theme::{Theme, STYLES};
-use dioxus::document::Style;
 use dioxus::prelude::*;
 
 /// Must be inserted at one of the highest levels of the DOM tree. Injects all
@@ -26,11 +26,11 @@ pub fn ConfigProvider(children: Element) -> Element {
     let theme_styles = theme.read().root_style();
 
     rsx! {
-        Style {
-            "{STYLES}"
+        Stylesheet {
+            href: STYLES
         }
 
-        Style {
+        DynamicStyle {
             "{theme_styles}"
         }
 
