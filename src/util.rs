@@ -14,6 +14,11 @@ pub fn use_id() -> String {
     use_hook(new_id)
 }
 
+#[allow(dead_code)]
+pub fn use_ids(n: usize) -> Vec<String> {
+    use_hook(|| (0..n).map(|_| new_id()).collect())
+}
+
 /// A trait for numeric values.
 pub trait Number:
     PartialEq

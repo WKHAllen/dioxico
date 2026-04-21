@@ -6,6 +6,9 @@ mod icon;
 mod icon_button;
 mod input;
 mod number_input;
+mod progress_bar;
+mod radio;
+mod slider;
 mod switch;
 mod textarea;
 
@@ -17,5 +20,8 @@ pub use icon::*;
 pub use icon_button::*;
 pub use input::*;
 pub use number_input::*;
+pub use progress_bar::*;
+pub use radio::*;
+pub use slider::*;
 pub use switch::*;
 pub use textarea::*;

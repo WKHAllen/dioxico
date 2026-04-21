@@ -1192,3 +1192,161 @@ body {
 .dioxico-switch-disabled .dioxico-switch-toggle:after {
   background-color: var(--dioxico-switch-head-background-color-disabled);
 }
+
+/*             */
+/*    RADIO    */
+/*             */
+
+.dioxico-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.dioxico-radio-group-horizontal {
+  flex-direction: row;
+}
+
+.dioxico-radio-group-vertical {
+  flex-direction: column;
+}
+
+.dioxico-radio-option {
+  display: flex;
+  flex-direction: row;
+}
+
+.dioxico-radio-input {
+  flex-shrink: 0;
+  cursor: pointer;
+  appearance: none;
+  margin: 0;
+  border-radius: 100vw;
+  width: var(--dioxico-radio-size);
+  height: var(--dioxico-radio-size);
+  border: var(--dioxico-standard-border);
+  background-color: var(--dioxico-radio-background-color-unchecked);
+  transition: 0.2s all linear;
+}
+
+.dioxico-radio-input:checked {
+  background-color: var(--dioxico-radio-background-color-checked);
+  border: var(--dioxico-radio-border-size-checked) solid
+    var(--dioxico-radio-border-color-checked);
+}
+
+.dioxico-radio-label {
+  font-size: var(--dioxico-standard-label-size);
+  padding-left: 8px;
+  cursor: pointer;
+}
+
+.dioxico-radio-option-disabled .dioxico-radio-input,
+.dioxico-radio-option-disabled .dioxico-radio-label {
+  cursor: default;
+}
+
+.dioxico-radio-option-disabled .dioxico-radio-input:checked {
+  background-color: var(--dioxico-radio-background-color-checked-disabled);
+  border: var(--dioxico-radio-border-size-checked) solid
+    var(--dioxico-radio-border-color-checked-disabled);
+}
+
+.dioxico-radio-option-disabled .dioxico-radio-label {
+  color: var(--dioxico-radio-label-color-disabled);
+}
+
+/*                    */
+/*    PROGRESS BAR    */
+/*                    */
+
+.dioxico-progress {
+  width: 100%;
+  height: var(--dioxico-progress-bar-height);
+  border-radius: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+.dioxico-progress-empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--dioxico-progress-bar-empty-width);
+  height: var(--dioxico-progress-bar-empty-height);
+  border-radius: 100vw;
+  background-color: var(--dioxico-progress-bar-empty-color);
+  border: var(--dioxico-standard-border);
+}
+
+.dioxico-progress-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--dioxico-progress-bar-height);
+  background-color: var(--dioxico-progress-bar-filled-color);
+}
+
+.dioxico-progress-disabled .dioxico-progress-filled {
+  background-color: var(--dioxico-progress-bar-filled-color-disabled);
+}
+
+/*              */
+/*    SLIDER    */
+/*              */
+
+.dioxico-slider-label {
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-slider {
+  width: 100%;
+  height: var(--dioxico-slider-thumb-size);
+  margin: var(--dioxico-slider-margin) 0;
+  border-radius: 100vw;
+  position: relative;
+}
+
+.dioxico-slider-input {
+  position: absolute;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+  margin: 0;
+}
+
+.dioxico-slider-track {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dioxico-slider-thumb-container {
+  position: absolute;
+  width: var(--dioxico-slider-thumb-container-size);
+}
+
+.dioxico-slider-thumb {
+  position: absolute;
+  background-color: var(--dioxico-slider-thumb-color);
+  width: var(--dioxico-slider-thumb-size);
+  height: var(--dioxico-slider-thumb-size);
+  border-radius: 100vw;
+}
+
+.dioxico-slider-disabled .dioxico-slider-label {
+  color: var(--dioxico-slider-label-color-disabled);
+}
+
+.dioxico-slider-disabled .dioxico-slider-thumb {
+  background-color: var(--dioxico-slider-thumb-color-disabled);
+}
+
+.dioxico-slider-disabled .dioxico-slider-input {
+  cursor: default;
+}

@@ -9,6 +9,9 @@ mod icon;
 mod icon_button;
 mod input;
 mod number_input;
+mod progress_bar;
+mod radio;
+mod slider;
 mod switch;
 mod textarea;
 mod theme;
@@ -51,6 +54,9 @@ fn Demo() -> Element {
         icon_button,
         checkbox,
         switch,
+        radio,
+        progress_bar,
+        slider,
     );
 
     rsx! {
