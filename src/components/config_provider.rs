@@ -1,3 +1,4 @@
+use crate::hooks::ClickAwayRegistry;
 use crate::style::DynamicStyle;
 use crate::theme::{Theme, STYLES};
 use dioxus::prelude::*;
@@ -20,20 +21,30 @@ use dioxus::prelude::*;
 /// # }
 /// ```
 #[component]
-pub fn ConfigProvider(children: Element) -> Element {
+pub fn ConfigProvider(#[props(default, into)] class: String, children: Element) -> Element {
     let theme_signal = use_signal(Theme::default);
     let theme = use_context_provider(|| theme_signal);
     let theme_styles = theme.read().root_style();
 
+    let click_away_reg_signal = use_signal(ClickAwayRegistry::new);
+    use_context_provider(|| click_away_reg_signal);
+
     rsx! {
-        Stylesheet {
-            href: STYLES
-        }
+        div {
+            class,
+            onclick: move |_| {
+                click_away_reg_signal.read().trigger_all();
+            },
 
-        DynamicStyle {
-            "{theme_styles}"
-        }
+            Stylesheet {
+                href: STYLES
+            }
 
-        {children}
+            DynamicStyle {
+                "{theme_styles}"
+            }
+
+            {children}
+        }
     }
 }

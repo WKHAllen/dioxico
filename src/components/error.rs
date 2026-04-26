@@ -39,12 +39,15 @@ pub fn Error(
     /// Error message size.
     #[props(default)]
     size: ErrorSize,
+    /// CSS classes to apply to the error.
+    #[props(default, into)]
+    class: String,
 ) -> Element {
     rsx! {
         span {
-            class: classes!("dioxico-error", format!("dioxico-text-{}", size.as_str())),
+            class: classes!("dioxico-error", format!("dioxico-text-{}", size.as_str()), class),
 
-            "{message}"
+            {message}
         }
     }
 }

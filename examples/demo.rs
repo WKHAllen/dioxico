@@ -11,6 +11,7 @@ mod input;
 mod number_input;
 mod progress_bar;
 mod radio;
+mod select;
 mod slider;
 mod switch;
 mod textarea;
@@ -57,6 +58,7 @@ fn Demo() -> Element {
         radio,
         progress_bar,
         slider,
+        select,
     );
 
     rsx! {

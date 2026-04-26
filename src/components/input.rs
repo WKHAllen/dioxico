@@ -75,7 +75,7 @@ pub fn Input(
                 class: "dioxico-input-label",
                 r#for: "{id}",
 
-                "{label}"
+                {label}
 
                 span {
                     class: "dioxico-required-mark",
