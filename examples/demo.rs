@@ -2,8 +2,10 @@ use convert_case::{Case, Casing};
 use dioxico::ConfigProvider;
 use dioxus::prelude::*;
 
+mod alert;
 mod button;
 mod checkbox;
+mod dialog;
 mod error;
 mod icon;
 mod icon_button;
@@ -13,6 +15,7 @@ mod progress_bar;
 mod radio;
 mod select;
 mod slider;
+mod spinner;
 mod switch;
 mod textarea;
 mod theme;
@@ -47,6 +50,7 @@ fn Demo() -> Element {
     let demos = demo_views!(
         theme,
         error,
+        spinner,
         input,
         textarea,
         number_input,
@@ -59,6 +63,8 @@ fn Demo() -> Element {
         progress_bar,
         slider,
         select,
+        dialog,
+        alert,
     );
 
     rsx! {

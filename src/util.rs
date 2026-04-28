@@ -2,6 +2,7 @@ use dioxus::prelude::*;
 use std::fmt::{Debug, Display};
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
+use std::time::Duration;
 
 /// Generates a random ID for an element.
 pub fn new_id() -> String {
@@ -113,3 +114,13 @@ impl_number_int_lossless!(i8 i16 i32 u8 u16 u32);
 impl_number_int_lossy!(i64 i128 isize u64 u128 usize);
 
 impl_number_float!(f32 f64);
+
+pub async fn sleep(duration: Duration) {
+    #[cfg(not(target_arch = "wasm32"))]
+    use tokio::time::sleep as sleep_async;
+
+    #[cfg(target_arch = "wasm32")]
+    use wasmtimer::tokio::sleep as sleep_async;
+
+    sleep_async(duration).await;
+}
