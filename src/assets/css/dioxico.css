@@ -1775,3 +1775,215 @@ body {
     stroke-dashoffset: -124;
   }
 }
+
+/*             */
+/*    CHIPS    */
+/*             */
+
+.dioxico-chips-container {
+  padding: var(--dioxico-form-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-padding-small);
+}
+
+.dioxico-chips-label-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.dioxico-chips-label {
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-chips {
+  display: flex;
+  flex-direction: column;
+}
+
+.dioxico-chips-above {
+  flex-direction: column-reverse;
+}
+
+.dioxico-chips-below {
+  flex-direction: column;
+}
+
+.dioxico-chips-inner {
+  background-color: var(--dioxico-input-background-color);
+  color: var(--dioxico-input-text-color);
+  padding: var(--dioxico-chips-container-padding);
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-input-border-radius);
+  transition: border 0.1s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-padding-small);
+}
+
+.dioxico-chips-inner:focus-within {
+  border: var(--dioxico-focus-border);
+}
+
+.dioxico-chips-container-invalid .dioxico-chips-inner,
+.dioxico-chips-container-invalid .dioxico-chips-inner:focus-within {
+  border: var(--dioxico-error-border);
+}
+
+.dioxico-chips-label {
+  color: var(--dioxico-text-color);
+  font-size: var(--dioxico-standard-label-size);
+}
+
+.dioxico-chips-container-disabled .dioxico-chips-label {
+  color: var(--dioxico-text-color-disabled);
+}
+
+.dioxico-chips-chip-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--dioxico-chips-chip-list-padding);
+}
+
+.dioxico-chips-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--dioxico-chips-chip-inner-padding);
+  background-color: var(--dioxico-chips-chip-background-color);
+  color: var(--dioxico-chips-chip-text-color);
+  padding: var(--dioxico-chips-chip-padding);
+  border-radius: 100vw;
+}
+
+.dioxico-chips-container-disabled .dioxico-chips-chip {
+  color: var(--dioxico-chips-chip-text-color-disabled);
+}
+
+.dioxico-chips-chip-label {
+  font-size: var(--dioxico-chips-chip-label-size);
+}
+
+.dioxico-chips-input-box-container {
+  display: flex;
+}
+
+.dioxico-chips-input {
+  width: 100%;
+  background-color: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+}
+
+.dioxico-chips-options-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dioxico-chips-options-popup {
+  position: absolute;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  max-height: var(--dioxico-chips-popup-max-height);
+  overflow-y: auto;
+  z-index: 1;
+  transition:
+    visibility 0.5s,
+    opacity 0.2s linear 0.125s;
+  background-color: var(--dioxico-chips-popup-background-color);
+  border-radius: var(--dioxico-chips-popup-border-radius);
+  box-shadow: var(--dioxico-standard-box-shadow);
+  padding: 4px 0;
+}
+
+.dioxico-chips-above .dioxico-chips-options-popup {
+  bottom: 0;
+}
+
+.dioxico-chips-below .dioxico-chips-options-popup {
+  top: 0;
+}
+
+.dioxico-chips-container-open .dioxico-chips-options-popup {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    visibility 0s,
+    opacity 0.2s linear;
+}
+
+.dioxico-chips-option {
+  padding: 2px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.1s linear;
+}
+
+.dioxico-chips-container-open .dioxico-chips-option:hover {
+  background-color: var(--dioxico-chips-popup-background-color-hover);
+}
+
+.dioxico-chips-container-open .dioxico-chips-option:active {
+  background-color: var(--dioxico-chips-popup-background-color-active);
+}
+
+.dioxico-chips-container-open .dioxico-chips-option-selecting {
+  background-color: var(--dioxico-chips-popup-background-color-hover);
+}
+
+.dioxico-chips-container-compact {
+  padding: var(--dioxico-compact-padding) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-compact-gap);
+  background-color: var(--dioxico-input-background-color);
+  color: var(--dioxico-input-text-color);
+}
+
+.dioxico-chips-container-compact > * {
+  margin: 0 var(--dioxico-compact-padding);
+}
+
+.dioxico-chips-container-compact .dioxico-chips {
+  margin: 0;
+}
+
+.dioxico-chips-container-compact .dioxico-chips-label {
+  color: var(--dioxico-compact-label-color);
+  font-size: var(--dioxico-compact-label-size);
+}
+
+.dioxico-chips-container-compact .dioxico-chips-inner {
+  padding: 0;
+  font-size: var(--dioxico-compact-text-size);
+  border: none;
+  border-radius: 0;
+  margin: 0 var(--dioxico-compact-padding);
+}
+
+.dioxico-chips-container-compact .dioxico-chips-chip-list {
+  gap: var(--dioxico-compact-gap);
+}
+
+.dioxico-chips-container-compact .dioxico-chips-chip-label {
+  font-size: var(--dioxico-compact-chip-label-size);
+}
+
+.dioxico-chips-container-compact .dioxico-chips-options-popup {
+  margin-top: var(--dioxico-compact-padding);
+}
+
+.dioxico-chips-container-compact .dioxico-chips-inner,
+.dioxico-chips-container-compact .dioxico-chips-inner:focus-within {
+  border: none;
+}
+
+.dioxico-chips-container-compact .dioxico-chips-error {
+  font-size: var(--dioxico-compact-error-size);
+}

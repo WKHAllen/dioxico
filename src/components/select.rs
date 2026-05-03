@@ -199,7 +199,7 @@ where
                             div {
                                 class: "dioxico-select-option",
                                 onclick: move |_| {
-                                    state.with_mut(|state| state.set_null_value());
+                                    state.write().set_null_value();
                                     dropdown_open.set(false);
                                 },
 
@@ -211,7 +211,7 @@ where
                             div {
                                 class: "dioxico-select-option",
                                 onclick: move |_| {
-                                    state.with_mut(|state| state.set_value(index));
+                                    state.write().set_value(index);
                                     dropdown_open.set(false);
                                 },
 

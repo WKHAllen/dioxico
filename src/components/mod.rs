@@ -1,6 +1,7 @@
 mod alert;
 mod button;
 mod checkbox;
+mod chips;
 mod config_provider;
 mod dialog;
 mod error;
@@ -19,6 +20,7 @@ mod textarea;
 pub use alert::*;
 pub use button::*;
 pub use checkbox::*;
+pub use chips::*;
 pub use config_provider::*;
 pub use dialog::*;
 pub use error::*;

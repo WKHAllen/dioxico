@@ -278,7 +278,7 @@ where
                     value: "{state.get()}",
                     oninput: move |event| {
                         let new_value_str = event.value();
-                        state.with_mut(move |num| num.set(&new_value_str));
+                        state.write().set(&new_value_str);
                     },
                     onkeydown: move |event| {
                         if event.key() == Key::Enter {

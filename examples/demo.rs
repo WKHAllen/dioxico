@@ -5,6 +5,7 @@ use dioxus::prelude::*;
 mod alert;
 mod button;
 mod checkbox;
+mod chips;
 mod dialog;
 mod error;
 mod icon;
@@ -65,6 +66,7 @@ fn Demo() -> Element {
         select,
         dialog,
         alert,
+        chips,
     );
 
     rsx! {
