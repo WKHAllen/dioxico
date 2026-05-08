@@ -1987,3 +1987,96 @@ body {
 .dioxico-chips-container-compact .dioxico-chips-error {
   font-size: var(--dioxico-compact-error-size);
 }
+
+/*               */
+/*    TOOLTIP    */
+/*               */
+
+.dioxico-tooltip-container {
+  position: relative;
+}
+
+.dioxico-tooltip-popup-container {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--dioxico-tooltip-popup-max-width);
+  display: flex;
+  justify-content: center;
+  z-index: -1;
+  transition: z-index 0s linear 0.15s;
+}
+
+.dioxico-tooltip-open .dioxico-tooltip-popup-container {
+  z-index: 1;
+  transition: z-index 0s linear 0s;
+}
+
+.dioxico-tooltip-disabled .dioxico-tooltip-popup-container {
+  z-index: -1;
+  transition: z-index 0s linear 0s;
+}
+
+.dioxico-tooltip-popup {
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  transition: all 0.15s ease-in-out;
+}
+
+.dioxico-tooltip-text {
+  background-color: var(--dioxico-tooltip-background-color);
+  color: var(--dioxico-tooltip-text-color);
+  font-size: var(--dioxico-tooltip-font-size);
+  padding: 2px 6px;
+  border-radius: var(--dioxico-tooltip-border-radius);
+  box-shadow: var(--dioxico-standard-box-shadow);
+}
+
+.dioxico-tooltip-open .dioxico-tooltip-popup {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dioxico-tooltip-disabled .dioxico-tooltip-popup {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/*             */
+/*    BADGE    */
+/*             */
+
+.dioxico-badge-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dioxico-badge {
+  height: var(--dioxico-badge-height);
+  padding: var(--dioxico-badge-padding);
+  border-radius: 100vw;
+  font-size: var(--dioxico-badge-font-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dioxico-badge-primary {
+  background-color: var(--dioxico-badge-primary-background-color);
+  color: var(--dioxico-badge-primary-text-color);
+}
+
+.dioxico-badge-secondary {
+  background-color: var(--dioxico-badge-secondary-background-color);
+  color: var(--dioxico-badge-secondary-text-color);
+}
+
+.dioxico-badge-danger {
+  background-color: var(--dioxico-badge-danger-background-color);
+  color: var(--dioxico-badge-danger-text-color);
+}

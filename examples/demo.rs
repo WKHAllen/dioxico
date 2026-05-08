@@ -3,6 +3,7 @@ use dioxico::ConfigProvider;
 use dioxus::prelude::*;
 
 mod alert;
+mod badge;
 mod button;
 mod checkbox;
 mod chips;
@@ -20,6 +21,7 @@ mod spinner;
 mod switch;
 mod textarea;
 mod theme;
+mod tooltip;
 
 macro_rules! demo_views {
     ( $( $demo:ident ),* $(,)? ) => {
@@ -67,6 +69,8 @@ fn Demo() -> Element {
         dialog,
         alert,
         chips,
+        tooltip,
+        badge,
     );
 
     rsx! {

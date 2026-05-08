@@ -1,4 +1,5 @@
 mod alert;
+mod badge;
 mod button;
 mod checkbox;
 mod chips;
@@ -16,8 +17,10 @@ mod slider;
 mod spinner;
 mod switch;
 mod textarea;
+mod tooltip;
 
 pub use alert::*;
+pub use badge::*;
 pub use button::*;
 pub use checkbox::*;
 pub use chips::*;
@@ -35,3 +38,4 @@ pub use slider::*;
 pub use spinner::*;
 pub use switch::*;
 pub use textarea::*;
+pub use tooltip::*;
