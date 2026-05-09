@@ -9,6 +9,7 @@ mod checkbox;
 mod chips;
 mod dialog;
 mod error;
+mod file_select;
 mod icon;
 mod icon_button;
 mod input;
@@ -71,6 +72,7 @@ fn Demo() -> Element {
         chips,
         tooltip,
         badge,
+        file_select,
     );
 
     rsx! {

@@ -579,6 +579,16 @@
   --dioxico-date-picker-day-background-color-selected: var(
     --dioxico-primary-color
   );
+
+  /*                 */
+  /*    FILE DROP    */
+  /*                 */
+
+  --dioxico-file-drop-background-color: var(--dioxico-background-color-3);
+  --dioxico-file-drop-background-color-hover: var(--dioxico-background-color-4);
+  --dioxico-file-drop-background-color-active: var(
+    --dioxico-background-color-5
+  );
 }
 
 /*              */
@@ -2079,4 +2089,174 @@ body {
 .dioxico-badge-danger {
   background-color: var(--dioxico-badge-danger-background-color);
   color: var(--dioxico-badge-danger-text-color);
+}
+
+/*                   */
+/*    FILE SELECT    */
+/*                   */
+
+.dioxico-file-select {
+  display: flex;
+  flex-direction: column;
+}
+
+.dioxico-file-select-button {
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: var(--dioxico-button-border-radius);
+  padding: 0;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  cursor: pointer;
+}
+
+.dioxico-file-select-button:disabled {
+  cursor: default;
+}
+
+.dioxico-file-select-button-primary {
+  background-color: var(--dioxico-button-primary-background-color);
+  color: var(--dioxico-button-primary-text-color);
+}
+
+.dioxico-file-select-button-primary:hover {
+  background-color: var(--dioxico-button-primary-background-color-hover);
+}
+
+.dioxico-file-select-button-primary:active {
+  background-color: var(--dioxico-button-primary-background-color-active);
+}
+
+.dioxico-file-select-button-primary:disabled {
+  background-color: var(--dioxico-button-primary-background-color-disabled);
+  color: var(--dioxico-button-primary-text-color-disabled);
+}
+
+.dioxico-file-select-button-secondary {
+  background-color: var(--dioxico-button-secondary-background-color);
+  color: var(--dioxico-button-secondary-text-color);
+}
+
+.dioxico-file-select-button-secondary:hover {
+  background-color: var(--dioxico-button-secondary-background-color-hover);
+}
+
+.dioxico-file-select-button-secondary:active {
+  background-color: var(--dioxico-button-secondary-background-color-active);
+}
+
+.dioxico-file-select-button-secondary:disabled {
+  background-color: var(--dioxico-button-secondary-background-color-disabled);
+  color: var(--dioxico-button-secondary-text-color-disabled);
+}
+
+.dioxico-file-select-button-transparent {
+  background-color: var(--dioxico-button-transparent-background-color);
+  color: var(--dioxico-button-transparent-text-color);
+}
+
+.dioxico-file-select-button-transparent:hover {
+  background-color: var(--dioxico-button-transparent-background-color-hover);
+}
+
+.dioxico-file-select-button-transparent:active {
+  background-color: var(--dioxico-button-transparent-background-color-active);
+}
+
+.dioxico-file-select-button-transparent:disabled {
+  background-color: var(--dioxico-button-transparent-background-color-disabled);
+  color: var(--dioxico-button-transparent-text-color-disabled);
+}
+
+.dioxico-file-select-button-danger {
+  background-color: var(--dioxico-button-danger-background-color);
+  color: var(--dioxico-button-danger-text-color);
+}
+
+.dioxico-file-select-button-danger:hover {
+  background-color: var(--dioxico-button-danger-background-color-hover);
+}
+
+.dioxico-file-select-button-danger:active {
+  background-color: var(--dioxico-button-danger-background-color-active);
+}
+
+.dioxico-file-select-button-danger:disabled {
+  background-color: var(--dioxico-button-danger-background-color-disabled);
+  color: var(--dioxico-button-danger-text-color-disabled);
+}
+
+.dioxico-file-select-button-label {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.dioxico-file-select-button:disabled .dioxico-file-select-button-label {
+  cursor: default;
+}
+
+.dioxico-file-select-input {
+  display: none;
+}
+
+/*                 */
+/*    FILE DROP    */
+/*                 */
+
+.dioxico-file-drop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-button-border-radius);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  background-color: var(--dioxico-file-drop-background-color);
+  cursor: pointer;
+}
+
+.dioxico-file-drop:hover {
+  background-color: var(--dioxico-file-drop-background-color-hover);
+}
+
+.dioxico-file-drop:active,
+.dioxico-file-drop-dropping {
+  background-color: var(--dioxico-file-drop-background-color-active);
+}
+
+.dioxico-file-drop-disabled,
+.dioxico-file-drop-disabled.dioxico-file-drop-dropping,
+.dioxico-file-drop-disabled:hover,
+.dioxico-file-drop-disabled:active {
+  background-color: var(--dioxico-file-drop-background-color);
+  cursor: default;
+}
+
+.dioxico-file-drop-label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--dioxico-text-color);
+  font-size: var(--dioxico-standard-label-size);
+  text-align: center;
+  cursor: pointer;
+}
+
+.dioxico-file-drop-disabled .dioxico-file-drop-label {
+  color: var(--dioxico-text-color-disabled);
+  cursor: default;
+}
+
+.dioxico-file-drop-label-text {
+  padding: 16px 12px;
+}
+
+.dioxico-file-drop-input {
+  display: none;
 }

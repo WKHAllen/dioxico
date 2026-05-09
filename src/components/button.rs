@@ -46,7 +46,9 @@ pub fn Button(
         button {
             r#type: "button",
             class: classes!("dioxico-button", format!("dioxico-button-{}", style.as_str())),
-            onclick: move |_| {
+            onclick: move |event| {
+                event.prevent_default();
+
                 if !disabled {
                     on_click.call(());
                 }

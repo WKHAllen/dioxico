@@ -3,6 +3,8 @@ use dioxus::prelude::*;
 use std::borrow::{Borrow, BorrowMut};
 use std::ops::{Deref, DerefMut};
 
+/// A generalized wrapper representing an immutable reference to a stateful
+/// value.
 pub enum StateRef<'a, T, S = UnsyncStorage>
 where
     S: Storage<SignalData<T>>,
@@ -65,6 +67,7 @@ where
     }
 }
 
+/// A generalized wrapper representing a mutable reference to a stateful value.
 pub enum StateMut<'a, T, S = UnsyncStorage>
 where
     T: Clone + 'static,
@@ -172,6 +175,16 @@ where
     ValueCallback(T, T, EventHandler<T>),
     /// A signal wrapping a value.
     Signal(Signal<T, S>),
+}
+
+impl<T, S> Default for State<T, S>
+where
+    T: Default + Clone + PartialEq + 'static,
+    S: Storage<SignalData<T>> + 'static,
+{
+    fn default() -> Self {
+        Self::Value(T::default(), T::default())
+    }
 }
 
 impl<T, S> Clone for State<T, S>
