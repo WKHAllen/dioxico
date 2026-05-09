@@ -2,7 +2,7 @@ use crate::classes::*;
 use dioxus::prelude::*;
 
 /// The size of an error message.
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ErrorSize {
     /// A very small message.
     Smaller,

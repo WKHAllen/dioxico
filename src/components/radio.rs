@@ -5,7 +5,6 @@ use dioxus::prelude::*;
 use std::fmt::Display;
 
 /// The orientation of a radio group.
-#[allow(dead_code)]
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum RadioGroupOrientation {
     /// Horizontally oriented.
@@ -43,6 +42,9 @@ pub fn RadioGroup<T>(
     /// Is this radio group disabled?
     #[props(default)]
     disabled: bool,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     T: Display + Clone + PartialEq + 'static,
@@ -58,7 +60,7 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.as_str())),
+            class: classes!("dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.as_str()), class),
 
             for (index, id, option) in index_id_options {
                 div {

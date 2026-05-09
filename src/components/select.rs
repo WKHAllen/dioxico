@@ -101,6 +101,9 @@ fn SelectInner<S, T>(
     /// An optional error message. If empty or missing, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     S: SelectState + Clone + PartialEq + 'static,
@@ -137,7 +140,7 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-select-container", disabled.then_some("dioxico-select-container-disabled"), dropdown_open().then_some("dioxico-select-container-open")),
+            class: classes!("dioxico-select-container", disabled.then_some("dioxico-select-container-disabled"), dropdown_open().then_some("dioxico-select-container-open"), class),
 
             div {
                 class: "dioxico-select-label-container",
@@ -255,6 +258,9 @@ pub fn Select<T>(
     /// An optional error message. If empty or missing, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     T: Display + Clone + PartialEq + 'static,
@@ -268,6 +274,7 @@ where
             required,
             disabled,
             error,
+            class,
         }
     }
 }
@@ -299,6 +306,9 @@ pub fn SelectNullable<T>(
     /// An optional error message. If empty or missing, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     T: Display + Clone + PartialEq + 'static,
@@ -313,6 +323,7 @@ where
             required,
             disabled,
             error,
+            class,
         }
     }
 }

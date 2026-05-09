@@ -10,12 +10,15 @@ pub fn ProgressBar(
     /// Is this progress bar disabled?
     #[props(default)]
     disabled: bool,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element {
     let width_style = format!("width: {}%;", progress * 100.0);
 
     rsx! {
         div {
-            class: classes!("dioxico-progress", disabled.then_some("dioxico-progress-disabled")),
+            class: classes!("dioxico-progress", disabled.then_some("dioxico-progress-disabled"), class),
 
             div {
                 class: "dioxico-progress-empty",

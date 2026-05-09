@@ -36,10 +36,13 @@ pub fn Spinner(
     /// Should the spinner be centered?
     #[props(default = true)]
     center: bool,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element {
     rsx! {
         div {
-            class: classes!("dioxico-spinner-container", center.then_some("dioxico-spinner-center")),
+            class: classes!("dioxico-spinner-container", center.then_some("dioxico-spinner-center"), class),
 
             svg {
                 class: classes!("dioxico-spinner", format!("dioxico-spinner-{}", size.as_str())),

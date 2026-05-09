@@ -98,7 +98,7 @@ const HOVER_DARKEN_AMOUNT: f32 = 0.15;
 const ACTIVE_DARKEN_AMOUNT: f32 = 0.25;
 
 /// The color mode. Defaults to dark mode.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ColorMode {
     /// Dark mode.
     #[default]
@@ -143,7 +143,7 @@ impl StyleRules {
 }
 
 /// A styling theme.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct Theme {
     /// The theme's color mode.
     pub color_mode: ColorMode,

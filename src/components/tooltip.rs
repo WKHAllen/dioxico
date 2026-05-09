@@ -12,18 +12,24 @@ pub fn Tooltip(
     disabled: bool,
     /// Elements within the tooltip hover area.
     children: Element,
-    /// CSS classes to apply to the tooltip container.
+    /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
+    /// CSS classes to apply to the tooltip content container.
+    #[props(default, into)]
+    content_class: String,
+    /// CSS classes to apply to the tooltip hover text.
+    #[props(default, into)]
+    text_class: String,
 ) -> Element {
     let mut hovering_state = use_signal(|| false);
 
     rsx! {
         div {
-            class: classes!("dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled.then_some("dioxico-tooltip-disabled")),
+            class: classes!("dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled.then_some("dioxico-tooltip-disabled"), class),
 
             div {
-                class: classes!("dioxico-tooltip-content", class),
+                class: classes!("dioxico-tooltip-content", content_class),
                 onmouseenter: move |_| hovering_state.set(true),
                 onmouseleave: move |_| hovering_state.set(false),
 
@@ -41,7 +47,7 @@ pub fn Tooltip(
                         // node ref?
 
                         span {
-                            class: "dioxico-tooltip-text",
+                            class: classes!("dioxico-tooltip-text", text_class),
 
                             {text}
                         }

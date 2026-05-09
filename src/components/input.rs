@@ -5,7 +5,7 @@ use crate::util::*;
 use dioxus::prelude::*;
 
 /// The type of input element.
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum InputType {
     /// Standard text input.
     #[default]
@@ -63,13 +63,16 @@ pub fn Input(
     /// An optional error message. If missing or empty, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element {
     let id = use_id();
     let invalid = !error.is_empty();
 
     rsx! {
         div {
-            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled")),
+            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled"), class),
 
             label {
                 class: "dioxico-input-label",

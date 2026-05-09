@@ -25,6 +25,9 @@ pub fn Slider<N>(
     /// Is this slider disabled?
     #[props(default)]
     disabled: bool,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     N: Number + 'static,
@@ -38,7 +41,7 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-slider-container", disabled.then_some("dioxico-slider-disabled")),
+            class: classes!("dioxico-slider-container", disabled.then_some("dioxico-slider-disabled"), class),
 
             label {
                 r#for: "{id}",

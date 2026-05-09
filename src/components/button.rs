@@ -41,11 +41,14 @@ pub fn Button(
     /// Callback called when the button is clicked.
     #[props(default)]
     on_click: EventHandler<()>,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element {
     rsx! {
         button {
             r#type: "button",
-            class: classes!("dioxico-button", format!("dioxico-button-{}", style.as_str())),
+            class: classes!("dioxico-button", format!("dioxico-button-{}", style.as_str()), class),
             onclick: move |event| {
                 event.prevent_default();
 

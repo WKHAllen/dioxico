@@ -14,16 +14,22 @@ pub fn Switch(
     /// Is this switch disabled?
     #[props(default)]
     disabled: bool,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
+    /// CSS classes to apply to the switch content.
+    #[props(default, into)]
+    content_class: String,
 ) -> Element {
     rsx! {
         div {
-            class: "dioxico-switch-container",
+            class: classes!("dioxico-switch-container", class),
 
             label {
                 class: classes!("dioxico-switch", disabled.then_some("dioxico-switch-disabled")),
 
-                span {
-                    class: "dioxico-switch-label",
+                div {
+                    class: classes!("dioxico-switch-label", content_class),
 
                     {label}
                 }

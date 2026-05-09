@@ -21,7 +21,13 @@ use dioxus::prelude::*;
 /// # }
 /// ```
 #[component]
-pub fn ConfigProvider(#[props(default, into)] class: String, children: Element) -> Element {
+pub fn ConfigProvider(
+    /// CSS classes to apply to the config provider container element.
+    #[props(default, into)]
+    class: String,
+    /// Child elements within the config provider component.
+    children: Element,
+) -> Element {
     let theme_signal = use_signal(Theme::default);
     let theme = use_context_provider(|| theme_signal);
     let theme_styles = theme.read().root_style();

@@ -15,16 +15,22 @@ pub fn Checkbox(
     /// Is this checkbox disabled?
     #[props(default)]
     disabled: bool,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
+    /// CSS classes to apply to the checkbox content.
+    #[props(default, into)]
+    content_class: String,
 ) -> Element {
     rsx! {
         div {
-            class: "dioxico-checkbox-container",
+            class: classes!("dioxico-checkbox-container", class),
 
             label {
                 class: classes!("dioxico-checkbox", disabled.then_some("dioxico-checkbox-disabled")),
 
-                span {
-                    class: "dioxico-checkbox-label",
+                div {
+                    class: classes!("dioxico-checkbox-label", content_class),
 
                     {label}
                 }

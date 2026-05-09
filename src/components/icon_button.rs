@@ -19,14 +19,17 @@ pub fn IconButton(
     /// Callback called when the icon button is clicked.
     #[props(default)]
     on_click: EventHandler<()>,
-    /// CSS classes to apply to the icon.
+    /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
+    /// CSS classes to apply to the icon.
+    #[props(default, into)]
+    icon_class: String,
 ) -> Element {
     rsx! {
         button {
             r#type: "button",
-            class: classes!("dioxico-icon-button", format!("dioxico-icon-button-{}", size.as_str())),
+            class: classes!("dioxico-icon-button", format!("dioxico-icon-button-{}", size.as_str()), class),
             onclick: move |_| {
                 if !disabled {
                     on_click.call(());
@@ -35,7 +38,7 @@ pub fn IconButton(
             disabled,
 
             img {
-                class: classes!("dioxico-icon-button-icon", class),
+                class: classes!("dioxico-icon-button-icon", icon_class),
                 src: icon,
             }
         }

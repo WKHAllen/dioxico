@@ -76,6 +76,12 @@ pub fn Alert(
     /// alert was closed manually and `false` otherwise.
     #[props(default)]
     on_close: EventHandler<bool>,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
+    /// CSS classes to apply to the alert content.
+    #[props(default, into)]
+    content_class: String,
     /// Elements within the alert.
     children: Element,
 ) -> Element {
@@ -101,7 +107,7 @@ pub fn Alert(
 
     rsx! {
         div {
-            class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open")),
+            class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open"), class),
 
             div {
                 class: "dioxico-alert-inner",
@@ -135,7 +141,7 @@ pub fn Alert(
                 }
 
                 div {
-                    class: "dioxico-alert-body",
+                    class: classes!("dioxico-alert-body", content_class),
 
                     {children}
                 }

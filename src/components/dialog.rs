@@ -4,8 +4,7 @@ use crate::state::State;
 use dioxus::prelude::*;
 
 /// Dialog size.
-#[allow(dead_code)]
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum DialogSize {
     /// Small dialog.
     Small,
@@ -34,8 +33,7 @@ impl DialogSize {
 }
 
 /// Dialog action buttons layout.
-#[allow(dead_code)]
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum DialogActionsLayout {
     /// Left-aligned actions.
     Left,
@@ -90,6 +88,12 @@ pub fn Dialog(
     /// The layout of the action buttons.
     #[props(default)]
     actions_layout: DialogActionsLayout,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
+    /// CSS classes to apply to the dialog content.
+    #[props(default, into)]
+    content_class: String,
     /// Elements within the dialog.
     children: Element,
 ) -> Element {
@@ -97,7 +101,7 @@ pub fn Dialog(
 
     rsx! {
         div {
-            class: classes!("dioxico-dialog-container", state.get().then_some("dioxico-dialog-container-open")),
+            class: classes!("dioxico-dialog-container", state.get().then_some("dioxico-dialog-container-open"), class),
             onclick: move |_| {
                 if !mouse_in_state() {
                     on_close_request.call(false);
@@ -137,7 +141,7 @@ pub fn Dialog(
                     }
 
                     div {
-                        class: "dioxico-dialog-body",
+                        class: classes!("dioxico-dialog-body", content_class),
 
                         {children}
                     }

@@ -5,7 +5,7 @@ use crate::util::*;
 use dioxus::prelude::*;
 
 /// Textarea resize options.
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum TextareaResize {
     /// No resize.
     #[default]
@@ -60,13 +60,16 @@ pub fn Textarea(
     /// An optional error message. If missing or empty, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element {
     let id = use_id();
     let invalid = !error.is_empty();
 
     rsx! {
         div {
-            class: classes!("dioxico-textarea-container", disabled.then_some("dioxico-textarea-container-disabled")),
+            class: classes!("dioxico-textarea-container", disabled.then_some("dioxico-textarea-container-disabled"), class),
 
             div {
                 class: "dioxico-textarea-label-container",

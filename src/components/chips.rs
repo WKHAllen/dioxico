@@ -100,7 +100,7 @@ fn get_possible_options(
 }
 
 /// Position of a chips popup.
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ChipsPopupPosition {
     /// Position the popup above.
     Above,
@@ -150,6 +150,9 @@ pub fn Chips<T>(
     /// An optional error message. If missing or empty, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     T: Display + Clone + PartialEq + 'static,
@@ -175,7 +178,7 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-chips-container", disabled.then_some("dioxico-chips-container-disabled"), dropdown_open().then_some("dioxico-chips-container-open"), invalid.then_some("dioxico-chips-container-invalid")),
+            class: classes!("dioxico-chips-container", disabled.then_some("dioxico-chips-container-disabled"), dropdown_open().then_some("dioxico-chips-container-open"), invalid.then_some("dioxico-chips-container-invalid"), class),
 
             div {
                 class: "dioxico-chips-label-container",

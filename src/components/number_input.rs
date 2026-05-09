@@ -242,6 +242,9 @@ pub fn NumberInput<N>(
     /// An optional error message. If missing or empty, no error will be shown.
     #[props(default)]
     error: String,
+    /// CSS classes to apply to the base element.
+    #[props(default, into)]
+    class: String,
 ) -> Element
 where
     N: Number + 'static,
@@ -251,7 +254,7 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled")),
+            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled"), class),
 
             label {
                 class: "dioxico-input-label",
