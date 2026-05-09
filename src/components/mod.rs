@@ -1,3 +1,4 @@
+mod accordion;
 mod alert;
 mod badge;
 mod button;
@@ -20,6 +21,7 @@ mod switch;
 mod textarea;
 mod tooltip;
 
+pub use accordion::*;
 pub use alert::*;
 pub use badge::*;
 pub use button::*;

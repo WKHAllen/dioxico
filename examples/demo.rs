@@ -2,6 +2,7 @@ use convert_case::{Case, Casing};
 use dioxico::ConfigProvider;
 use dioxus::prelude::*;
 
+mod accordion;
 mod alert;
 mod badge;
 mod button;
@@ -73,6 +74,7 @@ fn Demo() -> Element {
         tooltip,
         badge,
         file_select,
+        accordion,
     );
 
     rsx! {

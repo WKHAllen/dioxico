@@ -2260,3 +2260,49 @@ body {
 .dioxico-file-drop-input {
   display: none;
 }
+
+/*                 */
+/*    ACCORDION    */
+/*                 */
+
+.dioxico-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dioxico-padding-small);
+}
+
+.dioxico-accordion-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--dioxico-padding-small);
+  color: var(--dioxico-text-color);
+  font-size: var(--dioxico-standard-label-size);
+  cursor: pointer;
+}
+
+.dioxico-accordion-disabled .dioxico-accordion-header {
+  color: var(--dioxico-text-color-disabled);
+  cursor: default;
+}
+
+.dioxico-accordion-header-icon {
+  flex-grow: 0;
+  transition: transform 0.1s ease;
+}
+
+.dioxico-accordion-open .dioxico-accordion-header-icon {
+  transform: rotate(90deg);
+}
+
+.dioxico-accordion-header-title {
+  flex-grow: 1;
+}
+
+.dioxico-accordion-content {
+  display: none;
+}
+
+.dioxico-accordion-open .dioxico-accordion-content {
+  display: unset;
+}
