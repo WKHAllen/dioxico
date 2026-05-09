@@ -1338,10 +1338,17 @@ body {
 
 .dioxico-slider-thumb-container {
   position: absolute;
-  width: var(--dioxico-slider-thumb-container-size);
+  width: 100%;
+  height: 100%;
 }
 
 .dioxico-slider-thumb {
+  position: absolute;
+  width: var(--dioxico-slider-thumb-container-size);
+  height: 100%;
+}
+
+.dioxico-slider-thumb-head {
   position: absolute;
   background-color: var(--dioxico-slider-thumb-color);
   width: var(--dioxico-slider-thumb-size);
@@ -1353,7 +1360,7 @@ body {
   color: var(--dioxico-slider-label-color-disabled);
 }
 
-.dioxico-slider-disabled .dioxico-slider-thumb {
+.dioxico-slider-disabled .dioxico-slider-thumb-head {
   background-color: var(--dioxico-slider-thumb-color-disabled);
 }
 

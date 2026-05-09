@@ -64,7 +64,11 @@ where
 
                     div {
                         class: "dioxico-slider-thumb",
-                        style: thumb_transform_style,
+
+                        div {
+                            class: "dioxico-slider-thumb-head",
+                            style: thumb_transform_style,
+                        }
                     }
 
                     input {
