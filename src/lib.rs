@@ -6,6 +6,7 @@
 #![deny(missing_docs)]
 
 mod classes;
+mod collection;
 mod components;
 mod element;
 mod hooks;
@@ -14,6 +15,7 @@ mod style;
 mod theme;
 mod util;
 
+pub use collection::Collection;
 pub use components::*;
 pub use element::ElementLike;
 pub use hooks::*;

@@ -1,4 +1,5 @@
 use crate::classes::*;
+use crate::collection::Collection;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
@@ -26,13 +27,13 @@ impl RadioGroupOrientation {
 
 /// Radio group component.
 #[component]
-pub fn RadioGroup<T>(
+pub fn RadioGroup(
     /// Radio group state.
     #[props(into)]
     state: State<Option<usize>>,
     /// List of options in the radio group.
     #[props(into)]
-    options: Vec<T>,
+    options: Collection<ElementLike>,
     /// Radio group orientation.
     #[props(default)]
     orientation: RadioGroupOrientation,
@@ -45,17 +46,15 @@ pub fn RadioGroup<T>(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-) -> Element
-where
-    T: Into<ElementLike> + Clone + PartialEq + 'static,
-{
+) -> Element {
     let name = use_id();
     // IDs need to be regenerated with every re-render because the list of
     // options may have changed.
     let index_id_options = options
+        .into_inner()
         .into_iter()
         .enumerate()
-        .map(|(index, option)| (index, new_id(), option.into()))
+        .map(|(index, option)| (index, new_id(), option))
         .collect::<Vec<_>>();
 
     rsx! {

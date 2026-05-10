@@ -1,5 +1,6 @@
 use super::{Error, ErrorSize, Icon, ANGLE_DOWN_ICON};
 use crate::classes::*;
+use crate::collection::Collection;
 use crate::element::ElementLike;
 use crate::hooks::*;
 use crate::state::State;
@@ -77,13 +78,12 @@ impl SelectPopupPosition {
 
 /// Select dropdown component.
 #[component]
-fn SelectInner<S, T>(
+fn SelectInner<S>(
     /// Selection state.
     #[props(into)]
     state: State<S>,
     /// List of select options.
-    #[props(into)]
-    options: Vec<T>,
+    options: Collection<ElementLike>,
     /// Null label option element. Defaults to "Select...".
     #[props(default = ElementLike::super_from("Select..."))]
     null_label: ElementLike,
@@ -108,7 +108,6 @@ fn SelectInner<S, T>(
 ) -> Element
 where
     S: SelectState + Clone + PartialEq + 'static,
-    T: Into<ElementLike> + Clone + PartialEq + 'static,
 {
     let id = use_id();
     let invalid = !error.is_empty();
@@ -124,14 +123,10 @@ where
     // });
 
     let selected_option = match state.get().get_value() {
-        Some(selected) => options
-            .get(selected)
-            .cloned()
-            .map(|x| x.into())
-            .unwrap_or_else({
-                let null_label = null_label.clone();
-                move || null_label
-            }),
+        Some(selected) => options.get(selected).cloned().unwrap_or_else({
+            let null_label = null_label.clone();
+            move || null_label
+        }),
         None => null_label.clone(),
     };
 
@@ -212,7 +207,7 @@ where
                             }
                         }
 
-                        for (index, option) in options.into_iter().enumerate() {
+                        for (index, option) in options.into_inner().into_iter().enumerate() {
                             div {
                                 class: "dioxico-select-option",
                                 onclick: move |_| {
@@ -220,7 +215,7 @@ where
                                     dropdown_open.set(false);
                                 },
 
-                                {option.into()}
+                                {option}
                             }
                         }
                     }
@@ -238,13 +233,13 @@ where
 
 /// Select dropdown component.
 #[component]
-pub fn Select<T>(
+pub fn Select(
     /// Selection state.
     #[props(into)]
     state: State<usize>,
     /// List of select options.
     #[props(into)]
-    options: Vec<T>,
+    options: Collection<ElementLike>,
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
@@ -263,12 +258,9 @@ pub fn Select<T>(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-) -> Element
-where
-    T: Into<ElementLike> + Clone + PartialEq + 'static,
-{
+) -> Element {
     rsx! {
-        SelectInner<usize, T> {
+        SelectInner<usize> {
             state,
             options,
             label,
@@ -283,13 +275,13 @@ where
 
 /// Select dropdown component.
 #[component]
-pub fn SelectNullable<T>(
+pub fn SelectNullable(
     /// Selection state.
     #[props(into)]
     state: State<Option<usize>>,
     /// List of select options.
     #[props(into)]
-    options: Vec<T>,
+    options: Collection<ElementLike>,
     /// Null label option element. Defaults to "Select...".
     #[props(default = ElementLike::super_from("Select..."), into)]
     null_label: ElementLike,
@@ -311,12 +303,9 @@ pub fn SelectNullable<T>(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-) -> Element
-where
-    T: Into<ElementLike> + Clone + PartialEq + 'static,
-{
+) -> Element {
     rsx! {
-        SelectInner<Option<usize>, T> {
+        SelectInner<Option<usize>> {
             state,
             options,
             null_label,

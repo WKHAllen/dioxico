@@ -1,5 +1,6 @@
 use super::{Error, ErrorSize, IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
+use crate::collection::Collection;
 use crate::element::ElementLike;
 use crate::hooks::*;
 use crate::state::State;
@@ -122,13 +123,13 @@ impl ChipsPopupPosition {
 
 /// Chips selection component.
 #[component]
-pub fn Chips<T>(
+pub fn Chips(
     /// Chips selection state.
     #[props(into)]
     state: State<Vec<usize>>,
     /// List of chips options.
     #[props(into)]
-    options: Vec<T>,
+    options: Collection<String>,
     /// Maximum number of options ot display in the dropdown.
     option_display_limit: Option<usize>,
     /// Maximum number of options that can be selected.
@@ -154,10 +155,7 @@ pub fn Chips<T>(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-) -> Element
-where
-    T: Display + Clone + PartialEq + 'static,
-{
+) -> Element {
     let id = use_id();
     let mut dropdown_open = use_signal(|| false);
     let mut next_chip = use_signal(String::new);

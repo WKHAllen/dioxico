@@ -1,5 +1,6 @@
 use super::ButtonStyle;
 use crate::classes::*;
+use crate::collection::Collection;
 use crate::util::*;
 pub use dioxus::html::FileData;
 use dioxus::html::HasFileData;
@@ -23,7 +24,7 @@ pub fn FileSelect(
     /// List of acceptable file type specifiers. If empty, all files will be
     /// allowed.
     #[props(default, into)]
-    accept: Vec<String>,
+    accept: Collection<String>,
     /// Is this field disabled?
     #[props(default)]
     disabled: bool,
@@ -86,7 +87,7 @@ pub fn FileDrop(
     /// List of acceptable file type specifiers. If empty, all files will be
     /// allowed.
     #[props(default, into)]
-    accept: Vec<String>,
+    accept: Collection<String>,
     /// Is this field disabled?
     #[props(default)]
     disabled: bool,
