@@ -7,28 +7,33 @@ pub fn Demo() -> Element {
 
     rsx! {
         Button {
-            text: "Primary",
             on_click: move |_| last_button_clicked_state.set(Some(ButtonStyle::Primary)),
+
+            "Primary"
         }
         Button {
-            text: "Secondary",
             style: ButtonStyle::Secondary,
             on_click: move |_| last_button_clicked_state.set(Some(ButtonStyle::Secondary)),
+
+            "Secondary"
         }
         Button {
-            text: "Transparent",
             style: ButtonStyle::Transparent,
             on_click: move |_| last_button_clicked_state.set(Some(ButtonStyle::Transparent)),
+
+            "Transparent"
         }
         Button {
-            text: "Danger",
             style: ButtonStyle::Danger,
             on_click: move |_| last_button_clicked_state.set(Some(ButtonStyle::Danger)),
+
+            "Danger"
         }
         Button {
-            text: "Disabled",
             style: last_button_clicked_state().unwrap_or_default(),
             disabled: true,
+
+            "Disabled"
         }
         span {
             "Last clicked: {last_button_clicked_state():?}"

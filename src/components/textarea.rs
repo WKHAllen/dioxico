@@ -1,5 +1,6 @@
 use super::{Error, ErrorSize};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
@@ -36,9 +37,9 @@ pub fn Textarea(
     /// The textarea input state.
     #[props(into)]
     state: State<String>,
-    /// Textarea label text.
-    #[props(default)]
-    label: String,
+    /// Textarea label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Placeholder text for when the textarea is empty.
     #[props(default)]
     placeholder: String,
@@ -78,7 +79,7 @@ pub fn Textarea(
                     class: "dioxico-textarea-label",
                     r#for: "{id}",
 
-                    "{label}"
+                    {label}
 
                     span {
                         class: "dioxico-required-mark",

@@ -1,5 +1,6 @@
 use super::{Error, ErrorSize, IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::hooks::*;
 use crate::state::State;
 use crate::util::*;
@@ -132,9 +133,9 @@ pub fn Chips<T>(
     option_display_limit: Option<usize>,
     /// Maximum number of options that can be selected.
     max_selections: Option<usize>,
-    /// Chips selection label.
-    #[props(default)]
-    label: String,
+    /// Chips selection label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Placeholder text for when the selection is empty.
     #[props(default)]
     placeholder: String,

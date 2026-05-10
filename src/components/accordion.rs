@@ -1,5 +1,6 @@
 use super::{Icon, IconSize, ANGLE_RIGHT_ICON};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
 
@@ -9,8 +10,9 @@ pub fn Accordion(
     /// The open/closed state of the accordion.
     #[props(default, into)]
     state: State<bool>,
-    /// Accordion title text.
-    title: String,
+    /// Accordion title element.
+    #[props(into)]
+    title: ElementLike,
     /// Is this accordion disabled?
     #[props(default)]
     disabled: bool,

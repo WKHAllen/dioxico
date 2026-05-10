@@ -1,14 +1,15 @@
 use super::{Error, ErrorSize, Icon, ANGLE_DOWN_ICON};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::hooks::*;
 use crate::state::State;
 use crate::util::*;
+use dioxus::core::SuperFrom;
 use dioxus::prelude::*;
-use std::fmt::Display;
 
 /// Helper trait to note which types can be used to track the state of a select
 /// component.
-pub trait SelectState: Copy {
+trait SelectState: Copy {
     /// Does this select state type support null options?
     const HAS_NULL_OPTION: bool;
 
@@ -83,12 +84,12 @@ fn SelectInner<S, T>(
     /// List of select options.
     #[props(into)]
     options: Vec<T>,
-    /// Null label option text. Defaults to "Select...".
-    #[props(default = "Select...".to_owned())]
-    null_label: String,
-    /// Select label.
+    /// Null label option element. Defaults to "Select...".
+    #[props(default = ElementLike::super_from("Select..."))]
+    null_label: ElementLike,
+    /// Select label element.
     #[props(default)]
-    label: String,
+    label: ElementLike,
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
@@ -107,7 +108,7 @@ fn SelectInner<S, T>(
 ) -> Element
 where
     S: SelectState + Clone + PartialEq + 'static,
-    T: Display + Clone + PartialEq + 'static,
+    T: Into<ElementLike> + Clone + PartialEq + 'static,
 {
     let id = use_id();
     let invalid = !error.is_empty();
@@ -125,7 +126,8 @@ where
     let selected_option = match state.get().get_value() {
         Some(selected) => options
             .get(selected)
-            .map(ToString::to_string)
+            .cloned()
+            .map(|x| x.into())
             .unwrap_or_else({
                 let null_label = null_label.clone();
                 move || null_label
@@ -218,7 +220,7 @@ where
                                     dropdown_open.set(false);
                                 },
 
-                                {option.to_string()}
+                                {option.into()}
                             }
                         }
                     }
@@ -243,9 +245,9 @@ pub fn Select<T>(
     /// List of select options.
     #[props(into)]
     options: Vec<T>,
-    /// Select label.
-    #[props(default)]
-    label: String,
+    /// Select label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
@@ -263,7 +265,7 @@ pub fn Select<T>(
     class: String,
 ) -> Element
 where
-    T: Display + Clone + PartialEq + 'static,
+    T: Into<ElementLike> + Clone + PartialEq + 'static,
 {
     rsx! {
         SelectInner<usize, T> {
@@ -288,12 +290,12 @@ pub fn SelectNullable<T>(
     /// List of select options.
     #[props(into)]
     options: Vec<T>,
-    /// Null label option text. Defaults to "Select...".
-    #[props(default = "Select...".to_owned())]
-    null_label: String,
-    /// Select label.
-    #[props(default)]
-    label: String,
+    /// Null label option element. Defaults to "Select...".
+    #[props(default = ElementLike::super_from("Select..."), into)]
+    null_label: ElementLike,
+    /// Select label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
@@ -311,7 +313,7 @@ pub fn SelectNullable<T>(
     class: String,
 ) -> Element
 where
-    T: Display + Clone + PartialEq + 'static,
+    T: Into<ElementLike> + Clone + PartialEq + 'static,
 {
     rsx! {
         SelectInner<Option<usize>, T> {

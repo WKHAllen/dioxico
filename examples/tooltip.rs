@@ -5,11 +5,11 @@ use dioxus::prelude::*;
 pub fn Demo() -> Element {
     rsx! {
         Tooltip {
-            text: "Tooltip hover text",
+            content: "Tooltip hover text",
             "Hover here to view the tooltip text"
         }
         Tooltip {
-            text: "This should not show",
+            content: "This should not show",
             disabled: true,
             "This tooltip is disabled, and should show nothing when hovered over"
         }

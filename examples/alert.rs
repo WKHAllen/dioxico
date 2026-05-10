@@ -10,8 +10,9 @@ pub fn Demo() -> Element {
 
     rsx! {
         Button {
-            text: "Open 5 second alert",
             on_click: move |_| alert_finite_int_state.set(true),
+
+            "Open 5 second alert"
         }
         Alert {
             state: alert_finite_int_state,
@@ -22,8 +23,9 @@ pub fn Demo() -> Element {
             p { "This alert will only remain open for 5 seconds." }
         }
         Button {
-            text: "Open 6.789 second alert",
             on_click: move |_| alert_finite_float_state.set(true),
+
+            "Open 6.789 second alert"
         }
         Alert {
             state: alert_finite_float_state,
@@ -34,8 +36,9 @@ pub fn Demo() -> Element {
             p { "This alert will only remain open for 6.789 seconds." }
         }
         Button {
-            text: "Open infinite alert",
             on_click: move |_| alert_infinite_state.set(true),
+
+            "Open infinite alert"
         }
         Alert {
             state: alert_infinite_state,

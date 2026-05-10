@@ -1,5 +1,6 @@
 use super::{Error, ErrorSize};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
@@ -42,9 +43,9 @@ pub fn Input(
     /// Input type.
     #[props(default)]
     input_type: InputType,
-    /// Input label text.
-    #[props(default)]
-    label: String,
+    /// Input label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Placeholder text for when the input box is empty.
     #[props(default)]
     placeholder: String,

@@ -1,5 +1,6 @@
 use super::{Error, ErrorSize};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
@@ -224,9 +225,9 @@ pub fn NumberInput<N>(
     /// The number input state.
     #[props(into)]
     state: State<NumberState<N>>,
-    /// Number input label text.
-    #[props(default)]
-    label: String,
+    /// Number input label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Placeholder text for when the number input box is empty.
     #[props(default)]
     placeholder: String,
@@ -260,7 +261,7 @@ where
                 class: "dioxico-input-label",
                 r#for: "{id}",
 
-                "{label}"
+                {label}
 
                 span {
                     class: "dioxico-required-mark",

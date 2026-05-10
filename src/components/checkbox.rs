@@ -1,5 +1,6 @@
 use super::CHECK_ICON;
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
 
@@ -9,9 +10,9 @@ pub fn Checkbox(
     /// Checkbox state.
     #[props(into)]
     state: State<bool>,
-    /// Checkbox label.
-    #[props(default)]
-    label: String,
+    /// Checkbox label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Is this checkbox disabled?
     #[props(default)]
     disabled: bool,

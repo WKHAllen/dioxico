@@ -17,7 +17,9 @@ pub fn Demo() -> Element {
         }
         Accordion {
             state: state2,
-            title: "Accordion 2",
+            title: rsx! {
+                h3 { "Accordion 2" }
+            },
 
             div { "foo" }
             div { "bar" }

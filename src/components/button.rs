@@ -30,8 +30,6 @@ impl ButtonStyle {
 /// Button component.
 #[component]
 pub fn Button(
-    /// Button text.
-    text: String,
     /// Button style.
     #[props(default)]
     style: ButtonStyle,
@@ -44,6 +42,8 @@ pub fn Button(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
+    /// Button inner elements.
+    children: Element,
 ) -> Element {
     rsx! {
         button {
@@ -58,7 +58,7 @@ pub fn Button(
             },
             disabled,
 
-            {text}
+            {children}
         }
     }
 }

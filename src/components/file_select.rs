@@ -11,8 +11,6 @@ pub type FileSelectButtonStyle = ButtonStyle;
 /// File selection component.
 #[component]
 pub fn FileSelect(
-    /// Button text.
-    text: String,
     /// Button style.
     #[props(default)]
     style: FileSelectButtonStyle,
@@ -35,6 +33,8 @@ pub fn FileSelect(
     /// Callback called when files or directories are selected.
     #[props(default)]
     on_select: EventHandler<Vec<FileData>>,
+    /// Button inner elements.
+    children: Element,
 ) -> Element {
     let id = use_id();
     let accept = if accept.is_empty() {
@@ -56,7 +56,7 @@ pub fn FileSelect(
                     r#for: "{id}",
                     class: "dioxico-file-select-button-label",
 
-                    {text}
+                    {children}
                 }
             }
 
@@ -77,8 +77,6 @@ pub fn FileSelect(
 /// File drop zone component.
 #[component]
 pub fn FileDrop(
-    /// Drop zone text.
-    text: String,
     /// Should directory selection be allowed?
     #[props(default)]
     directory: bool,
@@ -98,6 +96,8 @@ pub fn FileDrop(
     /// Callback called when files or directories are selected.
     #[props(default)]
     on_drop: EventHandler<Vec<FileData>>,
+    /// Drop zone inner elements.
+    children: Element,
 ) -> Element {
     let id = use_id();
     let accept = if accept.is_empty() {
@@ -138,7 +138,7 @@ pub fn FileDrop(
                 span {
                     class: "dioxico-file-drop-label-text",
 
-                    {text}
+                    {children}
                 }
             }
 

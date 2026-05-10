@@ -2044,7 +2044,7 @@ body {
   transition: all 0.15s ease-in-out;
 }
 
-.dioxico-tooltip-text {
+.dioxico-tooltip-content {
   background-color: var(--dioxico-tooltip-background-color);
   color: var(--dioxico-tooltip-text-color);
   font-size: var(--dioxico-tooltip-font-size);

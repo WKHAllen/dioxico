@@ -1,5 +1,6 @@
 use super::{Button, ButtonStyle, IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
 
@@ -64,15 +65,15 @@ pub fn Dialog(
     /// Dialog size.
     #[props(default)]
     size: DialogSize,
-    /// Dialog title text.
-    #[props(default)]
-    title: String,
+    /// Dialog title element.
+    #[props(default, into)]
+    title: ElementLike,
     /// Ok button label. Will not be created if empty.
-    #[props(default)]
-    ok_label: String,
+    #[props(default, into)]
+    ok_label: ElementLike,
     /// Cancel button label. Will not be created if empty.
-    #[props(default)]
-    cancel_label: String,
+    #[props(default, into)]
+    cancel_label: ElementLike,
     /// Callback called with the dialog closing state. Receives `true` if the ok
     /// button was clicked and `false` otherwise.
     #[props(default)]
@@ -151,7 +152,6 @@ pub fn Dialog(
 
                         if !cancel_label.is_empty() {
                             Button {
-                                text: cancel_label,
                                 style: ButtonStyle::Transparent,
                                 on_click: move |_| {
                                     on_close_request.call(false);
@@ -160,12 +160,13 @@ pub fn Dialog(
                                         state.set(false);
                                     }
                                 },
+
+                                {cancel_label}
                             }
                         }
 
                         if !ok_label.is_empty() {
                             Button {
-                                text: ok_label,
                                 style: ButtonStyle::Primary,
                                 on_click: move |_| {
                                     on_close_request.call(true);
@@ -173,7 +174,9 @@ pub fn Dialog(
                                     if close_on_ok {
                                         state.set(false);
                                     }
-                                }
+                                },
+
+                                {ok_label}
                             }
                         }
                     }

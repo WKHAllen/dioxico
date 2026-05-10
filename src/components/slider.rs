@@ -1,5 +1,6 @@
 use super::ProgressBar;
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
@@ -10,9 +11,9 @@ pub fn Slider<N>(
     /// Slider state.
     #[props(into)]
     state: State<N>,
-    /// Slider label.
-    #[props(default)]
-    label: String,
+    /// Slider label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Minimum allowed value.
     #[props(default = N::NUMBER_MIN)]
     min: N,

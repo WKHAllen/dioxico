@@ -1,8 +1,8 @@
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
-use std::fmt::Display;
 
 /// The orientation of a radio group.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -47,7 +47,7 @@ pub fn RadioGroup<T>(
     class: String,
 ) -> Element
 where
-    T: Display + Clone + PartialEq + 'static,
+    T: Into<ElementLike> + Clone + PartialEq + 'static,
 {
     let name = use_id();
     // IDs need to be regenerated with every re-render because the list of
@@ -55,7 +55,7 @@ where
     let index_id_options = options
         .into_iter()
         .enumerate()
-        .map(|(index, option)| (index, new_id(), option.to_string()))
+        .map(|(index, option)| (index, new_id(), option.into()))
         .collect::<Vec<_>>();
 
     rsx! {

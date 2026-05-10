@@ -1,5 +1,6 @@
 use super::{IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
 use dioxus::prelude::*;
@@ -63,9 +64,9 @@ pub fn Alert(
     /// Alert open state.
     #[props(into)]
     state: State<bool>,
-    /// Alert title text.
-    #[props(default)]
-    title: String,
+    /// Alert title element.
+    #[props(default, into)]
+    title: ElementLike,
     /// The duration of time for which the alert should exist. This can be an
     /// [`AlertDuration`], a [`std::time::Duration`], or an int/float
     /// representing the alert duration in seconds. If left empty, it will

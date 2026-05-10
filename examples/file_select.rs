@@ -13,40 +13,47 @@ pub fn Demo() -> Element {
 
     rsx! {
         FileSelect {
-            text: "Primary file select button",
             on_select: move |files| state.set(files),
+
+            "Primary file select button"
         }
         FileSelect {
-            text: "Secondary file select button",
             style: FileSelectButtonStyle::Secondary,
             directory: true,
             on_select: move |files| state.set(files),
+
+            "Secondary file select button"
         }
         FileSelect {
-            text: "Transparent file select button",
             style: FileSelectButtonStyle::Transparent,
             multiple: true,
             on_select: move |files| state.set(files),
+
+            "Transparent file select button"
         }
         FileSelect {
-            text: "Danger file select button",
             style: FileSelectButtonStyle::Danger,
             accept: [".rs".to_owned()],
             on_select: move |files| state.set(files),
+
+            "Danger file select button"
         }
         FileSelect {
-            text: "Disabled file select button",
             disabled: true,
             on_select: move |files| state.set(files),
+
+            "Disabled file select button"
         }
         FileDrop {
-            text: "File drop zone",
             on_drop: move |files| state.set(files),
+
+            "File drop zone"
         }
         FileDrop {
-            text: "Disabled file drop zone",
             disabled: true,
             on_drop: move |files| state.set(files),
+
+            "Disabled file drop zone"
         }
         span {
             "Selected files: {paths}"

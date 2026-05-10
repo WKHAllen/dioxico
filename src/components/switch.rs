@@ -1,4 +1,5 @@
 use crate::classes::*;
+use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
 
@@ -8,9 +9,9 @@ pub fn Switch(
     /// Switch state.
     #[props(into)]
     state: State<bool>,
-    /// Switch label.
-    #[props(default)]
-    label: String,
+    /// Switch label element.
+    #[props(default, into)]
+    label: ElementLike,
     /// Is this switch disabled?
     #[props(default)]
     disabled: bool,

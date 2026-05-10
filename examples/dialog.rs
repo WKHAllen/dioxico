@@ -16,8 +16,9 @@ pub fn Demo() -> Element {
 
     rsx! {
         Button {
-            text: "Open small dialog",
             on_click: move |_| dialog_small_state.set(true),
+
+            "Open small dialog"
         }
         Dialog {
             state: dialog_small_state,
@@ -31,8 +32,9 @@ pub fn Demo() -> Element {
             p { "A small dialog with left-aligned actions." }
         }
         Button {
-            text: "Open medium dialog",
             on_click: move |_| dialog_medium_state.set(true),
+
+            "Open medium dialog"
         }
         Dialog {
             state: dialog_medium_state,
@@ -70,8 +72,9 @@ pub fn Demo() -> Element {
             p { "Behavior" }
         }
         Button {
-            text: "Open large dialog",
             on_click: move |_| dialog_large_state.set(true),
+
+            "Open large dialog"
         }
         Dialog {
             state: dialog_large_state,
@@ -91,8 +94,9 @@ pub fn Demo() -> Element {
             }
         }
         Button {
-            text: "Open max dialog",
             on_click: move |_| dialog_max_state.set(true),
+
+            "Open max dialog"
         }
         Dialog {
             state: dialog_max_state,
@@ -103,8 +107,9 @@ pub fn Demo() -> Element {
             p { "A maximum size dialog with no actions." }
         }
         Button {
-            text: "Open auto dialog",
             on_click: move |_| dialog_auto_state.set(true),
+
+            "Open auto dialog"
         }
         Dialog {
             state: dialog_auto_state,
