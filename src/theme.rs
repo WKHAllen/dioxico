@@ -1,7 +1,10 @@
+//! Features involving standard and custom themes.
+
 use csscolorparser::Color;
 use dioxus::prelude::*;
 
 /// The full content of the CSS stylesheet.
+#[allow(clippy::volatile_composites)]
 pub const STYLES: Asset = asset!("src/assets/css/dioxico.css");
 
 /// Fonts to fall back to if no other fonts are available.
@@ -109,30 +112,36 @@ pub enum ColorMode {
 
 impl ColorMode {
     /// Is this dark mode?
-    pub fn is_dark(&self) -> bool {
+    pub const fn is_dark(&self) -> bool {
         matches!(self, Self::Dark)
     }
 
     /// Is this light mode?
-    pub fn is_light(&self) -> bool {
+    pub const fn is_light(&self) -> bool {
         matches!(self, Self::Light)
     }
 }
 
+/// A set of styling rules.
 #[derive(Debug, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 struct StyleRules {
+    /// The inner styling rules.
     rules: Vec<(String, String)>,
 }
 
 impl StyleRules {
+    /// Constructs a new empty set of styling rules.
     fn new() -> Self {
         Self::default()
     }
 
+    /// Adds a rule to the set of rules.
     fn add(&mut self, name: impl Into<String>, rule: impl Into<String>) {
         self.rules.push((name.into(), rule.into()));
     }
 
+    /// Turns the set of rules into a string containing the equivalent CSS
+    /// styling.
     fn into_styles(self) -> String {
         self.rules
             .into_iter()
@@ -174,17 +183,17 @@ impl Default for Theme {
 
 impl Theme {
     /// Sets the color mode.
-    pub fn set_color_mode(&mut self, color_mode: ColorMode) {
+    pub const fn set_color_mode(&mut self, color_mode: ColorMode) {
         self.color_mode = color_mode;
     }
 
     /// Sets the color mode to dark mode.
-    pub fn set_dark_mode(&mut self) {
+    pub const fn set_dark_mode(&mut self) {
         self.color_mode = ColorMode::Dark;
     }
 
     /// Sets the color mode to light mode.
-    pub fn set_light_mode(&mut self) {
+    pub const fn set_light_mode(&mut self) {
         self.color_mode = ColorMode::Light;
     }
 
@@ -219,54 +228,63 @@ impl Theme {
     }
 
     /// Sets the color mode.
-    pub fn color_mode(mut self, color_mode: ColorMode) -> Self {
+    #[must_use = "`Theme` does nothing when not used"]
+    pub const fn color_mode(mut self, color_mode: ColorMode) -> Self {
         self.set_color_mode(color_mode);
         self
     }
 
     /// Sets the color mode to dark mode.
-    pub fn dark_mode(mut self) -> Self {
+    #[must_use = "`Theme` does nothing when not used"]
+    pub const fn dark_mode(mut self) -> Self {
         self.set_dark_mode();
         self
     }
 
     /// Sets the color mode to light mode.
-    pub fn light_mode(mut self) -> Self {
+    #[must_use = "`Theme` does nothing when not used"]
+    pub const fn light_mode(mut self) -> Self {
         self.set_light_mode();
         self
     }
 
     /// Sets the primary color.
+    #[must_use = "`Theme` does nothing when not used"]
     pub fn primary_color(mut self, primary_color: impl Into<Color>) -> Self {
         self.set_primary_color(primary_color);
         self
     }
 
     /// Sets the secondary color.
+    #[must_use = "`Theme` does nothing when not used"]
     pub fn secondary_color(mut self, secondary_color: impl Into<Color>) -> Self {
         self.set_secondary_color(secondary_color);
         self
     }
 
     /// Sets the danger color.
+    #[must_use = "`Theme` does nothing when not used"]
     pub fn danger_color(mut self, danger_color: impl Into<Color>) -> Self {
         self.set_danger_color(danger_color);
         self
     }
 
     /// Sets the error text color.
+    #[must_use = "`Theme` does nothing when not used"]
     pub fn error_color(mut self, error_color: impl Into<Color>) -> Self {
         self.set_error_color(error_color);
         self
     }
 
     /// Sets the list of fonts.
+    #[must_use = "`Theme` does nothing when not used"]
     pub fn fonts(mut self, fonts: &[impl AsRef<str>]) -> Self {
         self.set_fonts(fonts);
         self
     }
 
     /// Adds a new font to the font list.
+    #[must_use = "`Theme` does nothing when not used"]
     pub fn font(mut self, font: &str) -> Self {
         self.add_font(font);
         self
@@ -276,7 +294,7 @@ impl Theme {
     pub fn root_style(&self) -> String {
         let mut rules = StyleRules::new();
 
-        let mut fonts = self.fonts.iter().map(|s| s.as_ref()).collect::<Vec<_>>();
+        let mut fonts = self.fonts.iter().map(AsRef::as_ref).collect::<Vec<_>>();
         fonts.extend(FALLBACK_FONTS);
         rules.add("--dioxico-fonts", fonts.join(", "));
 

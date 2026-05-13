@@ -1,3 +1,5 @@
+//! Hooks involving themes.
+
 use crate::theme::Theme;
 use dioxus::prelude::*;
 

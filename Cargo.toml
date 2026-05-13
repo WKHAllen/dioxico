@@ -1,6 +1,11 @@
 [package]
 name = "dioxico"
 version = "0.1.0"
+license = "MIT"
+description = "A collection of UI components for Dioxus."
+repository = "https://github.com/WKHAllen/dioxico"
+keywords = ["ui", "web", "wasm", "dioxus", "component"]
+categories = ["gui", "web-programming", "wasm"]
 edition = "2021"
 
 [dependencies]

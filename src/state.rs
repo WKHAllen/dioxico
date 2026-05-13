@@ -1,3 +1,5 @@
+//! Generalized stateful values and reference types.
+
 use dioxus::core::{MarkerWrapper, SpawnIfAsync, SuperFrom};
 use dioxus::prelude::*;
 use std::borrow::{Borrow, BorrowMut};
@@ -9,7 +11,9 @@ pub enum StateRef<'a, T, S = UnsyncStorage>
 where
     S: Storage<SignalData<T>>,
 {
+    /// A standard reference to a stateful value.
     ValueRef(&'a T),
+    /// A Dioxus reference to a signal's inner value.
     SignalRef(ReadableRef<'a, Signal<T, S>, T>),
 }
 
@@ -33,7 +37,7 @@ where
 {
 }
 
-impl<'a, T, S> Deref for StateRef<'a, T, S>
+impl<T, S> Deref for StateRef<'_, T, S>
 where
     S: Storage<SignalData<T>>,
 {
@@ -47,7 +51,7 @@ where
     }
 }
 
-impl<'a, T, S> Borrow<T> for StateRef<'a, T, S>
+impl<T, S> Borrow<T> for StateRef<'_, T, S>
 where
     S: Storage<SignalData<T>>,
 {
@@ -57,7 +61,7 @@ where
     }
 }
 
-impl<'a, T, S> AsRef<T> for StateRef<'a, T, S>
+impl<T, S> AsRef<T> for StateRef<'_, T, S>
 where
     S: Storage<SignalData<T>>,
 {
@@ -73,11 +77,13 @@ where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
 {
+    /// A standard mutable reference to a stateful value.
     ValueMut(&'a mut T, EventHandler<T>),
+    /// A Dioxus mutable reference to a signal's inner value.
     SignalMut(WritableRef<'a, Signal<T, S>, T>),
 }
 
-impl<'a, T, S> Deref for StateMut<'a, T, S>
+impl<T, S> Deref for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -92,7 +98,7 @@ where
     }
 }
 
-impl<'a, T, S> DerefMut for StateMut<'a, T, S>
+impl<T, S> DerefMut for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -105,7 +111,7 @@ where
     }
 }
 
-impl<'a, T, S> Borrow<T> for StateMut<'a, T, S>
+impl<T, S> Borrow<T> for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -116,7 +122,7 @@ where
     }
 }
 
-impl<'a, T, S> BorrowMut<T> for StateMut<'a, T, S>
+impl<T, S> BorrowMut<T> for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -127,7 +133,7 @@ where
     }
 }
 
-impl<'a, T, S> AsRef<T> for StateMut<'a, T, S>
+impl<T, S> AsRef<T> for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -138,7 +144,7 @@ where
     }
 }
 
-impl<'a, T, S> AsMut<T> for StateMut<'a, T, S>
+impl<T, S> AsMut<T> for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -149,7 +155,7 @@ where
     }
 }
 
-impl<'a, T, S> Drop for StateMut<'a, T, S>
+impl<T, S> Drop for StateMut<'_, T, S>
 where
     T: Clone + 'static,
     S: Storage<SignalData<T>> + 'static,
@@ -227,8 +233,7 @@ where
     /// Returns a clone of the underlying value.
     pub fn get(&self) -> T {
         match self {
-            Self::Value(value, _) => value.clone(),
-            Self::ValueCallback(value, _, _) => value.clone(),
+            Self::Value(value, _) | Self::ValueCallback(value, _, _) => value.clone(),
             Self::Signal(sig) => sig(),
         }
     }
@@ -245,8 +250,7 @@ where
     /// Runs a closure that immutably borrows the inner value.
     pub fn with<O>(&self, f: impl FnOnce(&T) -> O) -> O {
         match self {
-            Self::Value(value, _) => f(value),
-            Self::ValueCallback(value, _, _) => f(value),
+            Self::Value(value, _) | Self::ValueCallback(value, _, _) => f(value),
             Self::Signal(sig) => f(&sig.read()),
         }
     }

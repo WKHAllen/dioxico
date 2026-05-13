@@ -1,3 +1,5 @@
+//! Number input components and utilities.
+
 use super::{Error, ErrorSize};
 use crate::classes::*;
 use crate::element::ElementLike;

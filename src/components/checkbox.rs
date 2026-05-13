@@ -1,3 +1,5 @@
+//! Checkbox components and utilities.
+
 use super::CHECK_ICON;
 use crate::classes::*;
 use crate::element::ElementLike;

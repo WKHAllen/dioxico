@@ -1,3 +1,5 @@
+//! Alert components and utilities.
+
 use super::{IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
 use crate::element::ElementLike;
@@ -18,7 +20,7 @@ pub enum AlertDuration {
 
 impl AlertDuration {
     /// Is the duration infinite?
-    pub fn is_infinite(&self) -> bool {
+    pub const fn is_infinite(&self) -> bool {
         match *self {
             Self::Finite(_) => false,
             Self::Infinite => true,
@@ -32,6 +34,7 @@ impl From<Duration> for AlertDuration {
     }
 }
 
+/// Implements `From<T> for AlertDuration` for the desired integer types.
 macro_rules! impl_from_secs {
     ( $( $ty:ty )* ) => {
         $(
@@ -103,7 +106,7 @@ pub fn Alert(
                 }
             }
             AlertDuration::Infinite => None,
-        })
+        });
     }
 
     rsx! {

@@ -1,5 +1,7 @@
-mod use_click_away;
-mod use_theme;
+//! A collection of useful Dioxus hooks.
 
-pub use use_click_away::*;
-pub use use_theme::*;
+mod click_away;
+mod theme;
+
+pub use click_away::*;
+pub use theme::*;

@@ -1,3 +1,5 @@
+//! Progress bar components and utilities.
+
 use crate::classes::*;
 use dioxus::prelude::*;
 

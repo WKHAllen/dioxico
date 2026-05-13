@@ -1,3 +1,5 @@
+//! Utilities involving CSS classes.
+
 use std::fmt::Display;
 
 /// A representation of a list of CSS classes.
@@ -5,7 +7,7 @@ pub struct Classes(Vec<String>);
 
 impl Classes {
     /// Creates a new empty list of CSS classes.
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self(Vec::new())
     }
 
@@ -29,11 +31,11 @@ impl From<String> for Classes {
 
 impl<T> From<Vec<T>> for Classes
 where
-    T: Into<Classes>,
+    T: Into<Self>,
 {
     fn from(value: Vec<T>) -> Self {
         Self(value.into_iter().fold(Vec::new(), |mut classes, item| {
-            let item_classes: Classes = item.into();
+            let item_classes: Self = item.into();
             classes.extend(item_classes.0);
             classes
         }))
@@ -42,7 +44,7 @@ where
 
 impl<T> From<Option<T>> for Classes
 where
-    T: Into<Classes>,
+    T: Into<Self>,
 {
     fn from(value: Option<T>) -> Self {
         match value {
@@ -55,7 +57,7 @@ where
 impl<F, T> From<F> for Classes
 where
     F: FnOnce() -> T,
-    T: Into<Classes>,
+    T: Into<Self>,
 {
     fn from(value: F) -> Self {
         value().into()

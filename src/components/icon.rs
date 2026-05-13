@@ -1,22 +1,30 @@
+//! Icon components and utilities.
+
 use crate::classes::*;
 use dioxus::prelude::*;
 
 /// Angle down icon.
+#[allow(clippy::volatile_composites)]
 pub const ANGLE_DOWN_ICON: Asset = asset!("/src/assets/svg/angle-down-solid.svg");
 
 /// Angle left icon.
+#[allow(clippy::volatile_composites)]
 pub const ANGLE_LEFT_ICON: Asset = asset!("/src/assets/svg/angle-left-solid.svg");
 
 /// Angle right icon.
+#[allow(clippy::volatile_composites)]
 pub const ANGLE_RIGHT_ICON: Asset = asset!("/src/assets/svg/angle-right-solid.svg");
 
 /// Calendar icon.
+#[allow(clippy::volatile_composites)]
 pub const CALENDAR_ICON: Asset = asset!("/src/assets/svg/calendar-days-solid.svg");
 
 /// Checkmark icon.
+#[allow(clippy::volatile_composites)]
 pub const CHECK_ICON: Asset = asset!("/src/assets/svg/check-solid.svg");
 
 /// X mark icon.
+#[allow(clippy::volatile_composites)]
 pub const XMARK_ICON: Asset = asset!("/src/assets/svg/xmark-solid.svg");
 
 /// The size of an icon.
@@ -33,7 +41,7 @@ pub enum IconSize {
 
 impl IconSize {
     /// Gets the name of the icon size.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Small => "small",
             Self::Medium => "medium",

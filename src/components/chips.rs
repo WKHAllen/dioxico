@@ -1,3 +1,5 @@
+//! Chips components and utilities.
+
 use super::{Error, ErrorSize, IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
 use crate::collection::Collection;
@@ -113,7 +115,7 @@ pub enum ChipsPopupPosition {
 
 impl ChipsPopupPosition {
     /// Gets the name of the position.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Above => "above",
             Self::Below => "below",
@@ -144,7 +146,7 @@ pub fn Chips(
     #[props(default)]
     position: ChipsPopupPosition,
     /// Maximum number of characters allowed in the chips input.
-    #[props(default = 524288)]
+    #[props(default = 524_288)]
     max_length: usize,
     /// Is this chips selection input disabled?
     #[props(default)]
@@ -264,7 +266,7 @@ pub fn Chips(
                                         }
                                     },
 
-                                    {options.get(this_option_index).map(|x| x.to_string()).unwrap_or_default()}
+                                    {options.get(this_option_index).cloned().unwrap_or_default()}
                                 }
                             }
                         }

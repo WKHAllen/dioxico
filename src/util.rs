@@ -1,3 +1,5 @@
+//! General utilities.
+
 use dioxus::prelude::*;
 use std::fmt::{Debug, Display};
 use std::ops::{Add, Div, Mul, Sub};
@@ -11,10 +13,14 @@ pub fn new_id() -> String {
     hex_value
 }
 
+/// Generates a random ID for an element, which will remain consistent across
+/// renders.
 pub fn use_id() -> String {
     use_hook(new_id)
 }
 
+/// Generates random IDs for `n` distinct elements, which will remain consistent
+/// across renders.
 #[allow(dead_code)]
 pub fn use_ids(n: usize) -> Vec<String> {
     use_hook(|| (0..n).map(|_| new_id()).collect())
@@ -115,6 +121,8 @@ impl_number_int_lossy!(i64 i128 isize u64 u128 usize);
 
 impl_number_float!(f32 f64);
 
+/// Sleep wrapper function, generalized to work in both wasm and non-wasm
+/// environments.
 pub async fn sleep(duration: Duration) {
     #[cfg(not(target_arch = "wasm32"))]
     use tokio::time::sleep as sleep_async;

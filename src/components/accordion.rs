@@ -1,3 +1,5 @@
+//! Accordion components and utilities.
+
 use super::{Icon, IconSize, ANGLE_RIGHT_ICON};
 use crate::classes::*;
 use crate::element::ElementLike;

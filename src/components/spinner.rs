@@ -1,3 +1,5 @@
+//! Loading spinner components and utilities.
+
 use crate::classes::*;
 use dioxus::prelude::*;
 
@@ -17,7 +19,7 @@ pub enum SpinnerSize {
 
 impl SpinnerSize {
     /// Gets the name of the spinner size.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Small => "small",
             Self::Medium => "medium",

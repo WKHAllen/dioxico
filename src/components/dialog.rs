@@ -1,3 +1,5 @@
+//! Dialog components and utilities.
+
 use super::{Button, ButtonStyle, IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
 use crate::element::ElementLike;
@@ -22,7 +24,7 @@ pub enum DialogSize {
 
 impl DialogSize {
     /// Gets the name of the dialog size.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Small => "small",
             Self::Medium => "medium",
@@ -47,7 +49,7 @@ pub enum DialogActionsLayout {
 
 impl DialogActionsLayout {
     /// Gets the name of the actions layout.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Left => "left",
             Self::Right => "right",

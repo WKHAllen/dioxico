@@ -1,3 +1,5 @@
+//! Textarea components and utilities.
+
 use super::{Error, ErrorSize};
 use crate::classes::*;
 use crate::element::ElementLike;
@@ -21,7 +23,7 @@ pub enum TextareaResize {
 
 impl TextareaResize {
     /// Gets the name of the resize option.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::None => "none",
             Self::Horizontal => "horizontal",
@@ -44,7 +46,7 @@ pub fn Textarea(
     #[props(default)]
     placeholder: String,
     /// Maximum number of characters allowed.
-    #[props(default = 524288)]
+    #[props(default = 524_288)]
     max_length: usize,
     /// Number of rows of text within the box.
     #[props(default = 3)]

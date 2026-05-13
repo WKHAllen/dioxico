@@ -1,3 +1,5 @@
+//! Slider components and utilities.
+
 use super::ProgressBar;
 use crate::classes::*;
 use crate::element::ElementLike;

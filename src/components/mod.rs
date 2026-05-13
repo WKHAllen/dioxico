@@ -1,3 +1,5 @@
+//! A collection of useful Dioxus components.
+
 mod accordion;
 mod alert;
 mod badge;

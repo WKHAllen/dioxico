@@ -1,3 +1,5 @@
+//! Switch components and utilities.
+
 use crate::classes::*;
 use crate::element::ElementLike;
 use crate::state::State;

@@ -1,3 +1,5 @@
+//! Select dropdown components and utilities.
+
 use super::{Error, ErrorSize, Icon, ANGLE_DOWN_ICON};
 use crate::classes::*;
 use crate::collection::Collection;
@@ -68,7 +70,7 @@ pub enum SelectPopupPosition {
 
 impl SelectPopupPosition {
     /// Gets the name of the position.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Above => "above",
             Self::Below => "below",

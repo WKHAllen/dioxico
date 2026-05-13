@@ -1,3 +1,5 @@
+//! Icon button components and utilities.
+
 use super::IconSize;
 use crate::classes::*;
 use dioxus::prelude::*;

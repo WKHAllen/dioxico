@@ -1,3 +1,5 @@
+//! Error components and utilities.
+
 use crate::classes::*;
 use dioxus::prelude::*;
 
@@ -19,7 +21,7 @@ pub enum ErrorSize {
 
 impl ErrorSize {
     /// Gets the name of the error message size.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Smaller => "smaller",
             Self::Small => "small",

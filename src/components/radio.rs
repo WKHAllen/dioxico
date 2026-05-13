@@ -1,3 +1,5 @@
+//! Radio group components and utilities.
+
 use crate::classes::*;
 use crate::collection::Collection;
 use crate::element::ElementLike;
@@ -17,7 +19,7 @@ pub enum RadioGroupOrientation {
 
 impl RadioGroupOrientation {
     /// Gets the name of the orientation.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Horizontal => "horizontal",
             Self::Vertical => "vertical",

@@ -1,3 +1,5 @@
+//! File selection components and utilities.
+
 use super::ButtonStyle;
 use crate::classes::*;
 use crate::collection::Collection;

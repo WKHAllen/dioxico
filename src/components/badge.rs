@@ -1,3 +1,5 @@
+//! Badge components and utilities.
+
 use crate::classes::*;
 use crate::util::*;
 use dioxus::prelude::*;
@@ -16,7 +18,7 @@ pub enum BadgeStyle {
 
 impl BadgeStyle {
     /// Gets the name of the badge style.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Primary => "primary",
             Self::Secondary => "secondary",

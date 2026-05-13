@@ -1,3 +1,5 @@
+//! Config provider components and utilities.
+
 use crate::hooks::ClickAwayRegistry;
 use crate::style::DynamicStyle;
 use crate::theme::{Theme, STYLES};
@@ -47,7 +49,7 @@ pub fn ConfigProvider(
             }
 
             DynamicStyle {
-                "{theme_styles}"
+                {theme_styles}
             }
 
             {children}

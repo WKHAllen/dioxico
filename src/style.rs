@@ -1,11 +1,17 @@
+//! Utilities involving styling.
+
 use crate::util::*;
 use dioxus::document::{document, StyleProps};
 use dioxus::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 
+/// A dynamic stylesheet injected into the document head.
 #[component]
-pub fn DynamicStyle(children: Element) -> Element {
+pub fn DynamicStyle(
+    /// The desired styles.
+    children: Element,
+) -> Element {
     // This value has to be untracked (e.g. must use `Rc<RefCell<T>>` rather
     // than a signal) because the necessary state change below would otherwise
     // create an infinite loop.

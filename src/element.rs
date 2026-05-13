@@ -1,10 +1,14 @@
+//! Utilities involving element types.
+
 use dioxus::core::{DynamicNode, SuperFrom};
 use dioxus::prelude::*;
 use std::rc::Rc;
 
 /// Anything that can be rendered, e.g. behaves like an element.
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct ElementLike {
+    /// A function that returns the provided element into a `DynamicNode` via
+    /// the `IntoDynNode` trait.
     f: Option<Rc<dyn Fn() -> DynamicNode>>,
 }
 
@@ -12,17 +16,6 @@ impl ElementLike {
     /// Is this node empty?
     pub const fn is_empty(&self) -> bool {
         self.f.is_none()
-    }
-}
-
-impl Clone for ElementLike {
-    fn clone(&self) -> Self {
-        match &self.f {
-            Some(f) => Self {
-                f: Some(Rc::clone(f)),
-            },
-            None => Self { f: None },
-        }
     }
 }
 
@@ -36,6 +29,7 @@ impl PartialEq for ElementLike {
     }
 }
 
+/// Marker type for `SuperFrom`.
 pub struct DynNodeMarker;
 
 impl<T> SuperFrom<T, DynNodeMarker> for ElementLike

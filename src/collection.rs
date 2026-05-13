@@ -1,3 +1,5 @@
+//! Utilities involving generic collection types.
+
 use std::borrow::{Borrow, BorrowMut};
 use std::collections::{HashSet, LinkedList, VecDeque};
 use std::ops::{Deref, DerefMut};
@@ -5,6 +7,7 @@ use std::ops::{Deref, DerefMut};
 /// Wrapper type for a variety of collection types, e.g. `Vec<T>`.
 #[derive(Debug, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Collection<T> {
+    /// The inner collection, stored as a `Vec<T>`.
     inner: Vec<T>,
 }
 
@@ -70,7 +73,7 @@ where
 {
     fn from(value: [U; N]) -> Self {
         Self {
-            inner: value.into_iter().map(|x| x.into()).collect(),
+            inner: value.into_iter().map(Into::into).collect(),
         }
     }
 }
@@ -81,7 +84,7 @@ where
 {
     fn from(value: Vec<U>) -> Self {
         Self {
-            inner: value.into_iter().map(|x| x.into()).collect(),
+            inner: value.into_iter().map(Into::into).collect(),
         }
     }
 }
@@ -92,7 +95,7 @@ where
 {
     fn from(value: VecDeque<U>) -> Self {
         Self {
-            inner: value.into_iter().map(|x| x.into()).collect(),
+            inner: value.into_iter().map(Into::into).collect(),
         }
     }
 }
@@ -103,7 +106,7 @@ where
 {
     fn from(value: HashSet<U>) -> Self {
         Self {
-            inner: value.into_iter().map(|x| x.into()).collect(),
+            inner: value.into_iter().map(Into::into).collect(),
         }
     }
 }
@@ -114,7 +117,7 @@ where
 {
     fn from(value: LinkedList<U>) -> Self {
         Self {
-            inner: value.into_iter().map(|x| x.into()).collect(),
+            inner: value.into_iter().map(Into::into).collect(),
         }
     }
 }

@@ -1,3 +1,5 @@
+//! Text input components and utilities.
+
 use super::{Error, ErrorSize};
 use crate::classes::*;
 use crate::element::ElementLike;
@@ -23,7 +25,7 @@ pub enum InputType {
 
 impl InputType {
     /// Gets the HTML input element type corresponding to the current input type.
-    pub fn as_str(&self) -> &'static str {
+    pub const fn as_str(&self) -> &'static str {
         match *self {
             Self::Text => "text",
             Self::Email => "email",
@@ -50,7 +52,7 @@ pub fn Input(
     #[props(default)]
     placeholder: String,
     /// Maximum number of characters allowed.
-    #[props(default = 524288)]
+    #[props(default = 524_288)]
     max_length: usize,
     /// Callback called when the enter key is pressed.
     #[props(default)]
