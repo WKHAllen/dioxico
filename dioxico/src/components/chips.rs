@@ -96,7 +96,7 @@ fn get_possible_options(
         })
         .collect::<Vec<_>>();
 
-    matches.sort_by(|(_, score1), (_, score2)| score1.cmp(score2));
+    matches.sort_by_key(|(_, score1)| *score1);
 
     let limited_matches = limit_options(&matches, display_limit);
 
@@ -178,107 +178,98 @@ pub fn Chips(
     let chips_node_onclick = use_click_away(move || dropdown_open.set(false));
 
     rsx! {
-        div {
-            class: classes!("dioxico-chips-container", disabled.then_some("dioxico-chips-container-disabled"), dropdown_open().then_some("dioxico-chips-container-open"), invalid.then_some("dioxico-chips-container-invalid"), class),
+      div {
+        class: classes!(
+            "dioxico-chips-container", disabled
+            .then_some("dioxico-chips-container-disabled"), dropdown_open()
+            .then_some("dioxico-chips-container-open"), invalid
+            .then_some("dioxico-chips-container-invalid"), class
+        ),
 
-            div {
-                class: "dioxico-chips-label-container",
+        div { class: "dioxico-chips-label-container",
 
-                label {
-                    r#for: "{id}",
-                    class: "dioxico-chips-label",
-
-                    {label}
-                }
-            }
-
-            div {
-                class: classes!("dioxico-chips", format!("dioxico-chips-{}", position.as_str())),
-                onclick: chips_node_onclick,
-                // TODO: node ref?
-
-                div {
-                    class: "dioxico-chips-inner",
-
-                    if !state.read().is_empty() {
-                        div {
-                            class: "dioxico-chips-chip-list",
-
-                            for (index, this_chip_index) in state.read().iter().enumerate() {
-                                div {
-                                    class: "dioxico-chips-chip",
-
-                                    span {
-                                        class: "dioxico-chips-chip-label",
-
-                                        {options.get(*this_chip_index).map(ToString::to_string).unwrap_or_default()}
-                                    }
-
-                                    IconButton {
-                                        icon: XMARK_ICON,
-                                        size: IconButtonSize::Small,
-                                        class: "dioxico-chips-chip-remove",
-                                        on_click: {
-                                            let mut state = state.clone();
-                                            move |_| {
-                                                state.write().remove(index);
-                                            }
-                                        },
-                                        disabled,
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    div {
-                        class: "dioxico-chips-input-box-container",
-
-                        input {
-                            r#type: "text",
-                            class: "dioxico-chips-input",
-                            id,
-                            value: next_chip,
-                            oninput: move |event| next_chip.set(event.value()),
-                            onfocusin: move |_| dropdown_open.set(true),
-                            maxlength: max_length,
-                            placeholder,
-                            disabled,
-                        }
-                    }
-                }
-
-                if !possible_options.is_empty() {
-                    div {
-                        class: "dioxico-chips-options-dropdown",
-
-                        div {
-                            class: "dioxico-chips-options-popup",
-
-                            for this_option_index in possible_options {
-                                div {
-                                    class: "dioxico-chips-option",
-                                    onclick: {
-                                        let mut state = state.clone();
-                                        move |_| {
-                                            state.write().push(this_option_index);
-                                            next_chip.set(String::new());
-                                        }
-                                    },
-
-                                    {options.get(this_option_index).cloned().unwrap_or_default()}
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-                class: "dioxico-chips-error",
-            }
+          label { r#for: "{id}", class: "dioxico-chips-label", {label} }
         }
+
+        div {
+          class: classes!("dioxico-chips", format!("dioxico-chips-{}", position.as_str())),
+          onclick: chips_node_onclick,
+          // TODO: node ref?
+          div { class: "dioxico-chips-inner",
+
+            if !state.read().is_empty() {
+              div { class: "dioxico-chips-chip-list",
+
+                for (index , this_chip_index) in state.read().iter().enumerate() {
+                  div { class: "dioxico-chips-chip",
+
+                    span { class: "dioxico-chips-chip-label",
+
+                      {options.get(*this_chip_index).map(ToString::to_string).unwrap_or_default()}
+                    }
+
+                    IconButton {
+                      icon: XMARK_ICON,
+                      size: IconButtonSize::Small,
+                      class: "dioxico-chips-chip-remove",
+                      on_click: {
+                          let mut state = state.clone();
+                          move |_| {
+                              state.write().remove(index);
+                          }
+                      },
+                      disabled,
+                    }
+                  }
+                }
+              }
+            }
+
+            div { class: "dioxico-chips-input-box-container",
+
+              input {
+                r#type: "text",
+                class: "dioxico-chips-input",
+                id,
+                value: next_chip,
+                oninput: move |event| next_chip.set(event.value()),
+                onfocusin: move |_| dropdown_open.set(true),
+                maxlength: max_length,
+                placeholder,
+                disabled,
+              }
+            }
+          }
+
+          if !possible_options.is_empty() {
+            div { class: "dioxico-chips-options-dropdown",
+
+              div { class: "dioxico-chips-options-popup",
+
+                for this_option_index in possible_options {
+                  div {
+                    class: "dioxico-chips-option",
+                    onclick: {
+                        let mut state = state.clone();
+                        move |_| {
+                            state.write().push(this_option_index);
+                            next_chip.set(String::new());
+                        }
+                    },
+
+                    {options.get(this_option_index).cloned().unwrap_or_default()}
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        Error {
+          message: error,
+          size: ErrorSize::Small,
+          class: "dioxico-chips-error",
+        }
+      }
     }
 }

@@ -56,37 +56,36 @@ pub fn RadioGroup(
         .into_inner()
         .into_iter()
         .enumerate()
-        .map(|(index, option)| (index, new_id(), option))
-        .collect::<Vec<_>>();
+        .map(|(index, option)| (index, new_id(), option));
 
     rsx! {
-        div {
-            class: classes!("dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.as_str()), class),
+      div {
+        class: classes!(
+            "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.as_str()),
+            class
+        ),
 
-            for (index, id, option) in index_id_options {
-                div {
-                    class: classes!("dioxico-radio-option", disabled.then_some("dioxico-radio-option-disabled")),
+        for (index , id , option) in index_id_options {
+          div {
+            class: classes!(
+                "dioxico-radio-option", disabled.then_some("dioxico-radio-option-disabled")
+            ),
 
-                    input {
-                        r#type: "radio",
-                        class: "dioxico-radio-input",
-                        id: "{id}",
-                        name: "{name}",
-                        value: "{index}",
-                        oninput: move |_| state.set(Some(index)),
-                        checked: state.get() == Some(index),
-                        required,
-                        disabled,
-                    }
-
-                    label {
-                        r#for: id,
-                        class: "dioxico-radio-label",
-
-                        {option}
-                    }
-                }
+            input {
+              r#type: "radio",
+              class: "dioxico-radio-input",
+              id: "{id}",
+              name: "{name}",
+              value: "{index}",
+              oninput: move |_| state.set(Some(index)),
+              checked: state.get() == Some(index),
+              required,
+              disabled,
             }
+
+            label { r#for: id, class: "dioxico-radio-label", {option} }
+          }
         }
+      }
     }
 }
