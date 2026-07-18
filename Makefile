@@ -10,10 +10,10 @@ lint:
 	cargo clippy -- -D warnings
 
 demo:
-	dx serve --example demo --platform desktop
+	dx serve --package dioxico --example demo --platform desktop
 
 demo-web:
-	dx serve --example demo --platform web
+	dx serve --package dioxico --example demo --platform web
 
 clean:
 	cargo clean
