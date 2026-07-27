@@ -1,4 +1,7 @@
-use dioxico::{Select, SelectEnum, SelectEnumNullable, SelectNullable, UnitEnum};
+use dioxico::{
+    Select, SelectEnum, SelectEnumNullable, SelectNullable, SelectSearchable,
+    SelectSearchableNullable, UnitEnum,
+};
 use dioxus::prelude::*;
 
 #[component]
@@ -23,6 +26,13 @@ pub fn Demo() -> Element {
         .collect::<Vec<_>>();
     let select_enum_state = use_signal(|| Language::C);
     let select_enum_nullable_state = use_signal(|| None::<Language>);
+    let mut select_searchable_state = use_signal(|| 0usize);
+    let mut select_searchable_nullable_state = use_signal(|| None);
+    let select_searchable_error = if select_searchable_nullable_state().is_none() {
+        "Please select an option"
+    } else {
+        ""
+    };
 
     rsx! {
       Select {
@@ -42,7 +52,7 @@ pub fn Demo() -> Element {
       span { "Value: {select_nullable_state():?}" }
       SelectNullable {
         state: select_nullable_state,
-        options,
+        options: options.clone(),
         label: "Disabled select label",
         disabled: true,
       }
@@ -61,6 +71,39 @@ pub fn Demo() -> Element {
       SelectEnumNullable {
         state: select_enum_nullable_state,
         label: "Disabled select enum label",
+        disabled: true,
+      }
+      SelectSearchable {
+        state: select_searchable_state,
+        options: options.clone(),
+        on_submit: move |results: Vec<usize>| {
+            if let Some(index) = results.first() {
+                select_searchable_state.set(*index);
+            }
+        },
+        label: "Select searchable label",
+        required: true,
+      }
+      span { "Value: {select_searchable_state():?}" }
+      SelectSearchableNullable {
+        state: select_searchable_nullable_state,
+        options: options.clone(),
+        on_submit: move |results: Vec<usize>| {
+            if let Some(index) = results.first() {
+                select_searchable_nullable_state.set(Some(*index));
+            } else {
+                select_searchable_nullable_state.set(None);
+            }
+        },
+        null_label: "Select an option...",
+        label: "Select searchable nullable label",
+        error: select_searchable_error,
+      }
+      span { "Value: {select_searchable_nullable_state():?}" }
+      SelectSearchableNullable {
+        state: select_searchable_nullable_state,
+        options,
+        label: "Disabled select searchable label",
         disabled: true,
       }
     }

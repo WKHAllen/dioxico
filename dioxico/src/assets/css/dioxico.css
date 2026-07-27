@@ -1447,6 +1447,45 @@ body {
   transform: rotate(-180deg);
 }
 
+.dioxico-select-search-container {
+  display: flex;
+}
+
+.dioxico-select-search {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--dioxico-input-background-color);
+  color: var(--dioxico-input-text-color);
+  padding: 6px 7px;
+  border: var(--dioxico-standard-border);
+  border-radius: var(--dioxico-input-border-radius);
+  transition: border 0.1s ease;
+}
+
+.dioxico-select-search-input {
+  background-color: var(--dioxico-input-background-color);
+  color: var(--dioxico-input-text-color);
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.dioxico-select-search:focus-within {
+  border: var(--dioxico-focus-border);
+}
+
+.dioxico-select-search-invalid,
+.dioxico-select-search-invalid:focus-within {
+  border: var(--dioxico-error-border);
+}
+
+.dioxico-select-search-container-disabled .dioxico-select-search {
+  color: var(--dioxico-input-text-color-disabled);
+}
+
 .dioxico-select-dropdown {
   position: relative;
   width: 100%;
