@@ -607,7 +607,7 @@ where
 /// A function used to search values in a select dropdown.
 #[allow(clippy::type_complexity)]
 #[derive(Clone)]
-pub struct SearchFn(Rc<dyn Fn(&str, &[String]) -> Vec<usize>>);
+pub struct SearchFn(Rc<dyn Fn(&str, &[&str]) -> Vec<usize>>);
 
 impl PartialEq for SearchFn {
     fn eq(&self, other: &Self) -> bool {
@@ -617,7 +617,7 @@ impl PartialEq for SearchFn {
 
 impl<F> From<F> for SearchFn
 where
-    F: Fn(&str, &[String]) -> Vec<usize> + 'static,
+    F: Fn(&str, &[&str]) -> Vec<usize> + 'static,
 {
     fn from(value: F) -> Self {
         Self(Rc::new(value))
@@ -627,7 +627,7 @@ where
 impl Default for SearchFn {
     fn default() -> Self {
         Self(Rc::new(move |query, collection| {
-            search(query, collection, String::as_str)
+            search(query, collection, |x| x)
                 .into_iter()
                 .map(|result| result.collection_index)
                 .collect()
@@ -635,14 +635,40 @@ impl Default for SearchFn {
     }
 }
 
+/// A function used to map a value to its string representation.
+pub struct OptionStrFn<T>(Rc<dyn Fn(&T) -> &str>);
+
+impl<T> Clone for OptionStrFn<T> {
+    fn clone(&self) -> Self {
+        Self(Rc::clone(&self.0))
+    }
+}
+
+impl<T> PartialEq for OptionStrFn<T> {
+    fn eq(&self, other: &Self) -> bool {
+        Rc::ptr_eq(&self.0, &other.0)
+    }
+}
+
+impl<T, F> From<F> for OptionStrFn<T>
+where
+    F: Fn(&T) -> &str + 'static,
+{
+    fn from(value: F) -> Self {
+        Self(Rc::new(value))
+    }
+}
+
 /// Select dropdown component.
 #[component]
-fn SelectSearchableInner<S>(
+fn SelectSearchableInner<T, S>(
     /// Selection state.
     #[props(into)]
     state: State<S>,
     /// List of select options.
-    options: ReadSignal<Collection<String>>,
+    options: ReadSignal<Collection<T>>,
+    /// A function to get the string representation of each option.
+    option_str_fn: ReadSignal<OptionStrFn<T>>,
     /// An optional function used to match search results. If not provided, a
     /// sensible default search function is used.
     #[props(default)]
@@ -675,6 +701,7 @@ fn SelectSearchableInner<S>(
     class: String,
 ) -> Element
 where
+    T: 'static,
     S: SelectState + Clone + PartialEq + 'static,
 {
     let id = use_id();
@@ -695,21 +722,33 @@ where
         // close the popup when this happens.
         dropdown_open.set(false);
 
+        let opt_str_fn = &option_str_fn.read().0;
         match state.get().get_value() {
             Some(selected) => match options.read().get(selected) {
-                Some(option) => option.clone(),
+                Some(option) => opt_str_fn(option).to_owned(),
                 None => String::new(),
             },
             None => String::new(),
         }
     });
-    let query_matches = use_memo(move || (*search_fn.0)(&search_query.read(), &options.read()));
+    let query_matches = use_memo(move || {
+        let opt_str_fn = &option_str_fn.read().0;
+        (*search_fn.0)(
+            &search_query.read(),
+            &options
+                .read()
+                .iter()
+                .map(|option| opt_str_fn(option))
+                .collect::<Vec<_>>(),
+        )
+    });
 
     let select_node_onclick = use_click_away(move || {
         // Reset the query to the current state value when focus leaves
+        let opt_str_fn = &option_str_fn.read().0;
         search_query.set(match state.get().get_value() {
             Some(selected) => match options.read().get(selected) {
-                Some(option) => option.clone(),
+                Some(option) => opt_str_fn(option).to_owned(),
                 None => String::new(),
             },
             None => String::new(),
@@ -813,7 +852,7 @@ where
                       dropdown_open.set(false);
                   },
 
-                  "{options.read()[index]}"
+                  "{(option_str_fn.read().0)(&options.read()[index])}"
                 }
               }
             }
@@ -830,16 +869,19 @@ where
 }
 
 #[component]
-pub fn SelectSearchable(
+pub fn SelectSearchable<T>(
     /// Selection state.
     #[props(into)]
     state: State<usize>,
     /// List of select options.
     #[props(into)]
-    options: Collection<String>,
+    options: ReadSignal<Collection<T>>,
+    /// A function to get the string representation of each option.
+    #[props(into)]
+    option_str_fn: OptionStrFn<T>,
     /// An optional function used to match search results. If not provided, a
     /// sensible default search function is used.
-    #[props(default)]
+    #[props(default, into)]
     search_fn: SearchFn,
     /// An optional callback called when the enter key is pressed. The value
     /// passed to the callback is a vector containing the indices of all options
@@ -864,11 +906,15 @@ pub fn SelectSearchable(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-) -> Element {
+) -> Element
+where
+    T: 'static,
+{
     rsx! {
-      SelectSearchableInner::<usize> {
+      SelectSearchableInner::<T,usize> {
         state,
         options,
+        option_str_fn,
         search_fn,
         on_submit,
         label,
@@ -882,16 +928,19 @@ pub fn SelectSearchable(
 }
 
 #[component]
-pub fn SelectSearchableNullable(
+pub fn SelectSearchableNullable<T>(
     /// Selection state.
     #[props(into)]
     state: State<Option<usize>>,
     /// List of select options.
     #[props(into)]
-    options: Collection<String>,
+    options: ReadSignal<Collection<T>>,
+    /// A function to get the string representation of each option.
+    #[props(into)]
+    option_str_fn: OptionStrFn<T>,
     /// An optional function used to match search results. If not provided, a
     /// sensible default search function is used.
-    #[props(default)]
+    #[props(default, into)]
     search_fn: SearchFn,
     /// An optional callback called when the enter key is pressed. The value
     /// passed to the callback is a vector containing the indices of all options
@@ -919,11 +968,15 @@ pub fn SelectSearchableNullable(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-) -> Element {
+) -> Element
+where
+    T: 'static,
+{
     rsx! {
-      SelectSearchableInner::<Option<usize>> {
+      SelectSearchableInner::<T,Option<usize>> {
         state,
         options,
+        option_str_fn,
         search_fn,
         on_submit,
         null_label,

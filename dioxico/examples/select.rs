@@ -76,6 +76,7 @@ pub fn Demo() -> Element {
       SelectSearchable {
         state: select_searchable_state,
         options: options.clone(),
+        option_str_fn: String::as_str,
         on_submit: move |results: Vec<usize>| {
             if let Some(index) = results.first() {
                 select_searchable_state.set(*index);
@@ -88,6 +89,7 @@ pub fn Demo() -> Element {
       SelectSearchableNullable {
         state: select_searchable_nullable_state,
         options: options.clone(),
+        option_str_fn: String::as_str,
         on_submit: move |results: Vec<usize>| {
             if let Some(index) = results.first() {
                 select_searchable_nullable_state.set(Some(*index));
@@ -103,6 +105,7 @@ pub fn Demo() -> Element {
       SelectSearchableNullable {
         state: select_searchable_nullable_state,
         options,
+        option_str_fn: String::as_str,
         label: "Disabled select searchable label",
         disabled: true,
       }

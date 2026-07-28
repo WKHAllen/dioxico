@@ -1482,7 +1482,7 @@ body {
   border: var(--dioxico-error-border);
 }
 
-.dioxico-select-search-container-disabled .dioxico-select-search {
+.dioxico-select-container-disabled .dioxico-select-search-input {
   color: var(--dioxico-input-text-color-disabled);
 }
 
