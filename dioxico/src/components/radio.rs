@@ -2,29 +2,21 @@
 
 use crate::classes::*;
 use crate::collection::Collection;
+use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// The orientation of a radio group.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum RadioGroupOrientation {
     /// Horizontally oriented.
     Horizontal,
     /// Vertically oriented.
     #[default]
     Vertical,
-}
-
-impl RadioGroupOrientation {
-    /// Gets the name of the orientation.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Horizontal => "horizontal",
-            Self::Vertical => "vertical",
-        }
-    }
 }
 
 /// Radio group component.
@@ -61,7 +53,7 @@ pub fn RadioGroup(
     rsx! {
       div {
         class: classes!(
-            "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.as_str()),
+            "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.css_repr()),
             class
         ),
 

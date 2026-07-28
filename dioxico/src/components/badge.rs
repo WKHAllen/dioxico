@@ -1,11 +1,13 @@
 //! Badge components and utilities.
 
 use crate::classes::*;
+use crate::css_repr::CssRepr;
 use crate::util::*;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// Badge style.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum BadgeStyle {
     /// Primary style.
     #[default]
@@ -14,17 +16,6 @@ pub enum BadgeStyle {
     Secondary,
     /// Danger style.
     Danger,
-}
-
-impl BadgeStyle {
-    /// Gets the name of the badge style.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Primary => "primary",
-            Self::Secondary => "secondary",
-            Self::Danger => "danger",
-        }
-    }
 }
 
 /// Badge component.
@@ -46,18 +37,12 @@ where
     N: Number + 'static,
 {
     rsx! {
-        div {
-            class: classes!("dioxico-badge-container", class),
+      div { class: classes!("dioxico-badge-container", class),
 
-            div {
-                class: classes!("dioxico-badge", format!("dioxico-badge-{}", style.as_str())),
+        div { class: classes!("dioxico-badge", format!("dioxico-badge-{}", style.css_repr())),
 
-                div {
-                    class: classes!("dioxico-badge-text", value_class),
-
-                    {value.to_string()}
-                }
-            }
+          div { class: classes!("dioxico-badge-text", value_class), {value.to_string()} }
         }
+      }
     }
 }

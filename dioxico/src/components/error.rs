@@ -1,10 +1,12 @@
 //! Error components and utilities.
 
 use crate::classes::*;
+use crate::css_repr::CssRepr;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// The size of an error message.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum ErrorSize {
     /// A very small message.
     Smaller,
@@ -17,19 +19,6 @@ pub enum ErrorSize {
     Large,
     /// A very large message.
     Larger,
-}
-
-impl ErrorSize {
-    /// Gets the name of the error message size.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Smaller => "smaller",
-            Self::Small => "small",
-            Self::Medium => "medium",
-            Self::Large => "large",
-            Self::Larger => "larger",
-        }
-    }
 }
 
 /// An error element.
@@ -46,10 +35,9 @@ pub fn Error(
     class: String,
 ) -> Element {
     rsx! {
-        span {
-            class: classes!("dioxico-error", format!("dioxico-text-{}", size.as_str()), class),
+      span { class: classes!("dioxico-error", format!("dioxico-text-{}", size.css_repr()), class),
 
-            {message}
-        }
+        {message}
+      }
     }
 }

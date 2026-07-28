@@ -2,13 +2,15 @@
 
 use super::{Error, ErrorSize};
 use crate::classes::*;
+use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// The type of input element.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum InputType {
     /// Standard text input.
     #[default]
@@ -21,19 +23,6 @@ pub enum InputType {
     Url,
     /// Password input.
     Password,
-}
-
-impl InputType {
-    /// Gets the HTML input element type corresponding to the current input type.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Text => "text",
-            Self::Email => "email",
-            Self::Tel => "tel",
-            Self::Url => "url",
-            Self::Password => "password",
-        }
-    }
 }
 
 /// An input element.
@@ -74,49 +63,45 @@ pub fn Input(
     let invalid = !error.is_empty();
 
     rsx! {
-        div {
-            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled"), class),
+      div {
+        class: classes!(
+            "dioxico-input-container", disabled
+            .then_some("dioxico-input-container-disabled"), class
+        ),
 
-            label {
-                class: "dioxico-input-label",
-                r#for: "{id}",
+        label { class: "dioxico-input-label", r#for: "{id}",
 
-                {label}
+          {label}
 
-                span {
-                    class: "dioxico-required-mark",
+          span { class: "dioxico-required-mark",
 
-                    if required {
-                        " *"
-                    }
-                }
+            if required {
+              " *"
             }
-
-            div {
-                class: "dioxico-input-box-container",
-
-                input {
-                    r#type: input_type.as_str(),
-                    class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
-                    id,
-                    value: "{state.get()}",
-                    oninput: move |event| state.set(event.value()),
-                    onkeydown: move |event| {
-                        if event.key() == Key::Enter {
-                            on_submit.call(());
-                        }
-                    },
-                    placeholder,
-                    maxlength: max_length,
-                    required,
-                    disabled,
-                }
-            }
-
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-            }
+          }
         }
+
+        div { class: "dioxico-input-box-container",
+
+          input {
+            r#type: input_type.css_repr(),
+            class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
+            id,
+            value: "{state.get()}",
+            oninput: move |event| state.set(event.value()),
+            onkeydown: move |event| {
+                if event.key() == Key::Enter {
+                    on_submit.call(());
+                }
+            },
+            placeholder,
+            maxlength: max_length,
+            required,
+            disabled,
+          }
+        }
+
+        Error { message: error, size: ErrorSize::Small }
+      }
     }
 }

@@ -24,6 +24,7 @@
 mod classes;
 mod collection;
 mod components;
+mod css_repr;
 mod element;
 mod hooks;
 mod state;
@@ -34,6 +35,7 @@ mod util;
 
 pub use collection::Collection;
 pub use components::*;
+pub use css_repr::CssRepr;
 pub use dioxico_macros::*;
 pub use element::ElementLike;
 pub use hooks::*;

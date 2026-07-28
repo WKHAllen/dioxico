@@ -2,6 +2,7 @@
 
 use super::IconSize;
 use crate::classes::*;
+use crate::css_repr::CssRepr;
 use dioxus::prelude::*;
 
 /// The size of an icon button.
@@ -29,20 +30,22 @@ pub fn IconButton(
     icon_class: String,
 ) -> Element {
     rsx! {
-        button {
-            r#type: "button",
-            class: classes!("dioxico-icon-button", format!("dioxico-icon-button-{}", size.as_str()), class),
-            onclick: move |_| {
-                if !disabled {
-                    on_click.call(());
-                }
-            },
-            disabled,
-
-            img {
-                class: classes!("dioxico-icon-button-icon", icon_class),
-                src: icon,
+      button {
+        r#type: "button",
+        class: classes!(
+            "dioxico-icon-button", format!("dioxico-icon-button-{}", size.css_repr()), class
+        ),
+        onclick: move |_| {
+            if !disabled {
+                on_click.call(());
             }
+        },
+        disabled,
+
+        img {
+          class: classes!("dioxico-icon-button-icon", icon_class),
+          src: icon,
         }
+      }
     }
 }

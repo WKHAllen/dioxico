@@ -1,10 +1,12 @@
 //! Button components and utilities.
 
 use crate::classes::*;
+use crate::css_repr::CssRepr;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// The style of a button.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum ButtonStyle {
     /// Primary style.
     #[default]
@@ -15,18 +17,6 @@ pub enum ButtonStyle {
     Transparent,
     /// Danger style.
     Danger,
-}
-
-impl ButtonStyle {
-    /// Gets the name of the button style.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Primary => "primary",
-            Self::Secondary => "secondary",
-            Self::Transparent => "transparent",
-            Self::Danger => "danger",
-        }
-    }
 }
 
 /// Button component.
@@ -48,19 +38,19 @@ pub fn Button(
     children: Element,
 ) -> Element {
     rsx! {
-        button {
-            r#type: "button",
-            class: classes!("dioxico-button", format!("dioxico-button-{}", style.as_str()), class),
-            onclick: move |event| {
-                event.prevent_default();
+      button {
+        r#type: "button",
+        class: classes!("dioxico-button", format!("dioxico-button-{}", style.css_repr()), class),
+        onclick: move |event| {
+            event.prevent_default();
 
-                if !disabled {
-                    on_click.call(());
-                }
-            },
-            disabled,
+            if !disabled {
+                on_click.call(());
+            }
+        },
+        disabled,
 
-            {children}
-        }
+        {children}
+      }
     }
 }

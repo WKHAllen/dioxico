@@ -2,13 +2,15 @@
 
 use super::{Error, ErrorSize};
 use crate::classes::*;
+use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// Textarea resize options.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum TextareaResize {
     /// No resize.
     #[default]
@@ -19,18 +21,6 @@ pub enum TextareaResize {
     Vertical,
     /// Both horizontal and vertical resize.
     Both,
-}
-
-impl TextareaResize {
-    /// Gets the name of the resize option.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::None => "none",
-            Self::Horizontal => "horizontal",
-            Self::Vertical => "vertical",
-            Self::Both => "both",
-        }
-    }
 }
 
 /// A textarea element.
@@ -71,48 +61,46 @@ pub fn Textarea(
     let invalid = !error.is_empty();
 
     rsx! {
-        div {
-            class: classes!("dioxico-textarea-container", disabled.then_some("dioxico-textarea-container-disabled"), class),
+      div {
+        class: classes!(
+            "dioxico-textarea-container", disabled
+            .then_some("dioxico-textarea-container-disabled"), class
+        ),
 
-            div {
-                class: "dioxico-textarea-label-container",
+        div { class: "dioxico-textarea-label-container",
 
-                label {
-                    class: "dioxico-textarea-label",
-                    r#for: "{id}",
+          label { class: "dioxico-textarea-label", r#for: "{id}",
 
-                    {label}
+            {label}
 
-                    span {
-                        class: "dioxico-required-mark",
+            span { class: "dioxico-required-mark",
 
-                        if required {
-                            " *"
-                        }
-                    }
-                }
+              if required {
+                " *"
+              }
             }
-
-            div {
-                class: "dioxico-textarea-box-container",
-
-                textarea {
-                    class: classes!("dioxico-textarea", format!("dioxico-textarea-resize-{}", resize.as_str()), invalid.then_some("dioxico-textarea-invalid")),
-                    id,
-                    value: "{state.get()}",
-                    oninput: move |event| state.set(event.value()),
-                    rows,
-                    placeholder,
-                    maxlength: max_length,
-                    required,
-                    disabled,
-                }
-            }
-
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-            }
+          }
         }
+
+        div { class: "dioxico-textarea-box-container",
+
+          textarea {
+            class: classes!(
+                "dioxico-textarea", format!("dioxico-textarea-resize-{}", resize.css_repr()),
+                invalid.then_some("dioxico-textarea-invalid")
+            ),
+            id,
+            value: "{state.get()}",
+            oninput: move |event| state.set(event.value()),
+            rows,
+            placeholder,
+            maxlength: max_length,
+            required,
+            disabled,
+          }
+        }
+
+        Error { message: error, size: ErrorSize::Small }
+      }
     }
 }

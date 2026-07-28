@@ -1,6 +1,8 @@
 //! Icon components and utilities.
 
 use crate::classes::*;
+use crate::css_repr::CssRepr;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 
 /// Angle down icon.
@@ -28,7 +30,7 @@ pub const CHECK_ICON: Asset = asset!("/src/assets/svg/check-solid.svg");
 pub const XMARK_ICON: Asset = asset!("/src/assets/svg/xmark-solid.svg");
 
 /// The size of an icon.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum IconSize {
     /// A small icon.
     Small,
@@ -37,17 +39,6 @@ pub enum IconSize {
     Medium,
     /// A large icon.
     Large,
-}
-
-impl IconSize {
-    /// Gets the name of the icon size.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Small => "small",
-            Self::Medium => "medium",
-            Self::Large => "large",
-        }
-    }
 }
 
 /// Icon component.
@@ -66,9 +57,12 @@ pub fn Icon(
     class: String,
 ) -> Element {
     rsx! {
-        img {
-            class: classes!("dioxico-icon", format!("dioxico-icon-{}", size.as_str()), disabled.then_some("dioxico-icon-disabled"), class),
-            src: icon,
-        }
+      img {
+        class: classes!(
+            "dioxico-icon", format!("dioxico-icon-{}", size.css_repr()), disabled
+            .then_some("dioxico-icon-disabled"), class
+        ),
+        src: icon,
+      }
     }
 }

@@ -3,11 +3,13 @@
 use super::{Error, ErrorSize, Icon, ANGLE_DOWN_ICON};
 use crate::classes::*;
 use crate::collection::Collection;
+use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::hooks::*;
 use crate::state::State;
 use crate::unit_enum::UnitEnum;
 use crate::util::*;
+use dioxico_macros::CssRepr;
 use dioxus::core::SuperFrom;
 use dioxus::prelude::*;
 use std::cmp::Ordering;
@@ -62,23 +64,13 @@ impl SelectState for Option<usize> {
 }
 
 /// Position of a select popup.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum SelectPopupPosition {
     /// Position the popup above.
     Above,
     /// Position the popup below.
     #[default]
     Below,
-}
-
-impl SelectPopupPosition {
-    /// Gets the name of the position.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Above => "above",
-            Self::Below => "below",
-        }
-    }
 }
 
 /// Select dropdown component.
@@ -164,7 +156,7 @@ where
         }
 
         div {
-          class: classes!("dioxico-select", format!("dioxico-select-{}", position.as_str())),
+          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
           onclick: select_node_onclick,
 
           button {
@@ -401,7 +393,7 @@ where
         }
 
         div {
-          class: classes!("dioxico-select", format!("dioxico-select-{}", position.as_str())),
+          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
           onclick: select_node_onclick,
 
           button {
@@ -752,7 +744,7 @@ where
         }
 
         div {
-          class: classes!("dioxico-select", format!("dioxico-select-{}", position.as_str())),
+          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
           onclick: select_node_onclick,
 
           div { class: "dioxico-select-search-container",

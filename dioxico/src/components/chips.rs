@@ -3,10 +3,12 @@
 use super::{Error, ErrorSize, IconButton, IconButtonSize, XMARK_ICON};
 use crate::classes::*;
 use crate::collection::Collection;
+use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::hooks::*;
 use crate::state::State;
 use crate::util::*;
+use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 use std::fmt::Display;
 
@@ -104,23 +106,13 @@ fn get_possible_options(
 }
 
 /// Position of a chips popup.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
 pub enum ChipsPopupPosition {
     /// Position the popup above.
     Above,
     /// Position the popup below.
     #[default]
     Below,
-}
-
-impl ChipsPopupPosition {
-    /// Gets the name of the position.
-    pub const fn as_str(&self) -> &'static str {
-        match *self {
-            Self::Above => "above",
-            Self::Below => "below",
-        }
-    }
 }
 
 /// Chips selection component.
@@ -192,7 +184,7 @@ pub fn Chips(
         }
 
         div {
-          class: classes!("dioxico-chips", format!("dioxico-chips-{}", position.as_str())),
+          class: classes!("dioxico-chips", format!("dioxico-chips-{}", position.css_repr())),
           onclick: chips_node_onclick,
           // TODO: node ref?
           div { class: "dioxico-chips-inner",
