@@ -33,7 +33,7 @@ mod theme;
 mod unit_enum;
 mod util;
 
-pub use collection::Collection;
+pub use collection::{Collection, ReadCollection};
 pub use components::*;
 pub use css_repr::CssRepr;
 pub use dioxico_macros::*;

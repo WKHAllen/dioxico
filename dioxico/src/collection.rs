@@ -1,7 +1,10 @@
 //! Utilities involving generic collection types.
 
+use dioxus::core::{SuperFrom, SuperInto};
+use dioxus::prelude::*;
 use std::borrow::{Borrow, BorrowMut};
 use std::collections::{HashSet, LinkedList, VecDeque};
+use std::marker::PhantomData;
 use std::ops::{Deref, DerefMut};
 
 /// Wrapper type for a variety of collection types, e.g. `Vec<T>`.
@@ -118,6 +121,82 @@ where
     fn from(value: LinkedList<U>) -> Self {
         Self {
             inner: value.into_iter().map(Into::into).collect(),
+        }
+    }
+}
+
+/// Wrapper type for any signal type containing a collection.
+///
+/// This type is similar to `Collection<T>`, but specifically for signals and
+/// signal-like types. Because inner collection is expected to be stored inside
+/// a signal, we can't perform the useful conversions from a variety of
+/// collection types. Instead, we choose to go with a `Vec<T>` for versatility.
+#[derive(Debug, Default, PartialEq)]
+pub struct ReadCollection<T>
+where
+    T: 'static,
+{
+    /// A read signal containing the inner collection, stored as a `Vec<T>`.
+    inner: ReadSignal<Vec<T>>,
+}
+
+impl<T> Copy for ReadCollection<T> {}
+
+impl<T> Clone for ReadCollection<T> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+impl<T> Deref for ReadCollection<T> {
+    type Target = ReadSignal<Vec<T>>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl<T> DerefMut for ReadCollection<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+impl<T> Borrow<ReadSignal<Vec<T>>> for ReadCollection<T> {
+    fn borrow(&self) -> &ReadSignal<Vec<T>> {
+        &self.inner
+    }
+}
+
+impl<T> BorrowMut<ReadSignal<Vec<T>>> for ReadCollection<T> {
+    fn borrow_mut(&mut self) -> &mut ReadSignal<Vec<T>> {
+        &mut self.inner
+    }
+}
+
+impl<T> AsRef<ReadSignal<Vec<T>>> for ReadCollection<T> {
+    fn as_ref(&self) -> &ReadSignal<Vec<T>> {
+        &self.inner
+    }
+}
+
+impl<T> AsMut<ReadSignal<Vec<T>>> for ReadCollection<T> {
+    fn as_mut(&mut self) -> &mut ReadSignal<Vec<T>> {
+        &mut self.inner
+    }
+}
+
+#[doc(hidden)]
+pub struct ReadFromMarker<M>(PhantomData<M>);
+
+impl<T, U, M> SuperFrom<U, ReadFromMarker<M>> for ReadCollection<T>
+where
+    T: 'static,
+    U: SuperInto<ReadSignal<Vec<T>>, M>,
+{
+    fn super_from(value: U) -> Self {
+        Self {
+            inner: value.super_into(),
         }
     }
 }

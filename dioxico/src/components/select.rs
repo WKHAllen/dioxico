@@ -2,7 +2,7 @@
 
 use super::{Error, ErrorSize, Icon, ANGLE_DOWN_ICON};
 use crate::classes::*;
-use crate::collection::Collection;
+use crate::collection::{Collection, ReadCollection};
 use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::hooks::*;
@@ -666,7 +666,7 @@ fn SelectSearchableInner<T, S>(
     #[props(into)]
     state: State<S>,
     /// List of select options.
-    options: ReadSignal<Collection<T>>,
+    options: ReadCollection<T>,
     /// A function to get the string representation of each option.
     option_str_fn: ReadSignal<OptionStrFn<T>>,
     /// An optional function used to match search results. If not provided, a
@@ -701,7 +701,7 @@ fn SelectSearchableInner<T, S>(
     class: String,
 ) -> Element
 where
-    T: 'static,
+    T: PartialEq + 'static,
     S: SelectState + Clone + PartialEq + 'static,
 {
     let id = use_id();
@@ -875,7 +875,7 @@ pub fn SelectSearchable<T>(
     state: State<usize>,
     /// List of select options.
     #[props(into)]
-    options: ReadSignal<Collection<T>>,
+    options: ReadCollection<T>,
     /// A function to get the string representation of each option.
     #[props(into)]
     option_str_fn: OptionStrFn<T>,
@@ -908,7 +908,7 @@ pub fn SelectSearchable<T>(
     class: String,
 ) -> Element
 where
-    T: 'static,
+    T: PartialEq + 'static,
 {
     rsx! {
       SelectSearchableInner::<T,usize> {
@@ -934,7 +934,7 @@ pub fn SelectSearchableNullable<T>(
     state: State<Option<usize>>,
     /// List of select options.
     #[props(into)]
-    options: ReadSignal<Collection<T>>,
+    options: ReadCollection<T>,
     /// A function to get the string representation of each option.
     #[props(into)]
     option_str_fn: OptionStrFn<T>,
@@ -970,7 +970,7 @@ pub fn SelectSearchableNullable<T>(
     class: String,
 ) -> Element
 where
-    T: 'static,
+    T: PartialEq + 'static,
 {
     rsx! {
       SelectSearchableInner::<T,Option<usize>> {

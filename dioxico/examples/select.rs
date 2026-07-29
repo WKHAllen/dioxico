@@ -24,6 +24,10 @@ pub fn Demo() -> Element {
     let options = (1..=5)
         .map(|index| format!("Option {}", index))
         .collect::<Vec<_>>();
+    let options_memo = use_memo({
+        let options = options.clone();
+        move || options.clone()
+    });
     let select_enum_state = use_signal(|| Language::C);
     let select_enum_nullable_state = use_signal(|| None::<Language>);
     let mut select_searchable_state = use_signal(|| 0usize);
@@ -75,7 +79,7 @@ pub fn Demo() -> Element {
       }
       SelectSearchable {
         state: select_searchable_state,
-        options: options.clone(),
+        options: options_memo,
         option_str_fn: String::as_str,
         on_submit: move |results: Vec<usize>| {
             if let Some(index) = results.first() {
