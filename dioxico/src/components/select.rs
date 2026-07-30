@@ -572,36 +572,49 @@ fn search<'a, T, F>(query: &str, collection: &'a [T], mut key_fn: F) -> Vec<Sear
 where
     F: FnMut(&T) -> &str,
 {
-    let query_lower = query.to_lowercase();
-
-    let mut search_values = collection
-        .iter()
-        .enumerate()
-        .filter_map(|(collection_index, value)| {
-            let key = key_fn(value).to_lowercase();
-            key.find(&query_lower).map(|query_index| SearchResult {
+    if query.is_empty() {
+        collection
+            .iter()
+            .enumerate()
+            .map(|(index, value)| SearchResult {
                 value,
-                key_len: key.len(),
-                collection_index,
-                query_index,
+                key_len: key_fn(value).len(),
+                collection_index: index,
+                query_index: 0,
             })
-        })
-        .collect::<Vec<_>>();
+            .collect()
+    } else {
+        let query_lower = query.to_lowercase();
 
-    search_values.sort_by(|a, b| {
-        // Highest sort priority is how early in the result the search query was found
-        match a.query_index.cmp(&b.query_index) {
-            // Next priority is how short the result is
-            Ordering::Equal => match a.key_len.cmp(&b.key_len) {
-                // Finally, fallback to original order
-                Ordering::Equal => a.collection_index.cmp(&b.collection_index),
+        let mut search_values = collection
+            .iter()
+            .enumerate()
+            .filter_map(|(collection_index, value)| {
+                let key = key_fn(value).to_lowercase();
+                key.find(&query_lower).map(|query_index| SearchResult {
+                    value,
+                    key_len: key.len(),
+                    collection_index,
+                    query_index,
+                })
+            })
+            .collect::<Vec<_>>();
+
+        search_values.sort_by(|a, b| {
+            // Highest sort priority is how early in the result the search query was found
+            match a.query_index.cmp(&b.query_index) {
+                // Next priority is how short the result is
+                Ordering::Equal => match a.key_len.cmp(&b.key_len) {
+                    // Finally, fallback to original order
+                    Ordering::Equal => a.collection_index.cmp(&b.collection_index),
+                    other => other,
+                },
                 other => other,
-            },
-            other => other,
-        }
-    });
+            }
+        });
 
-    search_values
+        search_values
+    }
 }
 
 /// A function used to search values in a select dropdown.
