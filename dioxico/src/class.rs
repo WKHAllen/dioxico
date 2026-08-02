@@ -3,6 +3,7 @@
 use std::fmt::Display;
 
 /// A representation of a list of CSS classes.
+#[derive(Debug, Clone, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Classes(Vec<String>);
 
 impl Classes {
@@ -71,15 +72,14 @@ impl Display for Classes {
 }
 
 /// Creates a list of CSS classes.
+#[macro_export]
 macro_rules! classes {
     ( $($class:expr),* $(,)? ) => {{
         #[allow(unused_mut)]
-        let mut classes = $crate::classes::Classes::new();
+        let mut classes = $crate::Classes::new();
         $(
-            classes.extend($crate::classes::Classes::from($class));
+            classes.extend($crate::Classes::from($class));
         )*
         classes.to_string()
     }};
 }
-
-pub(super) use classes;

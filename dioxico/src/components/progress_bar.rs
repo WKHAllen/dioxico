@@ -1,6 +1,6 @@
 //! Progress bar components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use dioxus::prelude::*;
 
 /// Progress bar component.
@@ -19,17 +19,11 @@ pub fn ProgressBar(
     let width_style = format!("width: {}%;", progress * 100.0);
 
     rsx! {
-        div {
-            class: classes!("dioxico-progress", disabled.then_some("dioxico-progress-disabled"), class),
+        div { class: classes!("dioxico-progress", disabled.then_some("dioxico-progress-disabled"), class),
 
-            div {
-                class: "dioxico-progress-empty",
-            }
+            div { class: "dioxico-progress-empty" }
 
-            div {
-                class: "dioxico-progress-filled",
-                style: width_style,
-            }
+            div { class: "dioxico-progress-filled", style: width_style }
         }
     }
 }

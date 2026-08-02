@@ -1,7 +1,7 @@
 //! Textarea components and utilities.
 
 use super::{Error, ErrorSize};
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::state::State;
@@ -61,46 +61,46 @@ pub fn Textarea(
     let invalid = !error.is_empty();
 
     rsx! {
-      div {
-        class: classes!(
-            "dioxico-textarea-container", disabled
-            .then_some("dioxico-textarea-container-disabled"), class
-        ),
-
-        div { class: "dioxico-textarea-label-container",
-
-          label { class: "dioxico-textarea-label", r#for: "{id}",
-
-            {label}
-
-            span { class: "dioxico-required-mark",
-
-              if required {
-                " *"
-              }
-            }
-          }
-        }
-
-        div { class: "dioxico-textarea-box-container",
-
-          textarea {
+        div {
             class: classes!(
-                "dioxico-textarea", format!("dioxico-textarea-resize-{}", resize.css_repr()),
-                invalid.then_some("dioxico-textarea-invalid")
+                "dioxico-textarea-container", disabled
+                .then_some("dioxico-textarea-container-disabled"), class
             ),
-            id,
-            value: "{state.get()}",
-            oninput: move |event| state.set(event.value()),
-            rows,
-            placeholder,
-            maxlength: max_length,
-            required,
-            disabled,
-          }
-        }
 
-        Error { message: error, size: ErrorSize::Small }
-      }
+            div { class: "dioxico-textarea-label-container",
+
+                label { class: "dioxico-textarea-label", r#for: "{id}",
+
+                    {label}
+
+                    span { class: "dioxico-required-mark",
+
+                        if required {
+                            " *"
+                        }
+                    }
+                }
+            }
+
+            div { class: "dioxico-textarea-box-container",
+
+                textarea {
+                    class: classes!(
+                        "dioxico-textarea", format!("dioxico-textarea-resize-{}", resize.css_repr()),
+                        invalid.then_some("dioxico-textarea-invalid")
+                    ),
+                    id,
+                    value: "{state.get()}",
+                    oninput: move |event| state.set(event.value()),
+                    rows,
+                    placeholder,
+                    maxlength: max_length,
+                    required,
+                    disabled,
+                }
+            }
+
+            Error { message: error, size: ErrorSize::Small }
+        }
     }
 }

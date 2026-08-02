@@ -1,6 +1,6 @@
 //! Switch components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
@@ -25,17 +25,11 @@ pub fn Switch(
     content_class: String,
 ) -> Element {
     rsx! {
-        div {
-            class: classes!("dioxico-switch-container", class),
+        div { class: classes!("dioxico-switch-container", class),
 
-            label {
-                class: classes!("dioxico-switch", disabled.then_some("dioxico-switch-disabled")),
+            label { class: classes!("dioxico-switch", disabled.then_some("dioxico-switch-disabled")),
 
-                div {
-                    class: classes!("dioxico-switch-label", content_class),
-
-                    {label}
-                }
+                div { class: classes!("dioxico-switch-label", content_class), {label} }
 
                 input {
                     r#type: "checkbox",
@@ -45,9 +39,7 @@ pub fn Switch(
                     disabled,
                 }
 
-                span {
-                    class: "dioxico-switch-toggle",
-                }
+                span { class: "dioxico-switch-toggle" }
             }
         }
     }

@@ -1,6 +1,6 @@
 //! Tooltip popup components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use dioxus::prelude::*;
 
@@ -29,7 +29,10 @@ pub fn Tooltip(
 
     rsx! {
         div {
-            class: classes!("dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled.then_some("dioxico-tooltip-disabled"), class),
+            class: classes!(
+                "dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled
+                .then_some("dioxico-tooltip-disabled"), class
+            ),
 
             div {
                 class: classes!("dioxico-tooltip-inner", inner_class),
@@ -39,18 +42,13 @@ pub fn Tooltip(
                 {children}
             }
 
-            div {
-                class: "dioxico-tooltip-container",
+            div { class: "dioxico-tooltip-container",
 
-                div {
-                    class: "dioxico-tooltip-popup-container",
+                div { class: "dioxico-tooltip-popup-container",
 
-                    div {
-                        class: "dioxico-tooltip-popup",
+                    div { class: "dioxico-tooltip-popup",
                         // node ref?
-
-                        span {
-                            class: classes!("dioxico-tooltip-content", content_class),
+                        span { class: classes!("dioxico-tooltip-content", content_class),
 
                             {content}
                         }

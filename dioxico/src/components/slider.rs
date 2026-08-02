@@ -1,7 +1,7 @@
 //! Slider components and utilities.
 
 use super::ProgressBar;
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
@@ -44,32 +44,22 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-slider-container", disabled.then_some("dioxico-slider-disabled"), class),
+            class: classes!(
+                "dioxico-slider-container", disabled.then_some("dioxico-slider-disabled"), class
+            ),
 
-            label {
-                r#for: "{id}",
-                class: "dioxico-slider-label",
+            label { r#for: "{id}", class: "dioxico-slider-label", {label} }
 
-                {label}
-            }
+            div { class: "dioxico-slider",
 
-            div {
-                class: "dioxico-slider",
+                div { class: "dioxico-slider-track",
 
-                div {
-                    class: "dioxico-slider-track",
-
-                    ProgressBar {
-                        progress,
-                        disabled,
-                    }
+                    ProgressBar { progress, disabled }
                 }
 
-                div {
-                    class: "dioxico-slider-thumb-container",
+                div { class: "dioxico-slider-thumb-container",
 
-                    div {
-                        class: "dioxico-slider-thumb",
+                    div { class: "dioxico-slider-thumb",
 
                         div {
                             class: "dioxico-slider-thumb-head",

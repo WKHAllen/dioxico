@@ -1,6 +1,6 @@
 //! Icon components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
@@ -57,12 +57,12 @@ pub fn Icon(
     class: String,
 ) -> Element {
     rsx! {
-      img {
-        class: classes!(
-            "dioxico-icon", format!("dioxico-icon-{}", size.css_repr()), disabled
-            .then_some("dioxico-icon-disabled"), class
-        ),
-        src: icon,
-      }
+        img {
+            class: classes!(
+                "dioxico-icon", format!("dioxico-icon-{}", size.css_repr()), disabled
+                .then_some("dioxico-icon-disabled"), class
+            ),
+            src: icon,
+        }
     }
 }

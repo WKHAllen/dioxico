@@ -1,6 +1,6 @@
 //! Badge components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use crate::util::*;
 use dioxico_macros::CssRepr;
@@ -37,12 +37,12 @@ where
     N: Number + 'static,
 {
     rsx! {
-      div { class: classes!("dioxico-badge-container", class),
+        div { class: classes!("dioxico-badge-container", class),
 
-        div { class: classes!("dioxico-badge", format!("dioxico-badge-{}", style.css_repr())),
+            div { class: classes!("dioxico-badge", format!("dioxico-badge-{}", style.css_repr())),
 
-          div { class: classes!("dioxico-badge-text", value_class), {value.to_string()} }
+                div { class: classes!("dioxico-badge-text", value_class), {value.to_string()} }
+            }
         }
-      }
     }
 }

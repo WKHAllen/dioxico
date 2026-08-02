@@ -1,6 +1,6 @@
 //! Error components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
@@ -35,9 +35,9 @@ pub fn Error(
     class: String,
 ) -> Element {
     rsx! {
-      span { class: classes!("dioxico-error", format!("dioxico-text-{}", size.css_repr()), class),
+        span { class: classes!("dioxico-error", format!("dioxico-text-{}", size.css_repr()), class),
 
-        {message}
-      }
+            {message}
+        }
     }
 }

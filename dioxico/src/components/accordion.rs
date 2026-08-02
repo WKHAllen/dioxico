@@ -1,7 +1,7 @@
 //! Accordion components and utilities.
 
 use super::{Icon, IconSize, ANGLE_RIGHT_ICON};
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
@@ -28,34 +28,31 @@ pub fn Accordion(
     content_class: String,
 ) -> Element {
     rsx! {
+      div {
+        class: classes!(
+            "dioxico-accordion", state.get().then_some("dioxico-accordion-open"), disabled
+            .then_some("dioxico-accordion-disabled"), class
+        ),
+
         div {
-            class: classes!("dioxico-accordion", state.get().then_some("dioxico-accordion-open"), disabled.then_some("dioxico-accordion-disabled"), class),
+          class: "dioxico-accordion-header",
+          onclick: move |_| {
+              if !disabled {
+                  state.set(!state.get());
+              }
+          },
 
-            div {
-                class: "dioxico-accordion-header",
-                onclick: move |_| if !disabled {
-                    state.set(!state.get());
-                },
+          Icon {
+            icon: ANGLE_RIGHT_ICON,
+            size: IconSize::Medium,
+            disabled,
+            class: "dioxico-accordion-header-icon",
+          }
 
-                Icon {
-                    icon: ANGLE_RIGHT_ICON,
-                    size: IconSize::Medium,
-                    disabled,
-                    class: "dioxico-accordion-header-icon",
-                }
-
-                div {
-                    class: "dioxico-accordion-header-title",
-
-                    {title}
-                }
-            }
-
-            div {
-                class: classes!("dioxico-accordion-content", content_class),
-
-                {children}
-            }
+          div { class: "dioxico-accordion-header-title", {title} }
         }
+
+        div { class: classes!("dioxico-accordion-content", content_class), {children} }
+      }
     }
 }

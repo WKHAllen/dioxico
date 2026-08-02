@@ -1,7 +1,7 @@
 //! File selection components and utilities.
 
 use super::ButtonStyle;
-use crate::classes::*;
+use crate::classes;
 use crate::collection::Collection;
 use crate::css_repr::CssRepr;
 use crate::util::*;
@@ -48,35 +48,30 @@ pub fn FileSelect(
     };
 
     rsx! {
-      div { class: classes!("dioxico-file-select", class),
+        div { class: classes!("dioxico-file-select", class),
 
-        button {
-          r#type: "button",
-          class: classes!(
-              "dioxico-file-select-button", format!("dioxico-file-select-button-{}", style
-              .css_repr())
-          ),
-          disabled,
+            button {
+                r#type: "button",
+                class: classes!(
+                    "dioxico-file-select-button", format!("dioxico-file-select-button-{}", style
+                    .css_repr())
+                ),
+                disabled,
 
-          label {
-            r#for: "{id}",
-            class: "dioxico-file-select-button-label",
+                label { r#for: "{id}", class: "dioxico-file-select-button-label", {children} }
+            }
 
-            {children}
-          }
+            input {
+                r#type: "file",
+                class: "dioxico-file-select-input",
+                id,
+                directory,
+                multiple,
+                accept,
+                disabled,
+                onchange: move |event| on_select.call(event.files()),
+            }
         }
-
-        input {
-          r#type: "file",
-          class: "dioxico-file-select-input",
-          id,
-          directory,
-          multiple,
-          accept,
-          disabled,
-          onchange: move |event| on_select.call(event.files()),
-        }
-      }
     }
 }
 
@@ -114,47 +109,47 @@ pub fn FileDrop(
     let mut hovering = use_signal(|| false);
 
     rsx! {
-      div {
-        class: classes!(
-            "dioxico-file-drop", hovering().then_some("dioxico-file-drop-dropping"), disabled
-            .then_some("dioxico-file-drop-disabled"), class
-        ),
-        ondragover: move |event| {
-            event.prevent_default();
+        div {
+            class: classes!(
+                "dioxico-file-drop", hovering().then_some("dioxico-file-drop-dropping"), disabled
+                .then_some("dioxico-file-drop-disabled"), class
+            ),
+            ondragover: move |event| {
+                event.prevent_default();
 
-            if !disabled {
-                hovering.set(true);
+                if !disabled {
+                    hovering.set(true);
+                }
+            },
+            ondragleave: move |_| {
+                if !disabled {
+                    hovering.set(false);
+                }
+            },
+            ondrop: move |event| {
+                event.prevent_default();
+
+                if !disabled {
+                    hovering.set(false);
+                    on_drop.call(event.files());
+                }
+            },
+
+            label { r#for: "{id}", class: "dioxico-file-drop-label",
+
+                span { class: "dioxico-file-drop-label-text", {children} }
             }
-        },
-        ondragleave: move |_| {
-            if !disabled {
-                hovering.set(false);
+
+            input {
+                r#type: "file",
+                class: "dioxico-file-drop-input",
+                id,
+                directory,
+                multiple,
+                accept,
+                disabled,
+                onchange: move |event| on_drop.call(event.files()),
             }
-        },
-        ondrop: move |event| {
-            event.prevent_default();
-
-            if !disabled {
-                hovering.set(false);
-                on_drop.call(event.files());
-            }
-        },
-
-        label { r#for: "{id}", class: "dioxico-file-drop-label",
-
-          span { class: "dioxico-file-drop-label-text", {children} }
         }
-
-        input {
-          r#type: "file",
-          class: "dioxico-file-drop-input",
-          id,
-          directory,
-          multiple,
-          accept,
-          disabled,
-          onchange: move |event| on_drop.call(event.files()),
-        }
-      }
     }
 }

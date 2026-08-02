@@ -1,7 +1,7 @@
 //! Alert components and utilities.
 
 use super::{IconButton, IconButtonSize, XMARK_ICON};
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
@@ -110,24 +110,15 @@ pub fn Alert(
     }
 
     rsx! {
-        div {
-            class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open"), class),
+        div { class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open"), class),
 
-            div {
-                class: "dioxico-alert-inner",
+            div { class: "dioxico-alert-inner",
 
-                div {
-                    class: "dioxico-alert-header",
+                div { class: "dioxico-alert-header",
 
-                    div {
-                        class: "dioxico-alert-header-space",
-                    }
+                    div { class: "dioxico-alert-header-space" }
 
-                    h4 {
-                        class: "dioxico-alert-title",
-
-                        {title}
-                    }
+                    h4 { class: "dioxico-alert-title", {title} }
 
                     IconButton {
                         icon: XMARK_ICON,
@@ -140,15 +131,11 @@ pub fn Alert(
                                 task.cancel();
                                 timeout_state.set(None);
                             }
-                        }
+                        },
                     }
                 }
 
-                div {
-                    class: classes!("dioxico-alert-body", content_class),
-
-                    {children}
-                }
+                div { class: classes!("dioxico-alert-body", content_class), {children} }
             }
         }
     }

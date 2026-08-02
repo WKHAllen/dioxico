@@ -21,7 +21,7 @@
 #![allow(clippy::uninlined_format_args)]
 #![allow(clippy::option_if_let_else)]
 
-mod classes;
+mod class;
 mod collection;
 mod components;
 mod css_repr;
@@ -33,6 +33,7 @@ mod theme;
 mod unit_enum;
 mod util;
 
+pub use class::Classes;
 pub use collection::{Collection, ReadCollection};
 pub use components::*;
 pub use css_repr::CssRepr;

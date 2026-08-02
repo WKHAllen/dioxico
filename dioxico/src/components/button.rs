@@ -1,6 +1,6 @@
 //! Button components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
@@ -38,19 +38,19 @@ pub fn Button(
     children: Element,
 ) -> Element {
     rsx! {
-      button {
-        r#type: "button",
-        class: classes!("dioxico-button", format!("dioxico-button-{}", style.css_repr()), class),
-        onclick: move |event| {
-            event.prevent_default();
+        button {
+            r#type: "button",
+            class: classes!("dioxico-button", format!("dioxico-button-{}", style.css_repr()), class),
+            onclick: move |event| {
+                event.prevent_default();
 
-            if !disabled {
-                on_click.call(());
-            }
-        },
-        disabled,
+                if !disabled {
+                    on_click.call(());
+                }
+            },
+            disabled,
 
-        {children}
-      }
+            {children}
+        }
     }
 }

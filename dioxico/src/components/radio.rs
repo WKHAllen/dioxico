@@ -1,6 +1,6 @@
 //! Radio group components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::collection::Collection;
 use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
@@ -51,33 +51,33 @@ pub fn RadioGroup(
         .map(|(index, option)| (index, new_id(), option));
 
     rsx! {
-      div {
-        class: classes!(
-            "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.css_repr()),
-            class
-        ),
-
-        for (index , id , option) in index_id_options {
-          div {
+        div {
             class: classes!(
-                "dioxico-radio-option", disabled.then_some("dioxico-radio-option-disabled")
+                "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.css_repr()),
+                class
             ),
 
-            input {
-              r#type: "radio",
-              class: "dioxico-radio-input",
-              id: "{id}",
-              name: "{name}",
-              value: "{index}",
-              oninput: move |_| state.set(Some(index)),
-              checked: state.get() == Some(index),
-              required,
-              disabled,
-            }
+            for (index , id , option) in index_id_options {
+                div {
+                    class: classes!(
+                        "dioxico-radio-option", disabled.then_some("dioxico-radio-option-disabled")
+                    ),
 
-            label { r#for: id, class: "dioxico-radio-label", {option} }
-          }
+                    input {
+                        r#type: "radio",
+                        class: "dioxico-radio-input",
+                        id: "{id}",
+                        name: "{name}",
+                        value: "{index}",
+                        oninput: move |_| state.set(Some(index)),
+                        checked: state.get() == Some(index),
+                        required,
+                        disabled,
+                    }
+
+                    label { r#for: id, class: "dioxico-radio-label", {option} }
+                }
+            }
         }
-      }
     }
 }

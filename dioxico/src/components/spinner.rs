@@ -1,6 +1,6 @@
 //! Loading spinner components and utilities.
 
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
@@ -33,24 +33,24 @@ pub fn Spinner(
     class: String,
 ) -> Element {
     rsx! {
-      div {
-        class: classes!(
-            "dioxico-spinner-container", center.then_some("dioxico-spinner-center"), class
-        ),
+        div {
+            class: classes!(
+                "dioxico-spinner-container", center.then_some("dioxico-spinner-center"), class
+            ),
 
-        svg {
-          class: classes!("dioxico-spinner", format!("dioxico-spinner-{}", size.css_repr())),
-          view_box: "0 0 50 50",
+            svg {
+                class: classes!("dioxico-spinner", format!("dioxico-spinner-{}", size.css_repr())),
+                view_box: "0 0 50 50",
 
-          circle {
-            class: "path",
-            cx: 25,
-            cy: 25,
-            r: 20,
-            fill: "none",
-            stroke_width: 5,
-          }
+                circle {
+                    class: "path",
+                    cx: 25,
+                    cy: 25,
+                    r: 20,
+                    fill: "none",
+                    stroke_width: 5,
+                }
+            }
         }
-      }
     }
 }

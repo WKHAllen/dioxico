@@ -1,7 +1,7 @@
 //! Text input components and utilities.
 
 use super::{Error, ErrorSize};
-use crate::classes::*;
+use crate::classes;
 use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
 use crate::state::State;
@@ -63,45 +63,45 @@ pub fn Input(
     let invalid = !error.is_empty();
 
     rsx! {
-      div {
-        class: classes!(
-            "dioxico-input-container", disabled
-            .then_some("dioxico-input-container-disabled"), class
-        ),
+        div {
+            class: classes!(
+                "dioxico-input-container", disabled
+                .then_some("dioxico-input-container-disabled"), class
+            ),
 
-        label { class: "dioxico-input-label", r#for: "{id}",
+            label { class: "dioxico-input-label", r#for: "{id}",
 
-          {label}
+                {label}
 
-          span { class: "dioxico-required-mark",
+                span { class: "dioxico-required-mark",
 
-            if required {
-              " *"
-            }
-          }
-        }
-
-        div { class: "dioxico-input-box-container",
-
-          input {
-            r#type: input_type.css_repr(),
-            class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
-            id,
-            value: "{state.get()}",
-            oninput: move |event| state.set(event.value()),
-            onkeydown: move |event| {
-                if event.key() == Key::Enter {
-                    on_submit.call(());
+                    if required {
+                        " *"
+                    }
                 }
-            },
-            placeholder,
-            maxlength: max_length,
-            required,
-            disabled,
-          }
-        }
+            }
 
-        Error { message: error, size: ErrorSize::Small }
-      }
+            div { class: "dioxico-input-box-container",
+
+                input {
+                    r#type: input_type.css_repr(),
+                    class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
+                    id,
+                    value: "{state.get()}",
+                    oninput: move |event| state.set(event.value()),
+                    onkeydown: move |event| {
+                        if event.key() == Key::Enter {
+                            on_submit.call(());
+                        }
+                    },
+                    placeholder,
+                    maxlength: max_length,
+                    required,
+                    disabled,
+                }
+            }
+
+            Error { message: error, size: ErrorSize::Small }
+        }
     }
 }

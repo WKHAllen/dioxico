@@ -1,7 +1,7 @@
 //! Number input components and utilities.
 
 use super::{Error, ErrorSize};
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
 use crate::util::*;
@@ -257,16 +257,16 @@ where
 
     rsx! {
         div {
-            class: classes!("dioxico-input-container", disabled.then_some("dioxico-input-container-disabled"), class),
+            class: classes!(
+                "dioxico-input-container", disabled
+                .then_some("dioxico-input-container-disabled"), class
+            ),
 
-            label {
-                class: "dioxico-input-label",
-                r#for: "{id}",
+            label { class: "dioxico-input-label", r#for: "{id}",
 
                 {label}
 
-                span {
-                    class: "dioxico-required-mark",
+                span { class: "dioxico-required-mark",
 
                     if required {
                         " *"
@@ -274,8 +274,7 @@ where
                 }
             }
 
-            div {
-                class: "dioxico-input-box-container",
+            div { class: "dioxico-input-box-container",
 
                 input {
                     r#type: "text",
@@ -297,10 +296,7 @@ where
                 }
             }
 
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-            }
+            Error { message: error, size: ErrorSize::Small }
         }
     }
 }

@@ -1,7 +1,7 @@
 //! Checkbox components and utilities.
 
 use super::CHECK_ICON;
-use crate::classes::*;
+use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
 use dioxus::prelude::*;
@@ -26,17 +26,11 @@ pub fn Checkbox(
     content_class: String,
 ) -> Element {
     rsx! {
-        div {
-            class: classes!("dioxico-checkbox-container", class),
+        div { class: classes!("dioxico-checkbox-container", class),
 
-            label {
-                class: classes!("dioxico-checkbox", disabled.then_some("dioxico-checkbox-disabled")),
+            label { class: classes!("dioxico-checkbox", disabled.then_some("dioxico-checkbox-disabled")),
 
-                div {
-                    class: classes!("dioxico-checkbox-label", content_class),
-
-                    {label}
-                }
+                div { class: classes!("dioxico-checkbox-label", content_class), {label} }
 
                 input {
                     r#type: "checkbox",
@@ -46,13 +40,9 @@ pub fn Checkbox(
                     disabled,
                 }
 
-                span {
-                    class: "dioxico-checkmark",
+                span { class: "dioxico-checkmark",
 
-                    img {
-                        class: "dioxico-checkmark-icon",
-                        src: CHECK_ICON,
-                    }
+                    img { class: "dioxico-checkmark-icon", src: CHECK_ICON }
                 }
             }
         }
