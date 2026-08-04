@@ -90,6 +90,9 @@ fn SelectInner<S>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -133,93 +136,90 @@ where
     // let mut popup_node = use_signal(|| None);
 
     rsx! {
-        div {
-            class: classes!(
-                "dioxico-select-container", disabled
-                .then_some("dioxico-select-container-disabled"), dropdown_open()
-                .then_some("dioxico-select-container-open"), class
-            ),
+      div {
+        class: classes!(
+            "dioxico-select-container", disabled
+            .then_some("dioxico-select-container-disabled"), dropdown_open()
+            .then_some("dioxico-select-container-open"), class
+        ),
 
-            div { class: "dioxico-select-label-container",
+        div { class: "dioxico-select-label-container",
+          label { r#for: "{id}", class: "dioxico-select-label",
+            {label}
 
-                label { r#for: "{id}", class: "dioxico-select-label",
-
-                    {label}
-
-                    span { class: "dioxico-required-mark",
-
-                        if required {
-                            " *"
-                        }
-                    }
-                }
+            span { class: "dioxico-required-mark",
+              if required {
+                " *"
+              }
             }
-
-            div {
-                class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
-                onclick: select_node_onclick,
-
-                button {
-                    r#type: "button",
-                    class: classes!(
-                        "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
-                    ),
-                    id,
-                    disabled,
-                    onclick: move |_| {
-                        if !disabled {
-                            dropdown_open.set(!dropdown_open());
-                        }
-                    },
-
-                    div { class: "dioxico-select-button-selection", {selected_option} }
-
-                    Icon {
-                        icon: ANGLE_DOWN_ICON,
-                        disabled,
-                        class: "dioxico-select-button-icon",
-                    }
-                }
-
-                div { class: "dioxico-select-dropdown",
-
-                    div { class: "dioxico-select-popup",
-                        // onmounted: move |element| {
-                        //     popup_node.set(Some(element.data()));
-                        // },
-                        if S::HAS_NULL_OPTION {
-                            div {
-                                class: "dioxico-select-option",
-                                onclick: move |_| {
-                                    state.write().set_null_value();
-                                    dropdown_open.set(false);
-                                },
-
-                                {null_label}
-                            }
-                        }
-
-                        for (index , option) in options.into_inner().into_iter().enumerate() {
-                            div {
-                                class: "dioxico-select-option",
-                                onclick: move |_| {
-                                    state.write().set_value(index);
-                                    dropdown_open.set(false);
-                                },
-
-                                {option}
-                            }
-                        }
-                    }
-                }
-            }
-
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-                class: "dioxico-select-error",
-            }
+          }
         }
+
+        div {
+          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
+          onclick: select_node_onclick,
+
+          button {
+            r#type: "button",
+            class: classes!(
+                "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
+            ),
+            id,
+            disabled,
+            onclick: move |_| {
+                if !disabled {
+                    dropdown_open.set(!dropdown_open());
+                }
+            },
+            onmounted: on_mounted,
+
+            div { class: "dioxico-select-button-selection", {selected_option} }
+
+            Icon {
+              icon: ANGLE_DOWN_ICON,
+              disabled,
+              class: "dioxico-select-button-icon",
+            }
+          }
+
+          div { class: "dioxico-select-dropdown",
+            div { class: "dioxico-select-popup",
+              // onmounted: move |element| {
+              //     popup_node.set(Some(element.data()));
+              // },
+              if S::HAS_NULL_OPTION {
+                div {
+                  class: "dioxico-select-option",
+                  onclick: move |_| {
+                      state.write().set_null_value();
+                      dropdown_open.set(false);
+                  },
+
+                  {null_label}
+                }
+              }
+
+              for (index , option) in options.into_inner().into_iter().enumerate() {
+                div {
+                  class: "dioxico-select-option",
+                  onclick: move |_| {
+                      state.write().set_value(index);
+                      dropdown_open.set(false);
+                  },
+
+                  {option}
+                }
+              }
+            }
+          }
+        }
+
+        Error {
+          message: error,
+          size: ErrorSize::Small,
+          class: "dioxico-select-error",
+        }
+      }
     }
 }
 
@@ -238,6 +238,9 @@ pub fn Select(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -252,16 +255,17 @@ pub fn Select(
     class: String,
 ) -> Element {
     rsx! {
-        SelectInner::<usize> {
-            state,
-            options,
-            label,
-            position,
-            required,
-            disabled,
-            error,
-            class,
-        }
+      SelectInner::<usize> {
+        state,
+        options,
+        label,
+        position,
+        on_mounted,
+        required,
+        disabled,
+        error,
+        class,
+      }
     }
 }
 
@@ -283,6 +287,9 @@ pub fn SelectNullable(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -297,17 +304,18 @@ pub fn SelectNullable(
     class: String,
 ) -> Element {
     rsx! {
-        SelectInner::<Option<usize>> {
-            state,
-            options,
-            null_label,
-            label,
-            position,
-            required,
-            disabled,
-            error,
-            class,
-        }
+      SelectInner::<Option<usize>> {
+        state,
+        options,
+        null_label,
+        label,
+        position,
+        on_mounted,
+        required,
+        disabled,
+        error,
+        class,
+      }
     }
 }
 
@@ -330,6 +338,9 @@ fn SelectEnumInner<E>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -370,93 +381,90 @@ where
     // let mut popup_node = use_signal(|| None);
 
     rsx! {
-        div {
-            class: classes!(
-                "dioxico-select-container", disabled
-                .then_some("dioxico-select-container-disabled"), dropdown_open()
-                .then_some("dioxico-select-container-open"), class
-            ),
+      div {
+        class: classes!(
+            "dioxico-select-container", disabled
+            .then_some("dioxico-select-container-disabled"), dropdown_open()
+            .then_some("dioxico-select-container-open"), class
+        ),
 
-            div { class: "dioxico-select-label-container",
+        div { class: "dioxico-select-label-container",
+          label { r#for: "{id}", class: "dioxico-select-label",
+            {label}
 
-                label { r#for: "{id}", class: "dioxico-select-label",
-
-                    {label}
-
-                    span { class: "dioxico-required-mark",
-
-                        if required {
-                            " *"
-                        }
-                    }
-                }
+            span { class: "dioxico-required-mark",
+              if required {
+                " *"
+              }
             }
-
-            div {
-                class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
-                onclick: select_node_onclick,
-
-                button {
-                    r#type: "button",
-                    class: classes!(
-                        "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
-                    ),
-                    id,
-                    disabled,
-                    onclick: move |_| {
-                        if !disabled {
-                            dropdown_open.set(!dropdown_open());
-                        }
-                    },
-
-                    div { class: "dioxico-select-button-selection", {selected_option} }
-
-                    Icon {
-                        icon: ANGLE_DOWN_ICON,
-                        disabled,
-                        class: "dioxico-select-button-icon",
-                    }
-                }
-
-                div { class: "dioxico-select-dropdown",
-
-                    div { class: "dioxico-select-popup",
-                        // onmounted: move |element| {
-                        //     popup_node.set(Some(element.data()));
-                        // },
-                        if nullable {
-                            div {
-                                class: "dioxico-select-option",
-                                onclick: move |_| {
-                                    on_change.call(None);
-                                    dropdown_open.set(false);
-                                },
-
-                                {null_label}
-                            }
-                        }
-
-                        for option in E::VARIANT_NAMES {
-                            div {
-                                class: "dioxico-select-option",
-                                onclick: move |_| {
-                                    on_change.call(E::from_variant_name(option));
-                                    dropdown_open.set(false);
-                                },
-
-                                {*option}
-                            }
-                        }
-                    }
-                }
-            }
-
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-                class: "dioxico-select-error",
-            }
+          }
         }
+
+        div {
+          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
+          onclick: select_node_onclick,
+
+          button {
+            r#type: "button",
+            class: classes!(
+                "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
+            ),
+            id,
+            disabled,
+            onclick: move |_| {
+                if !disabled {
+                    dropdown_open.set(!dropdown_open());
+                }
+            },
+            onmounted: on_mounted,
+
+            div { class: "dioxico-select-button-selection", {selected_option} }
+
+            Icon {
+              icon: ANGLE_DOWN_ICON,
+              disabled,
+              class: "dioxico-select-button-icon",
+            }
+          }
+
+          div { class: "dioxico-select-dropdown",
+            div { class: "dioxico-select-popup",
+              // onmounted: move |element| {
+              //     popup_node.set(Some(element.data()));
+              // },
+              if nullable {
+                div {
+                  class: "dioxico-select-option",
+                  onclick: move |_| {
+                      on_change.call(None);
+                      dropdown_open.set(false);
+                  },
+
+                  {null_label}
+                }
+              }
+
+              for option in E::VARIANT_NAMES {
+                div {
+                  class: "dioxico-select-option",
+                  onclick: move |_| {
+                      on_change.call(E::from_variant_name(option));
+                      dropdown_open.set(false);
+                  },
+
+                  {*option}
+                }
+              }
+            }
+          }
+        }
+
+        Error {
+          message: error,
+          size: ErrorSize::Small,
+          class: "dioxico-select-error",
+        }
+      }
     }
 }
 
@@ -472,6 +480,9 @@ pub fn SelectEnum<E>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -489,17 +500,18 @@ where
     E: UnitEnum + Clone + PartialEq + 'static,
 {
     rsx! {
-        SelectEnumInner::<E> {
-            value: Some(state.get()),
-            on_change: move |new_value: Option<E>| state.set(new_value.unwrap()),
-            nullable: false,
-            label,
-            position,
-            required,
-            disabled,
-            error,
-            class,
-        }
+      SelectEnumInner::<E> {
+        value: Some(state.get()),
+        on_change: move |new_value: Option<E>| state.set(new_value.unwrap()),
+        nullable: false,
+        label,
+        position,
+        on_mounted,
+        required,
+        disabled,
+        error,
+        class,
+      }
     }
 }
 
@@ -518,6 +530,9 @@ pub fn SelectEnumNullable<E>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -535,18 +550,19 @@ where
     E: UnitEnum + Clone + PartialEq + 'static,
 {
     rsx! {
-        SelectEnumInner::<E> {
-            value: state.get(),
-            on_change: move |new_value: Option<E>| state.set(new_value),
-            nullable: true,
-            null_label,
-            label,
-            position,
-            required,
-            disabled,
-            error,
-            class,
-        }
+      SelectEnumInner::<E> {
+        value: state.get(),
+        on_change: move |new_value: Option<E>| state.set(new_value),
+        nullable: true,
+        null_label,
+        label,
+        position,
+        on_mounted,
+        required,
+        disabled,
+        error,
+        class,
+      }
     }
 }
 
@@ -700,6 +716,9 @@ fn SelectSearchableInner<T, S>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -773,111 +792,107 @@ where
     // let mut popup_node = use_signal(|| None);
 
     rsx! {
-        div {
-            class: classes!(
-                "dioxico-select-container", disabled
-                .then_some("dioxico-select-container-disabled"), dropdown_open()
-                .then_some("dioxico-select-container-open"), class
-            ),
+      div {
+        class: classes!(
+            "dioxico-select-container", disabled
+            .then_some("dioxico-select-container-disabled"), dropdown_open()
+            .then_some("dioxico-select-container-open"), class
+        ),
 
-            div { class: "dioxico-select-label-container",
+        div { class: "dioxico-select-label-container",
+          label { r#for: "{id}", class: "dioxico-select-label",
+            {label}
 
-                label { r#for: "{id}", class: "dioxico-select-label",
-
-                    {label}
-
-                    span { class: "dioxico-required-mark",
-
-                        if required {
-                            " *"
-                        }
-                    }
-                }
+            span { class: "dioxico-required-mark",
+              if required {
+                " *"
+              }
             }
-
-            div {
-                class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
-                onclick: select_node_onclick,
-
-                div { class: "dioxico-select-search-container",
-
-                    div {
-                        class: classes!(
-                            "dioxico-select-search", invalid.then_some("dioxico-select-search-invalid")
-                        ),
-
-                        input {
-                            r#type: "text",
-                            class: "dioxico-select-search-input",
-                            id: "{id}",
-                            disabled,
-                            placeholder: "{null_label}",
-                            value: search_query(),
-                            onfocusin: move |_| {
-                                if !disabled {
-                                    dropdown_open.set(true);
-                                }
-                            },
-                            onfocusout: move |_| {
-                                dropdown_open.set(false);
-                            },
-                            oninput: move |event| search_query.set(event.value()),
-                            onkeydown: move |event| {
-                                if event.key() == Key::Enter {
-                                    on_submit.call(query_matches());
-                                }
-                            },
-                        }
-
-                        label { r#for: id,
-                            Icon {
-                                icon: ANGLE_DOWN_ICON,
-                                disabled,
-                                class: "dioxico-select-button-icon",
-                            }
-                        }
-                    }
-                }
-
-                div { class: "dioxico-select-dropdown",
-
-                    div { class: "dioxico-select-popup",
-                        // onmounted: move |element| {
-                        //     popup_node.set(Some(element.data()));
-                        // },
-                        if S::HAS_NULL_OPTION {
-                            div {
-                                class: "dioxico-select-option",
-                                onclick: move |_| {
-                                    state.write().set_null_value();
-                                    dropdown_open.set(false);
-                                },
-
-                                "{null_label}"
-                            }
-                        }
-
-                        for index in query_matches() {
-                            div {
-                                class: "dioxico-select-option",
-                                onclick: move |_| {
-                                    state.write().set_value(index);
-                                    dropdown_open.set(false);
-                                },
-
-                                "{(option_str_fn.read().0)(&options.read()[index])}"
-                            }
-                        }
-                    }
-                }
-            }
-
-            Error {
-                message: error,
-                size: ErrorSize::Small,
-                class: "dioxico-select-error",
-            }
+          }
         }
+
+        div {
+          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
+          onclick: select_node_onclick,
+
+          div { class: "dioxico-select-search-container",
+            div {
+              class: classes!(
+                  "dioxico-select-search", invalid.then_some("dioxico-select-search-invalid")
+              ),
+
+              input {
+                r#type: "text",
+                class: "dioxico-select-search-input",
+                id: "{id}",
+                disabled,
+                placeholder: "{null_label}",
+                value: search_query(),
+                onfocusin: move |_| {
+                    if !disabled {
+                        dropdown_open.set(true);
+                    }
+                },
+                onfocusout: move |_| {
+                    dropdown_open.set(false);
+                },
+                oninput: move |event| search_query.set(event.value()),
+                onkeydown: move |event| {
+                    if event.key() == Key::Enter {
+                        on_submit.call(query_matches());
+                    }
+                },
+                onmounted: on_mounted,
+              }
+
+              label { r#for: id,
+                Icon {
+                  icon: ANGLE_DOWN_ICON,
+                  disabled,
+                  class: "dioxico-select-button-icon",
+                }
+              }
+            }
+          }
+
+          div { class: "dioxico-select-dropdown",
+            div { class: "dioxico-select-popup",
+              // onmounted: move |element| {
+              //     popup_node.set(Some(element.data()));
+              // },
+              if S::HAS_NULL_OPTION {
+                div {
+                  class: "dioxico-select-option",
+                  onclick: move |_| {
+                      state.write().set_null_value();
+                      dropdown_open.set(false);
+                  },
+
+                  "{null_label}"
+                }
+              }
+
+              for index in query_matches() {
+                div {
+                  class: "dioxico-select-option",
+                  onclick: move |_| {
+                      state.write().set_value(index);
+                      dropdown_open.set(false);
+                  },
+
+                  "{(option_str_fn.read().0)(&options.read()[index])}"
+                }
+              }
+            }
+          }
+        }
+
+        Error {
+          message: error,
+          size: ErrorSize::Small,
+          class: "dioxico-select-error",
+        }
+      }
     }
 }
 
@@ -907,6 +922,9 @@ pub fn SelectSearchable<T>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -924,19 +942,20 @@ where
     T: PartialEq + 'static,
 {
     rsx! {
-        SelectSearchableInner::<T,usize> {
-            state,
-            options,
-            option_str_fn,
-            search_fn,
-            on_submit,
-            label,
-            position,
-            required,
-            disabled,
-            error,
-            class,
-        }
+      SelectSearchableInner::<T,usize> {
+        state,
+        options,
+        option_str_fn,
+        search_fn,
+        on_submit,
+        label,
+        position,
+        on_mounted,
+        required,
+        disabled,
+        error,
+        class,
+      }
     }
 }
 
@@ -969,6 +988,9 @@ pub fn SelectSearchableNullable<T>(
     /// Positioning of the popup.
     #[props(default)]
     position: SelectPopupPosition,
+    /// Callback called when the select input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this select field required?
     #[props(default)]
     required: bool,
@@ -986,19 +1008,20 @@ where
     T: PartialEq + 'static,
 {
     rsx! {
-        SelectSearchableInner::<T,Option<usize>> {
-            state,
-            options,
-            option_str_fn,
-            search_fn,
-            on_submit,
-            null_label,
-            label,
-            position,
-            required,
-            disabled,
-            error,
-            class,
-        }
+      SelectSearchableInner::<T,Option<usize>> {
+        state,
+        options,
+        option_str_fn,
+        search_fn,
+        on_submit,
+        null_label,
+        label,
+        position,
+        on_mounted,
+        required,
+        disabled,
+        error,
+        class,
+      }
     }
 }

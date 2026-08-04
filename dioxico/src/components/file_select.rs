@@ -37,6 +37,12 @@ pub fn FileSelect(
     /// Callback called when files or directories are selected.
     #[props(default)]
     on_select: EventHandler<Vec<FileData>>,
+    /// Callback called when the file select button element is mounted.
+    #[props(default)]
+    on_mounted_button: EventHandler<Event<MountedData>>,
+    /// Callback called when the file select input element is mounted.
+    #[props(default)]
+    on_mounted_input: EventHandler<Event<MountedData>>,
     /// Button inner elements.
     children: Element,
 ) -> Element {
@@ -48,30 +54,36 @@ pub fn FileSelect(
     };
 
     rsx! {
-        div { class: classes!("dioxico-file-select", class),
+      div { class: classes!("dioxico-file-select", class),
+        button {
+          r#type: "button",
+          class: classes!(
+              "dioxico-file-select-button", format!("dioxico-file-select-button-{}", style
+              .css_repr())
+          ),
+          disabled,
+          onmounted: on_mounted_button,
 
-            button {
-                r#type: "button",
-                class: classes!(
-                    "dioxico-file-select-button", format!("dioxico-file-select-button-{}", style
-                    .css_repr())
-                ),
-                disabled,
-
-                label { r#for: "{id}", class: "dioxico-file-select-button-label", {children} }
-            }
-
-            input {
-                r#type: "file",
-                class: "dioxico-file-select-input",
-                id,
-                directory,
-                multiple,
-                accept,
-                disabled,
-                onchange: move |event| on_select.call(event.files()),
-            }
+          label {
+            r#for: "{id}",
+            class: "dioxico-file-select-button-label",
+            {children}
+          }
         }
+
+        input {
+          r#type: "file",
+          class: "dioxico-file-select-input",
+          id,
+          directory,
+          multiple,
+          accept,
+          disabled,
+          onchange: move |event| on_select.call(event.files()),
+          onmounted: on_mounted_input,
+
+        }
+      }
     }
 }
 
@@ -97,6 +109,9 @@ pub fn FileDrop(
     /// Callback called when files or directories are selected.
     #[props(default)]
     on_drop: EventHandler<Vec<FileData>>,
+    /// Callback called when the drop zone input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Drop zone inner elements.
     children: Element,
 ) -> Element {
@@ -109,47 +124,47 @@ pub fn FileDrop(
     let mut hovering = use_signal(|| false);
 
     rsx! {
-        div {
-            class: classes!(
-                "dioxico-file-drop", hovering().then_some("dioxico-file-drop-dropping"), disabled
-                .then_some("dioxico-file-drop-disabled"), class
-            ),
-            ondragover: move |event| {
-                event.prevent_default();
+      div {
+        class: classes!(
+            "dioxico-file-drop", hovering().then_some("dioxico-file-drop-dropping"), disabled
+            .then_some("dioxico-file-drop-disabled"), class
+        ),
+        ondragover: move |event| {
+            event.prevent_default();
 
-                if !disabled {
-                    hovering.set(true);
-                }
-            },
-            ondragleave: move |_| {
-                if !disabled {
-                    hovering.set(false);
-                }
-            },
-            ondrop: move |event| {
-                event.prevent_default();
-
-                if !disabled {
-                    hovering.set(false);
-                    on_drop.call(event.files());
-                }
-            },
-
-            label { r#for: "{id}", class: "dioxico-file-drop-label",
-
-                span { class: "dioxico-file-drop-label-text", {children} }
+            if !disabled {
+                hovering.set(true);
             }
-
-            input {
-                r#type: "file",
-                class: "dioxico-file-drop-input",
-                id,
-                directory,
-                multiple,
-                accept,
-                disabled,
-                onchange: move |event| on_drop.call(event.files()),
+        },
+        ondragleave: move |_| {
+            if !disabled {
+                hovering.set(false);
             }
+        },
+        ondrop: move |event| {
+            event.prevent_default();
+
+            if !disabled {
+                hovering.set(false);
+                on_drop.call(event.files());
+            }
+        },
+
+        label { r#for: "{id}", class: "dioxico-file-drop-label",
+          span { class: "dioxico-file-drop-label-text", {children} }
         }
+
+        input {
+          r#type: "file",
+          class: "dioxico-file-drop-input",
+          id,
+          directory,
+          multiple,
+          accept,
+          disabled,
+          onchange: move |event| on_drop.call(event.files()),
+          onmounted: on_mounted,
+        }
+      }
     }
 }

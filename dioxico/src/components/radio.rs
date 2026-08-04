@@ -31,6 +31,9 @@ pub fn RadioGroup(
     /// Radio group orientation.
     #[props(default)]
     orientation: RadioGroupOrientation,
+    /// Callback called when each radio input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<(usize, Event<MountedData>)>,
     /// Is this radio group required?
     #[props(default)]
     required: bool,
@@ -51,33 +54,34 @@ pub fn RadioGroup(
         .map(|(index, option)| (index, new_id(), option));
 
     rsx! {
-        div {
+      div {
+        class: classes!(
+            "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.css_repr()),
+            class
+        ),
+
+        for (index , id , option) in index_id_options {
+          div {
             class: classes!(
-                "dioxico-radio-group", format!("dioxico-radio-group-{}", orientation.css_repr()),
-                class
+                "dioxico-radio-option", disabled.then_some("dioxico-radio-option-disabled")
             ),
 
-            for (index , id , option) in index_id_options {
-                div {
-                    class: classes!(
-                        "dioxico-radio-option", disabled.then_some("dioxico-radio-option-disabled")
-                    ),
-
-                    input {
-                        r#type: "radio",
-                        class: "dioxico-radio-input",
-                        id: "{id}",
-                        name: "{name}",
-                        value: "{index}",
-                        oninput: move |_| state.set(Some(index)),
-                        checked: state.get() == Some(index),
-                        required,
-                        disabled,
-                    }
-
-                    label { r#for: id, class: "dioxico-radio-label", {option} }
-                }
+            input {
+              r#type: "radio",
+              class: "dioxico-radio-input",
+              id: "{id}",
+              name: "{name}",
+              value: "{index}",
+              oninput: move |_| state.set(Some(index)),
+              onmounted: move |event| on_mounted.call((index, event)),
+              checked: state.get() == Some(index),
+              required,
+              disabled,
             }
+
+            label { r#for: id, class: "dioxico-radio-label", {option} }
+          }
         }
+      }
     }
 }

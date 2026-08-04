@@ -25,6 +25,9 @@ pub fn Slider<N>(
     /// Step size.
     #[props(default = N::NUMBER_STEP)]
     step: N,
+    /// Callback called when the slider input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this slider disabled?
     #[props(default)]
     disabled: bool,
@@ -43,50 +46,47 @@ where
     let thumb_transform_style = format!("left: {width_percentage}%");
 
     rsx! {
-        div {
-            class: classes!(
-                "dioxico-slider-container", disabled.then_some("dioxico-slider-disabled"), class
-            ),
+      div {
+        class: classes!(
+            "dioxico-slider-container", disabled.then_some("dioxico-slider-disabled"), class
+        ),
 
-            label { r#for: "{id}", class: "dioxico-slider-label", {label} }
+        label { r#for: "{id}", class: "dioxico-slider-label", {label} }
 
-            div { class: "dioxico-slider",
+        div { class: "dioxico-slider",
+          div { class: "dioxico-slider-track",
+            ProgressBar { progress, disabled }
+          }
 
-                div { class: "dioxico-slider-track",
-
-                    ProgressBar { progress, disabled }
-                }
-
-                div { class: "dioxico-slider-thumb-container",
-
-                    div { class: "dioxico-slider-thumb",
-
-                        div {
-                            class: "dioxico-slider-thumb-head",
-                            style: thumb_transform_style,
-                        }
-                    }
-
-                    input {
-                        r#type: "range",
-                        class: "dioxico-slider-input",
-                        id,
-                        value: "{value}",
-                        min: "{min}",
-                        max: "{max}",
-                        step: "{step}",
-                        oninput: move |event: Event<FormData>| {
-                            let new_value = event
-                                .value()
-                                .parse::<N>()
-                                .map_err(|_| format!("failed to parse '{}' as a number", event.value()))
-                                .unwrap();
-                            state.set(new_value);
-                        },
-                        disabled,
-                    }
-                }
+          div { class: "dioxico-slider-thumb-container",
+            div { class: "dioxico-slider-thumb",
+              div {
+                class: "dioxico-slider-thumb-head",
+                style: thumb_transform_style,
+              }
             }
+
+            input {
+              r#type: "range",
+              class: "dioxico-slider-input",
+              id,
+              value: "{value}",
+              min: "{min}",
+              max: "{max}",
+              step: "{step}",
+              oninput: move |event: Event<FormData>| {
+                  let new_value = event
+                      .value()
+                      .parse::<N>()
+                      .map_err(|_| format!("failed to parse '{}' as a number", event.value()))
+                      .unwrap();
+                  state.set(new_value);
+              },
+              onmounted: on_mounted,
+              disabled,
+            }
+          }
         }
+      }
     }
 }

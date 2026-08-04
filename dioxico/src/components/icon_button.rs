@@ -22,6 +22,9 @@ pub fn IconButton(
     /// Callback called when the icon button is clicked.
     #[props(default)]
     on_click: EventHandler<()>,
+    /// Callback called when the icon button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
@@ -30,22 +33,23 @@ pub fn IconButton(
     icon_class: String,
 ) -> Element {
     rsx! {
-        button {
-            r#type: "button",
-            class: classes!(
-                "dioxico-icon-button", format!("dioxico-icon-button-{}", size.css_repr()), class
-            ),
-            onclick: move |_| {
-                if !disabled {
-                    on_click.call(());
-                }
-            },
-            disabled,
-
-            img {
-                class: classes!("dioxico-icon-button-icon", icon_class),
-                src: icon,
+      button {
+        r#type: "button",
+        class: classes!(
+            "dioxico-icon-button", format!("dioxico-icon-button-{}", size.css_repr()), class
+        ),
+        onclick: move |_| {
+            if !disabled {
+                on_click.call(());
             }
+        },
+        onmounted: on_mounted,
+        disabled,
+
+        img {
+          class: classes!("dioxico-icon-button-icon", icon_class),
+          src: icon,
         }
+      }
     }
 }

@@ -18,6 +18,9 @@ pub fn Checkbox(
     /// Is this checkbox disabled?
     #[props(default)]
     disabled: bool,
+    /// Callback called when the checkbox input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
@@ -26,25 +29,23 @@ pub fn Checkbox(
     content_class: String,
 ) -> Element {
     rsx! {
-        div { class: classes!("dioxico-checkbox-container", class),
-
-            label { class: classes!("dioxico-checkbox", disabled.then_some("dioxico-checkbox-disabled")),
-
-                div { class: classes!("dioxico-checkbox-label", content_class), {label} }
-
-                input {
-                    r#type: "checkbox",
-                    class: "dioxico-checkbox-input",
-                    checked: state.get(),
-                    oninput: move |event| state.set(event.checked()),
-                    disabled,
-                }
-
-                span { class: "dioxico-checkmark",
-
-                    img { class: "dioxico-checkmark-icon", src: CHECK_ICON }
-                }
-            }
+      div { class: classes!("dioxico-checkbox-container", class),
+        label { class: classes!("dioxico-checkbox", disabled.then_some("dioxico-checkbox-disabled")),
+          div { class: classes!("dioxico-checkbox-label", content_class),
+            {label}
+          }
+          input {
+            r#type: "checkbox",
+            class: "dioxico-checkbox-input",
+            checked: state.get(),
+            oninput: move |event| state.set(event.checked()),
+            onmounted: on_mounted,
+            disabled,
+          }
+          span { class: "dioxico-checkmark",
+            img { class: "dioxico-checkmark-icon", src: CHECK_ICON }
+          }
         }
+      }
     }
 }

@@ -31,6 +31,9 @@ pub fn Button(
     /// Callback called when the button is clicked.
     #[props(default)]
     on_click: EventHandler<()>,
+    /// Callback called when the button element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
@@ -38,19 +41,20 @@ pub fn Button(
     children: Element,
 ) -> Element {
     rsx! {
-        button {
-            r#type: "button",
-            class: classes!("dioxico-button", format!("dioxico-button-{}", style.css_repr()), class),
-            onclick: move |event| {
-                event.prevent_default();
+      button {
+        r#type: "button",
+        class: classes!("dioxico-button", format!("dioxico-button-{}", style.css_repr()), class),
+        onclick: move |event| {
+            event.prevent_default();
 
-                if !disabled {
-                    on_click.call(());
-                }
-            },
-            disabled,
+            if !disabled {
+                on_click.call(());
+            }
+        },
+        onmounted: on_mounted,
+        disabled,
 
-            {children}
-        }
+        {children}
+      }
     }
 }

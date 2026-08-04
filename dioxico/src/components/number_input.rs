@@ -236,6 +236,9 @@ pub fn NumberInput<N>(
     /// Callback called when the enter key is pressed.
     #[props(default)]
     on_submit: EventHandler<()>,
+    /// Callback called when the number input element is mounted.
+    #[props(default)]
+    on_mounted: EventHandler<Event<MountedData>>,
     /// Is this field required?
     #[props(default)]
     required: bool,
@@ -256,47 +259,45 @@ where
     let invalid = !error.is_empty();
 
     rsx! {
-        div {
-            class: classes!(
-                "dioxico-input-container", disabled
-                .then_some("dioxico-input-container-disabled"), class
-            ),
+      div {
+        class: classes!(
+            "dioxico-input-container", disabled
+            .then_some("dioxico-input-container-disabled"), class
+        ),
 
-            label { class: "dioxico-input-label", r#for: "{id}",
+        label { class: "dioxico-input-label", r#for: "{id}",
+          {label}
 
-                {label}
-
-                span { class: "dioxico-required-mark",
-
-                    if required {
-                        " *"
-                    }
-                }
+          span { class: "dioxico-required-mark",
+            if required {
+              " *"
             }
-
-            div { class: "dioxico-input-box-container",
-
-                input {
-                    r#type: "text",
-                    class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
-                    id,
-                    value: "{state.get()}",
-                    oninput: move |event| {
-                        let new_value_str = event.value();
-                        state.write().set(&new_value_str);
-                    },
-                    onkeydown: move |event| {
-                        if event.key() == Key::Enter {
-                            on_submit.call(());
-                        }
-                    },
-                    placeholder,
-                    required,
-                    disabled,
-                }
-            }
-
-            Error { message: error, size: ErrorSize::Small }
+          }
         }
+
+        div { class: "dioxico-input-box-container",
+          input {
+            r#type: "text",
+            class: classes!("dioxico-input", invalid.then_some("dioxico-input-invalid")),
+            id,
+            value: "{state.get()}",
+            oninput: move |event| {
+                let new_value_str = event.value();
+                state.write().set(&new_value_str);
+            },
+            onkeydown: move |event| {
+                if event.key() == Key::Enter {
+                    on_submit.call(());
+                }
+            },
+            onmounted: on_mounted,
+            placeholder,
+            required,
+            disabled,
+          }
+        }
+
+        Error { message: error, size: ErrorSize::Small }
+      }
     }
 }
