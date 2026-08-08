@@ -1835,14 +1835,6 @@ body {
   flex-direction: column;
 }
 
-.dioxico-chips-above {
-  flex-direction: column-reverse;
-}
-
-.dioxico-chips-below {
-  flex-direction: column;
-}
-
 .dioxico-chips-inner {
   background-color: var(--dioxico-input-background-color);
   color: var(--dioxico-input-text-color);
@@ -1911,42 +1903,14 @@ body {
   outline: none;
 }
 
-.dioxico-chips-options-dropdown {
-  position: relative;
+.dioxico-chips-options-dropdown.dioxico-popover {
   width: 100%;
-}
-
-.dioxico-chips-options-popup {
-  position: absolute;
-  width: 100%;
-  visibility: hidden;
-  opacity: 0;
   max-height: var(--dioxico-chips-popup-max-height);
   overflow-y: auto;
-  z-index: 1;
-  transition:
-    visibility 0.5s,
-    opacity 0.2s linear 0.125s;
   background-color: var(--dioxico-chips-popup-background-color);
   border-radius: var(--dioxico-chips-popup-border-radius);
   box-shadow: var(--dioxico-standard-box-shadow);
   padding: 4px 0;
-}
-
-.dioxico-chips-above .dioxico-chips-options-popup {
-  bottom: 0;
-}
-
-.dioxico-chips-below .dioxico-chips-options-popup {
-  top: 0;
-}
-
-.dioxico-chips-container-open .dioxico-chips-options-popup {
-  visibility: visible;
-  opacity: 1;
-  transition:
-    visibility 0s,
-    opacity 0.2s linear;
 }
 
 .dioxico-chips-option {
@@ -1956,15 +1920,15 @@ body {
   transition: background-color 0.1s linear;
 }
 
-.dioxico-chips-container-open .dioxico-chips-option:hover {
+.dioxico-chips-option:hover {
   background-color: var(--dioxico-chips-popup-background-color-hover);
 }
 
-.dioxico-chips-container-open .dioxico-chips-option:active {
+.dioxico-chips-option:active {
   background-color: var(--dioxico-chips-popup-background-color-active);
 }
 
-.dioxico-chips-container-open .dioxico-chips-option-selecting {
+.dioxico-chips-option-selecting {
   background-color: var(--dioxico-chips-popup-background-color-hover);
 }
 

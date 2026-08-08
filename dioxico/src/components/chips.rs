@@ -1,14 +1,14 @@
 //! Chips components and utilities.
 
-use super::{Error, ErrorSize, IconButton, IconButtonSize, XMARK_ICON};
+use super::{
+    Error, ErrorSize, IconButton, IconButtonSize, Popover, PopoverPositionX, PopoverPositionY,
+    PopoverType, XMARK_ICON,
+};
 use crate::classes;
 use crate::collection::Collection;
-use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
-use crate::hooks::*;
 use crate::state::State;
 use crate::util::*;
-use dioxico_macros::CssRepr;
 use dioxus::prelude::*;
 use std::fmt::Display;
 
@@ -105,16 +105,6 @@ fn get_possible_options(
     limited_matches.iter().map(|(option, _)| *option).collect()
 }
 
-/// Position of a chips popup.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
-pub enum ChipsPopupPosition {
-    /// Position the popup above.
-    Above,
-    /// Position the popup below.
-    #[default]
-    Below,
-}
-
 /// Chips selection component.
 #[component]
 pub fn Chips(
@@ -134,9 +124,6 @@ pub fn Chips(
     /// Placeholder text for when the selection is empty.
     #[props(default)]
     placeholder: String,
-    /// Popup position.
-    #[props(default)]
-    position: ChipsPopupPosition,
     /// Maximum number of characters allowed in the chips input.
     #[props(default = 524_288)]
     max_length: usize,
@@ -155,6 +142,7 @@ pub fn Chips(
 ) -> Element {
     let id = use_id();
     let mut dropdown_open = use_signal(|| false);
+    let mut input_focused = use_signal(|| false);
     let mut next_chip = use_signal(String::new);
 
     let possible_options = get_possible_options(
@@ -164,90 +152,112 @@ pub fn Chips(
         option_display_limit,
         max_selections,
     );
+    let maybe_first_option = possible_options.first().copied();
 
     let invalid = !error.is_empty();
 
     // TODO: enable selecting via arrow keys, space/enter, and escape/backspace
     // let mut selecting = use_signal(|| None);
 
-    let chips_node_onclick = use_click_away(move || dropdown_open.set(false));
-
     rsx! {
       div {
         class: classes!(
             "dioxico-chips-container", disabled
-            .then_some("dioxico-chips-container-disabled"), dropdown_open()
-            .then_some("dioxico-chips-container-open"), invalid
+            .then_some("dioxico-chips-container-disabled"), invalid
             .then_some("dioxico-chips-container-invalid"), class
         ),
-
         div { class: "dioxico-chips-label-container",
           label { r#for: "{id}", class: "dioxico-chips-label", {label} }
         }
 
-        div {
-          class: classes!("dioxico-chips", format!("dioxico-chips-{}", position.css_repr())),
-          onclick: chips_node_onclick,
-          // TODO: node ref?
-          div { class: "dioxico-chips-inner",
-            if !state.read().is_empty() {
-              div { class: "dioxico-chips-chip-list",
-                for (index , this_chip_index) in state.read().iter().enumerate() {
-                  div { class: "dioxico-chips-chip",
-                    span { class: "dioxico-chips-chip-label",
-                      {options.get(*this_chip_index).map(ToString::to_string).unwrap_or_default()}
-                    }
+        Popover {
+          state: dropdown_open,
+          popover_type: PopoverType::Auto,
+          close_on_dismiss: false,
+          on_dismiss: move || {
+              if !input_focused() {
+                  dropdown_open.set(false);
+              }
+          },
+          anchored: true,
+          anchor_class: "dioxico-chips",
+          anchor_content: rsx! {
+            div { class: "dioxico-chips-inner",
+              if !state.read().is_empty() {
+                div { class: "dioxico-chips-chip-list",
+                  for (index , this_chip_index) in state.read().iter().enumerate() {
+                    div { class: "dioxico-chips-chip",
+                      span { class: "dioxico-chips-chip-label",
+                        {options.get(*this_chip_index).map(ToString::to_string).unwrap_or_default()}
+                      }
 
-                    IconButton {
-                      icon: XMARK_ICON,
-                      size: IconButtonSize::Small,
-                      class: "dioxico-chips-chip-remove",
-                      on_click: {
-                          let mut state = state.clone();
-                          move |_| {
-                              state.write().remove(index);
-                          }
-                      },
-                      disabled,
+                      IconButton {
+                        icon: XMARK_ICON,
+                        size: IconButtonSize::Small,
+                        class: "dioxico-chips-chip-remove",
+                        on_click: {
+                            let mut state = state.clone();
+                            move |_| {
+                                state.write().remove(index);
+                            }
+                        },
+                        disabled,
+                      }
                     }
                   }
                 }
               }
-            }
 
-            div { class: "dioxico-chips-input-box-container",
-              input {
-                r#type: "text",
-                class: "dioxico-chips-input",
-                id,
-                value: next_chip,
-                oninput: move |event| next_chip.set(event.value()),
-                onfocusin: move |_| dropdown_open.set(true),
-                onmounted: on_mounted,
-                maxlength: max_length,
-                placeholder,
-                disabled,
+              div { class: "dioxico-chips-input-box-container",
+                input {
+                  r#type: "text",
+                  class: "dioxico-chips-input",
+                  id: "{id}",
+                  value: next_chip,
+                  oninput: move |event| next_chip.set(event.value()),
+                  onkeydown: {
+                      let mut state = state.clone();
+                      move |event| {
+                          if event.key() == Key::Enter
+                              && let Some(first_option_index) = maybe_first_option
+                          {
+                              state.write().push(first_option_index);
+                              next_chip.set(String::new());
+                          }
+                      }
+                  },
+                  onfocusin: move |_| {
+                      dropdown_open.set(true);
+                      input_focused.set(true);
+                  },
+                  onfocusout: move |_| {
+                      input_focused.set(false);
+                  },
+                  onmounted: on_mounted,
+                  maxlength: max_length,
+                  placeholder,
+                  disabled,
+                }
               }
             }
-          }
+          },
+          position_x: PopoverPositionX::Center,
+          position_y: PopoverPositionY::Bottom,
+          class: "dioxico-chips-options-dropdown",
 
           if !possible_options.is_empty() {
-            div { class: "dioxico-chips-options-dropdown",
-              div { class: "dioxico-chips-options-popup",
-                for this_option_index in possible_options {
-                  div {
-                    class: "dioxico-chips-option",
-                    onclick: {
-                        let mut state = state.clone();
-                        move |_| {
-                            state.write().push(this_option_index);
-                            next_chip.set(String::new());
-                        }
-                    },
+            for this_option_index in possible_options {
+              div {
+                class: "dioxico-chips-option",
+                onclick: {
+                    let mut state = state.clone();
+                    move |_| {
+                        state.write().push(this_option_index);
+                        next_chip.set(String::new());
+                    }
+                },
 
-                    {options.get(this_option_index).cloned().unwrap_or_default()}
-                  }
-                }
+                {options.get(this_option_index).cloned().unwrap_or_default()}
               }
             }
           }

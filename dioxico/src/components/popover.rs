@@ -103,6 +103,9 @@ pub fn Popover(
     /// Callback called when the popover is dismissed.
     #[props(default)]
     on_dismiss: EventHandler<()>,
+    /// Should the popover close when dismissed? Defaults to `true`.
+    #[props(default = true)]
+    close_on_dismiss: bool,
     /// CSS classes to apply to the popover element.
     #[props(default, into)]
     class: String,
@@ -172,7 +175,12 @@ pub fn Popover(
                 let open = is_popover_open(&id).await.unwrap();
 
                 if !open && state.get() {
-                    state.set(false);
+                    if close_on_dismiss {
+                        state.set(false);
+                    } else {
+                        open_popover(&id);
+                    }
+
                     on_dismiss.call(());
                 }
             }

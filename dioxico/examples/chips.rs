@@ -1,4 +1,4 @@
-use dioxico::{Chips, ChipsPopupPosition};
+use dioxico::Chips;
 use dioxus::prelude::*;
 
 #[component]
@@ -27,31 +27,22 @@ pub fn Demo() -> Element {
     };
 
     rsx! {
-        Chips {
-            state,
-            options: options.clone(),
-            label: "Chips label",
-            option_display_limit: 5,
-            max_selections: 6,
-            placeholder: "Placeholder!",
-            error,
-        }
-        span {
-            "Selected: {selected_values}"
-        }
-        Chips {
-            state,
-            options: options.clone(),
-            label: "Disabled chips label",
-            disabled: true,
-        }
-        Chips {
-            state,
-            options: options.clone(),
-            label: "Chips above",
-            position: ChipsPopupPosition::Above,
-            error,
-        }
+      Chips {
+        state,
+        options: options.clone(),
+        label: "Chips label",
+        option_display_limit: 5,
+        max_selections: 6,
+        placeholder: "Placeholder!",
+        error,
+      }
+      span { "Selected: {selected_values}" }
+      Chips {
+        state,
+        options: options.clone(),
+        label: "Disabled chips label",
+        disabled: true,
+      }
     }
 }
 
