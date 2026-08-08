@@ -1,6 +1,9 @@
 //! Alert components and utilities.
 
-use super::{IconButton, IconButtonSize, XMARK_ICON};
+use super::{
+    IconButton, IconButtonSize, Popover, PopoverPositionX, PopoverPositionY, PopoverType,
+    XMARK_ICON,
+};
 use crate::classes;
 use crate::element::ElementLike;
 use crate::state::State;
@@ -110,26 +113,40 @@ pub fn Alert(
     }
 
     rsx! {
-      div { class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open"), class),
-        div { class: "dioxico-alert-inner",
-          div { class: "dioxico-alert-header",
-            div { class: "dioxico-alert-header-space" }
-            h4 { class: "dioxico-alert-title", {title} }
-            IconButton {
-              icon: XMARK_ICON,
-              size: IconButtonSize::Medium,
-              on_click: move |_| {
-                  on_close.call(true);
-                  state.set(false);
+      Popover {
+        state,
+        popover_type: PopoverType::Manual,
+        anchored: false,
+        backdrop: false,
+        position_x: PopoverPositionX::Right,
+        position_y: PopoverPositionY::Top,
+        position_offset_x: 16,
+        position_offset_y: 16,
+        class,
 
-                  if let Some(task) = timeout_state() {
-                      task.cancel();
-                      timeout_state.set(None);
-                  }
-              },
+        div { class: "dioxico-alert",
+          div { class: "dioxico-alert-inner",
+            div { class: "dioxico-alert-header",
+              div { class: "dioxico-alert-header-space" }
+              h4 { class: "dioxico-alert-title", {title} }
+              IconButton {
+                icon: XMARK_ICON,
+                size: IconButtonSize::Medium,
+                on_click: move |_| {
+                    on_close.call(true);
+                    state.set(false);
+
+                    if let Some(task) = timeout_state() {
+                        task.cancel();
+                        timeout_state.set(None);
+                    }
+                },
+              }
+            }
+            div { class: classes!("dioxico-alert-body", content_class),
+              {children}
             }
           }
-          div { class: classes!("dioxico-alert-body", content_class), {children} }
         }
       }
     }

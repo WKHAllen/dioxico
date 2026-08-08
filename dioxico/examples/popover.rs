@@ -1,15 +1,15 @@
-use dioxico::{Button, Popover, PopoverPositionX, PopoverPositionY, PopoverType, use_popover};
+use dioxico::{Button, Popover, PopoverPositionX, PopoverPositionY, PopoverType};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
-    let handle1 = use_popover();
-    let handle2 = use_popover();
+    let mut state1 = use_signal(|| false);
+    let mut state2 = use_signal(|| false);
 
     rsx! {
-      Button { on_click: move || handle1.open(), "Open un-anchored popover" }
+      Button { on_click: move || state1.set(true), "Open un-anchored popover" }
       Popover {
-        handle: handle1,
+        state: state1,
         backdrop: true,
         position_x: PopoverPositionX::Right,
         position_y: PopoverPositionY::Top,
@@ -18,10 +18,10 @@ pub fn Demo() -> Element {
         p { "An un-anchored popover with no styling." }
       }
       div {
-        onmouseenter: move |_| handle2.open(),
-        onmouseleave: move |_| handle2.close(),
+        onmouseenter: move |_| state2.set(true),
+        onmouseleave: move |_| state2.set(false),
         Popover {
-          handle: handle2,
+          state: state2,
           popover_type: PopoverType::Manual,
           anchored: true,
           anchor_content: "Hover here to see anchored popover",

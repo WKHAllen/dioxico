@@ -1,9 +1,11 @@
 //! Popover utilities.
 
 use crate::CssRepr;
-use crate::ElementLike;
 use crate::classes;
+use crate::element::ElementLike;
+use crate::state::State;
 use crate::util::*;
+use dioxus::core::anyhow;
 use dioxus::prelude::*;
 
 /// Opens an HTML popover element.
@@ -16,55 +18,15 @@ fn close_popover(id: &str) {
     document::eval(&format!("document.getElementById('{id}').hidePopover();"));
 }
 
-/// Toggles an HTML popover element.
-fn toggle_popover(id: &str) {
-    document::eval(&format!("document.getElementById('{id}').togglePopover();"));
-}
-
-/// A handle to a popover element.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct PopoverHandle {
-    /// The ID of the popover element.
-    id: [u8; 8],
-}
-
-impl PopoverHandle {
-    /// Returns the ID of the popover element.
-    #[allow(clippy::missing_panics_doc)] // cannot panic while invariants are upheld
-    #[inline]
-    pub fn id(&self) -> &str {
-        str::from_utf8(&self.id).unwrap()
-    }
-
-    /// Opens this popover.
-    #[inline]
-    pub fn open(self) {
-        open_popover(self.id());
-    }
-
-    /// Closes this popover.
-    #[inline]
-    pub fn close(self) {
-        close_popover(self.id());
-    }
-
-    /// Toggles this popover.
-    #[inline]
-    pub fn toggle(self) {
-        toggle_popover(self.id());
-    }
-}
-
-/// Creates a handle to a popover element.
-///
-/// **Note:** In order to use this, the popover must be created in the DOM as an
-/// HTML element with the `popover` attribute, and with the ID provded by
-/// [`PopoverHandle::id()`].
-#[allow(clippy::missing_panics_doc)] // cannot panic while invariants are upheld
-pub fn use_popover() -> PopoverHandle {
-    use_hook(|| PopoverHandle {
-        id: new_id().bytes().collect::<Vec<_>>().try_into().unwrap(),
-    })
+/// Checks whether the popover with the given ID is open.
+#[allow(clippy::future_not_send)]
+async fn is_popover_open(id: &str) -> Result<bool> {
+    let eval = document::eval(&format!(
+        "return document.getElementById('{id}').matches(':popover-open');"
+    ));
+    let res = eval.await?;
+    res.as_bool()
+        .ok_or_else(|| anyhow!("`is_popover_open` return value was not a boolean").into())
 }
 
 /// Popover type.
@@ -104,8 +66,9 @@ pub enum PopoverPositionY {
 /// A generalized popover component.
 #[component]
 pub fn Popover(
-    /// A handle to this popover. Use [`use_popover()`] to create a handle.
-    handle: PopoverHandle,
+    /// The popover state.
+    #[props(into)]
+    state: State<bool>,
     /// Popover type.
     #[props(default)]
     popover_type: PopoverType,
@@ -137,12 +100,28 @@ pub fn Popover(
     /// Number of pixels to offset the popover on the Y-axis.
     #[props(default)]
     position_offset_y: i32,
+    /// Callback called when the popover is dismissed.
+    #[props(default)]
+    on_dismiss: EventHandler<()>,
     /// CSS classes to apply to the popover element.
     #[props(default, into)]
     class: String,
     /// Elements within the popover.
     children: Element,
 ) -> Element {
+    let id = use_id();
+
+    use_effect({
+        let id = id.clone();
+        move || {
+            if state.get() {
+                open_popover(&id);
+            } else {
+                close_popover(&id);
+            }
+        }
+    });
+
     let pos_x = position_x.map(|pos| pos.css_repr()).unwrap_or_default();
     let pos_y = position_y.map(|pos| pos.css_repr()).unwrap_or_default();
     let position_area_style = if pos_x.is_empty() && pos_y.is_empty() {
@@ -151,7 +130,7 @@ pub fn Popover(
         format!("position-area: {pos_x} {pos_y};")
     };
     let anchor_style = if anchored {
-        format!("position-anchor: --anchor-{};", handle.id())
+        format!("position-anchor: --anchor-{id};")
     } else {
         String::new()
     };
@@ -174,7 +153,7 @@ pub fn Popover(
       if anchored {
         div {
           class: classes!("dioxico-popover-anchor", anchor_class),
-          style: "anchor-name: --anchor-{handle.id()};",
+          style: "anchor-name: --anchor-{id};",
           {anchor_content}
         }
       }
@@ -186,7 +165,18 @@ pub fn Popover(
             format!("dioxico-popover-{}", pos.css_repr())), position_y.map(| pos |
             format!("dioxico-popover-{}", pos.css_repr())), class
         ),
-        id: handle.id(),
+        id: "{id}",
+        ontoggle: move |_| {
+            let id = id.clone();
+            async move {
+                let open = is_popover_open(&id).await.unwrap();
+
+                if !open && state.get() {
+                    state.set(false);
+                    on_dismiss.call(());
+                }
+            }
+        },
         popover: popover_type.css_repr(),
         style: "{anchor_style} {position_area_style} {offset_x_style} {offset_y_style}",
         {children}

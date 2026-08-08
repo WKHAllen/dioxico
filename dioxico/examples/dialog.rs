@@ -1,4 +1,4 @@
-use dioxico::{sleep, Button, Dialog, DialogActionsLayout, DialogSize, Input, Select};
+use dioxico::{Button, Dialog, DialogActionsLayout, DialogSize, Input, Select, sleep};
 use dioxus::prelude::*;
 use std::rc::Rc;
 use std::time::Duration;
@@ -24,7 +24,7 @@ pub fn Demo() -> Element {
             dialog_small_state.set(true);
             if let Some(input_data) = &*dialog_input_data.read() {
                 sleep(Duration::from_secs_f64(0.1)).await;
-                input_data.set_focus(true).await.unwrap();
+                let _ = input_data.set_focus(true).await;
             }
         },
         "Open small dialog"

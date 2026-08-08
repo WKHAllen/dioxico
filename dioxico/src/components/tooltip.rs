@@ -1,5 +1,6 @@
 //! Tooltip popup components and utilities.
 
+use super::{Popover, PopoverPositionY, PopoverType};
 use crate::classes;
 use crate::element::ElementLike;
 use dioxus::prelude::*;
@@ -18,39 +19,30 @@ pub fn Tooltip(
     /// CSS classes to apply to the base element.
     #[props(default, into)]
     class: String,
-    /// CSS classes to apply to the tooltip inner container.
-    #[props(default, into)]
-    inner_class: String,
-    /// CSS classes to apply to the tooltip hover text.
+    /// CSS classes to apply to the content element.
     #[props(default, into)]
     content_class: String,
 ) -> Element {
-    let mut hovering_state = use_signal(|| false);
+    let mut state = use_signal(|| false);
 
     rsx! {
       div {
-        class: classes!(
-            "dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled
-            .then_some("dioxico-tooltip-disabled"), class
-        ),
-
-        div {
-          class: classes!("dioxico-tooltip-inner", inner_class),
-          onmouseenter: move |_| hovering_state.set(true),
-          onmouseleave: move |_| hovering_state.set(false),
-
-          {children}
-        }
-
-        div { class: "dioxico-tooltip-container",
-          div { class: "dioxico-tooltip-popup-container",
-            div { class: "dioxico-tooltip-popup",
-              // node ref?
-              span { class: classes!("dioxico-tooltip-content", content_class),
-                {content}
-              }
+        class: "dioxico-tooltip",
+        onmouseenter: move |_| {
+            if !disabled {
+                state.set(true);
             }
-          }
+        },
+        onmouseleave: move |_| state.set(false),
+        Popover {
+          state,
+          popover_type: PopoverType::Manual,
+          anchored: true,
+          anchor_class: classes!("dioxico-tooltip-anchor", class),
+          anchor_content: children,
+          position_y: PopoverPositionY::Bottom,
+          class: classes!("dioxico-tooltip-popover", content_class),
+          {content}
         }
       }
     }

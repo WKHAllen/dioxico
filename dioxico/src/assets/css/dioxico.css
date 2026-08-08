@@ -438,7 +438,7 @@
   --dioxico-dialog-overlay-background-color: #00000060;
   --dioxico-dialog-background-color: var(--dioxico-background-color-3);
   --dioxico-dialog-margin: 32px;
-  --dioxico-dialog-padding: var(--dioxico-padding-large);
+  --dioxico-dialog-padding: var(--dioxico-padding-medium);
   --dioxico-dialog-border-radius: var(--dioxico-border-radius-large);
   --dioxico-dialog-width-small: 400px;
   --dioxico-dialog-width-medium: 800px;
@@ -452,7 +452,7 @@
 
   --dioxico-alert-background-color: var(--dioxico-background-color-4);
   --dioxico-alert-margin: 16px;
-  --dioxico-alert-padding: var(--dioxico-padding-large);
+  --dioxico-alert-padding: var(--dioxico-padding-medium);
   --dioxico-alert-border-radius: var(--dioxico-border-radius-large);
   --dioxico-alert-max-width: 400px;
   --dioxico-alert-section-gap: var(--dioxico-padding-medium);
@@ -1617,69 +1617,50 @@ body {
 /*    DIALOG    */
 /*              */
 
-.dioxico-dialog-container {
-  visibility: hidden;
-  opacity: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--dioxico-dialog-overlay-background-color);
-  transition:
-    visibility 0.25s linear,
-    opacity 0.25s linear;
-}
-
-.dioxico-dialog-container.dioxico-dialog-container-open {
-  visibility: visible;
-  opacity: 1;
-}
-
-.dioxico-dialog {
+.dioxico-dialog.dioxico-popover {
   background-color: var(--dioxico-dialog-background-color);
   border-radius: var(--dioxico-dialog-border-radius);
   box-shadow: var(--dioxico-standard-box-shadow);
   max-height: calc(100% - 2 * var(--dioxico-dialog-margin));
   overflow: auto;
   transform: translateY(-50px);
-  transition: transform 0.25s ease-out;
+  transition: all var(--dioxico-popover-animation-duration) allow-discrete;
 }
 
-.dioxico-dialog-container-open .dioxico-dialog {
+.dioxico-dialog.dioxico-popover:popover-open {
   transform: translateY(0px);
+
+  @starting-style {
+    transform: translateY(-50px);
+  }
 }
 
-.dioxico-dialog-small {
+.dioxico-dialog.dioxico-popover.dioxico-dialog-small {
   width: min(
     calc(100% - 2 * var(--dioxico-dialog-margin)),
     var(--dioxico-dialog-width-small)
   );
 }
 
-.dioxico-dialog-medium {
+.dioxico-dialog.dioxico-popover.dioxico-dialog-medium {
   width: min(
     calc(100% - 2 * var(--dioxico-dialog-margin)),
     var(--dioxico-dialog-width-medium)
   );
 }
 
-.dioxico-dialog-large {
+.dioxico-dialog.dioxico-popover.dioxico-dialog-large {
   width: min(
     calc(100% - 2 * var(--dioxico-dialog-margin)),
     var(--dioxico-dialog-width-large)
   );
 }
 
-.dioxico-dialog-max {
+.dioxico-dialog.dioxico-popover.dioxico-dialog-max {
   width: calc(100% - 2 * var(--dioxico-dialog-margin));
 }
 
-.dioxico-dialog-auto {
+.dioxico-dialog.dioxico-popover.dioxico-dialog-auto {
   max-width: calc(100% - 2 * var(--dioxico-dialog-margin));
 }
 
@@ -1726,24 +1707,9 @@ body {
 /*             */
 
 .dioxico-alert {
-  visibility: hidden;
-  opacity: 0;
-  position: fixed;
-  z-index: 1;
-  top: var(--dioxico-alert-margin);
-  right: var(--dioxico-alert-margin);
   max-width: var(--dioxico-alert-max-width);
   background-color: var(--dioxico-alert-background-color);
   border-radius: var(--dioxico-alert-border-radius);
-  box-shadow: var(--dioxico-standard-box-shadow);
-  transition:
-    visibility 0.25s linear,
-    opacity 0.25s linear;
-}
-
-.dioxico-alert.dioxico-alert-open {
-  visibility: visible;
-  opacity: 1;
 }
 
 .dioxico-alert-inner {
@@ -2057,58 +2023,13 @@ body {
 /*    TOOLTIP    */
 /*               */
 
-.dioxico-tooltip-container {
-  position: relative;
-}
-
-.dioxico-tooltip-popup-container {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--dioxico-tooltip-popup-max-width);
-  display: flex;
-  justify-content: center;
-  z-index: -1;
-  transition: z-index 0s linear 0.15s;
-}
-
-.dioxico-tooltip-open .dioxico-tooltip-popup-container {
-  z-index: 1;
-  transition: z-index 0s linear 0s;
-}
-
-.dioxico-tooltip-disabled .dioxico-tooltip-popup-container {
-  z-index: -1;
-  transition: z-index 0s linear 0s;
-}
-
-.dioxico-tooltip-popup {
-  visibility: hidden;
-  opacity: 0;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  transition: all 0.15s ease-in-out;
-}
-
-.dioxico-tooltip-content {
+.dioxico-tooltip .dioxico-tooltip-popover {
   background-color: var(--dioxico-tooltip-background-color);
   color: var(--dioxico-tooltip-text-color);
   font-size: var(--dioxico-tooltip-font-size);
   padding: 2px 6px;
   border-radius: var(--dioxico-tooltip-border-radius);
   box-shadow: var(--dioxico-standard-box-shadow);
-}
-
-.dioxico-tooltip-open .dioxico-tooltip-popup {
-  visibility: visible;
-  opacity: 1;
-}
-
-.dioxico-tooltip-disabled .dioxico-tooltip-popup {
-  visibility: hidden;
-  opacity: 0;
 }
 
 /*             */
