@@ -9,7 +9,7 @@ use std::time::Duration;
 /// Generates a random ID for an element.
 pub fn new_id() -> String {
     let value = rand::random::<u32>();
-    let hex_value = format!("{value:x}");
+    let hex_value = format!("{value:08x}");
     hex_value
 }
 

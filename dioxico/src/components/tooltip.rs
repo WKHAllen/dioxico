@@ -28,33 +28,30 @@ pub fn Tooltip(
     let mut hovering_state = use_signal(|| false);
 
     rsx! {
+      div {
+        class: classes!(
+            "dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled
+            .then_some("dioxico-tooltip-disabled"), class
+        ),
+
         div {
-            class: classes!(
-                "dioxico-tooltip", hovering_state().then_some("dioxico-tooltip-open"), disabled
-                .then_some("dioxico-tooltip-disabled"), class
-            ),
+          class: classes!("dioxico-tooltip-inner", inner_class),
+          onmouseenter: move |_| hovering_state.set(true),
+          onmouseleave: move |_| hovering_state.set(false),
 
-            div {
-                class: classes!("dioxico-tooltip-inner", inner_class),
-                onmouseenter: move |_| hovering_state.set(true),
-                onmouseleave: move |_| hovering_state.set(false),
-
-                {children}
-            }
-
-            div { class: "dioxico-tooltip-container",
-
-                div { class: "dioxico-tooltip-popup-container",
-
-                    div { class: "dioxico-tooltip-popup",
-                        // node ref?
-                        span { class: classes!("dioxico-tooltip-content", content_class),
-
-                            {content}
-                        }
-                    }
-                }
-            }
+          {children}
         }
+
+        div { class: "dioxico-tooltip-container",
+          div { class: "dioxico-tooltip-popup-container",
+            div { class: "dioxico-tooltip-popup",
+              // node ref?
+              span { class: classes!("dioxico-tooltip-content", content_class),
+                {content}
+              }
+            }
+          }
+        }
+      }
     }
 }

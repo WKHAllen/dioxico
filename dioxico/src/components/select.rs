@@ -1,6 +1,6 @@
 //! Select dropdown components and utilities.
 
-use super::{Error, ErrorSize, Icon, ANGLE_DOWN_ICON};
+use super::{ANGLE_DOWN_ICON, Error, ErrorSize, Icon};
 use crate::classes;
 use crate::collection::{Collection, ReadCollection};
 use crate::css_repr::CssRepr;

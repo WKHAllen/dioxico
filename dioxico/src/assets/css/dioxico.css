@@ -589,6 +589,15 @@
   --dioxico-file-drop-background-color-active: var(
     --dioxico-background-color-5
   );
+
+  /*               */
+  /*    POPOVER    */
+  /*               */
+
+  --dioxico-popover-background-color: var(--dioxico-background-color-4);
+  --dioxico-popover-border-radius: var(--dioxico-border-radius-medium);
+  --dioxico-popover-overlay-background-color: #00000060;
+  --dioxico-popover-animation-duration: 0.5s;
 }
 
 /*              */
@@ -2351,4 +2360,62 @@ body {
 
 .dioxico-accordion-open .dioxico-accordion-content {
   display: unset;
+}
+
+/*               */
+/*    POPOVER    */
+/*               */
+
+.dioxico-popover {
+  position-try-fallbacks: flip-block;
+  color: var(--dioxico-text-color);
+  background-color: var(--dioxico-popover-background-color);
+  border: none;
+  border-radius: var(--dioxico-popover-border-radius);
+  box-shadow: var(--dioxico-standard-box-shadow);
+}
+
+.dioxico-popover-animate {
+  opacity: 0;
+  transition:
+    opacity var(--dioxico-popover-animation-duration),
+    display var(--dioxico-popover-animation-duration) allow-discrete,
+    overlay var(--dioxico-popover-animation-duration) allow-discrete;
+}
+
+.dioxico-popover-animate:popover-open {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+.dioxico-popover-backdrop::backdrop {
+  background-color: #00000000;
+  transition: background-color var(--dioxico-popover-animation-duration);
+}
+
+.dioxico-popover-backdrop:popover-open::backdrop {
+  background-color: var(--dioxico-popover-overlay-background-color);
+
+  @starting-style {
+    background-color: #00000000;
+  }
+}
+
+.dioxico-popover-top {
+  margin-bottom: auto;
+}
+
+.dioxico-popover-bottom {
+  margin-top: auto;
+}
+
+.dioxico-popover-left {
+  margin-right: auto;
+}
+
+.dioxico-popover-right {
+  margin-left: auto;
 }

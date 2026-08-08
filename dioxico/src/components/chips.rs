@@ -75,10 +75,10 @@ fn get_possible_options(
     display_limit: Option<usize>,
     max_selections: Option<usize>,
 ) -> Vec<usize> {
-    if let Some(max_selections) = max_selections {
-        if selected_options_indices.len() >= max_selections {
-            return Vec::new();
-        }
+    if let Some(max_selections) = max_selections
+        && selected_options_indices.len() >= max_selections
+    {
+        return Vec::new();
     }
 
     let unselected_options_indices = (0..all_options.len())

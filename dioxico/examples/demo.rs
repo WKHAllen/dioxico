@@ -15,6 +15,7 @@ mod icon;
 mod icon_button;
 mod input;
 mod number_input;
+mod popover;
 mod progress_bar;
 mod radio;
 mod select;
@@ -75,20 +76,15 @@ fn Demo() -> Element {
         badge,
         file_select,
         accordion,
+        popover,
     );
 
     rsx! {
-        Title {
-            "Dioxico demo"
-        }
+      Title { "Dioxico demo" }
 
-        ConfigProvider {
-            div {
-                class: "dioxico-demo",
-
-                {demos}
-            }
-        }
+      ConfigProvider {
+        div { class: "dioxico-demo", {demos} }
+      }
     }
 }
 

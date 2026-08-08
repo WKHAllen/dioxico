@@ -110,33 +110,27 @@ pub fn Alert(
     }
 
     rsx! {
-        div { class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open"), class),
+      div { class: classes!("dioxico-alert", state.get().then_some("dioxico-alert-open"), class),
+        div { class: "dioxico-alert-inner",
+          div { class: "dioxico-alert-header",
+            div { class: "dioxico-alert-header-space" }
+            h4 { class: "dioxico-alert-title", {title} }
+            IconButton {
+              icon: XMARK_ICON,
+              size: IconButtonSize::Medium,
+              on_click: move |_| {
+                  on_close.call(true);
+                  state.set(false);
 
-            div { class: "dioxico-alert-inner",
-
-                div { class: "dioxico-alert-header",
-
-                    div { class: "dioxico-alert-header-space" }
-
-                    h4 { class: "dioxico-alert-title", {title} }
-
-                    IconButton {
-                        icon: XMARK_ICON,
-                        size: IconButtonSize::Medium,
-                        on_click: move |_| {
-                            on_close.call(true);
-                            state.set(false);
-
-                            if let Some(task) = timeout_state() {
-                                task.cancel();
-                                timeout_state.set(None);
-                            }
-                        },
-                    }
-                }
-
-                div { class: classes!("dioxico-alert-body", content_class), {children} }
+                  if let Some(task) = timeout_state() {
+                      task.cancel();
+                      timeout_state.set(None);
+                  }
+              },
             }
+          }
+          div { class: classes!("dioxico-alert-body", content_class), {children} }
         }
+      }
     }
 }
