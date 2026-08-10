@@ -34,10 +34,15 @@ pub fn Error(
     #[props(default, into)]
     class: String,
 ) -> Element {
-    rsx! {
-        span { class: classes!("dioxico-error", format!("dioxico-text-{}", size.css_repr()), class),
+    let empty = message.is_empty();
 
-            {message}
-        }
+    rsx! {
+      span {
+        class: classes!(
+            "dioxico-error", format!("dioxico-text-{}", size.css_repr()), empty
+            .then_some("dioxico-error-empty"), class
+        ),
+        {message}
+      }
     }
 }

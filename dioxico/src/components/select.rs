@@ -1,15 +1,15 @@
 //! Select dropdown components and utilities.
 
-use super::{ANGLE_DOWN_ICON, Error, ErrorSize, Icon};
+use super::{
+    ANGLE_DOWN_ICON, Error, ErrorSize, Icon, Popover, PopoverPositionX, PopoverPositionY,
+    PopoverType,
+};
 use crate::classes;
 use crate::collection::{Collection, ReadCollection};
-use crate::css_repr::CssRepr;
 use crate::element::ElementLike;
-use crate::hooks::*;
 use crate::state::State;
 use crate::unit_enum::UnitEnum;
 use crate::util::*;
-use dioxico_macros::CssRepr;
 use dioxus::core::SuperFrom;
 use dioxus::prelude::*;
 use std::cmp::Ordering;
@@ -63,16 +63,6 @@ impl SelectState for Option<usize> {
     }
 }
 
-/// Position of a select popup.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash, CssRepr)]
-pub enum SelectPopupPosition {
-    /// Position the popup above.
-    Above,
-    /// Position the popup below.
-    #[default]
-    Below,
-}
-
 /// Select dropdown component.
 #[component]
 fn SelectInner<S>(
@@ -87,9 +77,6 @@ fn SelectInner<S>(
     /// Select label element.
     #[props(default)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select button element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -130,8 +117,6 @@ where
         None => null_label.clone(),
     };
 
-    let select_node_onclick = use_click_away(move || dropdown_open.set(false));
-
     // TODO: `use_popup`?
     // let mut popup_node = use_signal(|| None);
 
@@ -155,61 +140,63 @@ where
           }
         }
 
-        div {
-          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
-          onclick: select_node_onclick,
-
-          button {
-            r#type: "button",
-            class: classes!(
-                "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
-            ),
-            id,
-            disabled,
-            onclick: move |_| {
-                if !disabled {
-                    dropdown_open.set(!dropdown_open());
-                }
-            },
-            onmounted: on_mounted,
-
-            div { class: "dioxico-select-button-selection", {selected_option} }
-
-            Icon {
-              icon: ANGLE_DOWN_ICON,
+        Popover {
+          state: dropdown_open,
+          popover_type: PopoverType::Auto,
+          anchored: true,
+          anchor_class: "dioxico-select",
+          anchor_content: rsx! {
+            button {
+              r#type: "button",
+              class: classes!(
+                  "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
+              ),
+              id: "{id}",
               disabled,
-              class: "dioxico-select-button-icon",
+              onclick: move |_| {
+                  if !disabled {
+                      dropdown_open.toggle();
+                  }
+              },
+              onmounted: on_mounted,
+
+              div { class: "dioxico-select-button-selection", {selected_option} }
+
+              Icon {
+                icon: ANGLE_DOWN_ICON,
+                disabled,
+                class: "dioxico-select-button-icon",
+              }
+            }
+          },
+          position_x: PopoverPositionX::Center,
+          position_y: PopoverPositionY::Bottom,
+          class: "dioxico-select-dropdown",
+
+          // onmounted: move |element| {
+          //     popup_node.set(Some(element.data()));
+          // },
+          if S::HAS_NULL_OPTION {
+            div {
+              class: "dioxico-select-option",
+              onclick: move |_| {
+                  state.write().set_null_value();
+                  dropdown_open.set(false);
+              },
+
+              {null_label}
             }
           }
 
-          div { class: "dioxico-select-dropdown",
-            div { class: "dioxico-select-popup",
-              // onmounted: move |element| {
-              //     popup_node.set(Some(element.data()));
-              // },
-              if S::HAS_NULL_OPTION {
-                div {
-                  class: "dioxico-select-option",
-                  onclick: move |_| {
-                      state.write().set_null_value();
-                      dropdown_open.set(false);
-                  },
+          for (index , option) in options.into_inner().into_iter().enumerate() {
+            div {
+              class: "dioxico-select-option",
+              onclick: move |_| {
+                  state.write().set_value(index);
+                  dropdown_open.set(false);
+              },
 
-                  {null_label}
-                }
-              }
-
-              for (index , option) in options.into_inner().into_iter().enumerate() {
-                div {
-                  class: "dioxico-select-option",
-                  onclick: move |_| {
-                      state.write().set_value(index);
-                      dropdown_open.set(false);
-                  },
-
-                  {option}
-                }
-              }
+              {option}
             }
           }
         }
@@ -235,9 +222,6 @@ pub fn Select(
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select button element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -259,7 +243,6 @@ pub fn Select(
         state,
         options,
         label,
-        position,
         on_mounted,
         required,
         disabled,
@@ -284,9 +267,6 @@ pub fn SelectNullable(
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select button element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -309,7 +289,6 @@ pub fn SelectNullable(
         options,
         null_label,
         label,
-        position,
         on_mounted,
         required,
         disabled,
@@ -335,9 +314,6 @@ fn SelectEnumInner<E>(
     /// Select label element.
     #[props(default)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select button element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -375,8 +351,6 @@ where
         None => null_label.clone(),
     };
 
-    let select_node_onclick = use_click_away(move || dropdown_open.set(false));
-
     // TODO: `use_popup`?
     // let mut popup_node = use_signal(|| None);
 
@@ -400,61 +374,63 @@ where
           }
         }
 
-        div {
-          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
-          onclick: select_node_onclick,
-
-          button {
-            r#type: "button",
-            class: classes!(
-                "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
-            ),
-            id,
-            disabled,
-            onclick: move |_| {
-                if !disabled {
-                    dropdown_open.set(!dropdown_open());
-                }
-            },
-            onmounted: on_mounted,
-
-            div { class: "dioxico-select-button-selection", {selected_option} }
-
-            Icon {
-              icon: ANGLE_DOWN_ICON,
+        Popover {
+          state: dropdown_open,
+          popover_type: PopoverType::Auto,
+          anchored: true,
+          anchor_class: "dioxico-select",
+          anchor_content: rsx! {
+            button {
+              r#type: "button",
+              class: classes!(
+                  "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
+              ),
+              id: "{id}",
               disabled,
-              class: "dioxico-select-button-icon",
+              onclick: move |_| {
+                  if !disabled {
+                      dropdown_open.toggle();
+                  }
+              },
+              onmounted: on_mounted,
+
+              div { class: "dioxico-select-button-selection", {selected_option} }
+
+              Icon {
+                icon: ANGLE_DOWN_ICON,
+                disabled,
+                class: "dioxico-select-button-icon",
+              }
+            }
+          },
+          position_x: PopoverPositionX::Center,
+          position_y: PopoverPositionY::Bottom,
+          class: "dioxico-select-dropdown",
+
+          // onmounted: move |element| {
+          //     popup_node.set(Some(element.data()));
+          // },
+          if nullable {
+            div {
+              class: "dioxico-select-option",
+              onclick: move |_| {
+                  on_change.call(None);
+                  dropdown_open.set(false);
+              },
+
+              {null_label}
             }
           }
 
-          div { class: "dioxico-select-dropdown",
-            div { class: "dioxico-select-popup",
-              // onmounted: move |element| {
-              //     popup_node.set(Some(element.data()));
-              // },
-              if nullable {
-                div {
-                  class: "dioxico-select-option",
-                  onclick: move |_| {
-                      on_change.call(None);
-                      dropdown_open.set(false);
-                  },
+          for option in E::VARIANT_NAMES {
+            div {
+              class: "dioxico-select-option",
+              onclick: move |_| {
+                  on_change.call(E::from_variant_name(option));
+                  dropdown_open.set(false);
+              },
 
-                  {null_label}
-                }
-              }
-
-              for option in E::VARIANT_NAMES {
-                div {
-                  class: "dioxico-select-option",
-                  onclick: move |_| {
-                      on_change.call(E::from_variant_name(option));
-                      dropdown_open.set(false);
-                  },
-
-                  {*option}
-                }
-              }
+              {*option}
             }
           }
         }
@@ -477,9 +453,6 @@ pub fn SelectEnum<E>(
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select button element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -505,7 +478,6 @@ where
         on_change: move |new_value: Option<E>| state.set(new_value.unwrap()),
         nullable: false,
         label,
-        position,
         on_mounted,
         required,
         disabled,
@@ -527,9 +499,6 @@ pub fn SelectEnumNullable<E>(
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select button element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -556,7 +525,6 @@ where
         nullable: true,
         null_label,
         label,
-        position,
         on_mounted,
         required,
         disabled,
@@ -713,9 +681,6 @@ fn SelectSearchableInner<T, S>(
     /// Select label element.
     #[props(default)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select input element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -739,6 +704,7 @@ where
     let id = use_id();
     let invalid = !error.is_empty();
     let mut dropdown_open = use_signal(|| false);
+    let mut input_focused = use_signal(|| false);
 
     // TODO: enable selecting via arrow keys, space/enter, and escape/backspace
     // let mut selecting = use_signal(|| None);
@@ -775,19 +741,6 @@ where
         )
     });
 
-    let select_node_onclick = use_click_away(move || {
-        // Reset the query to the current state value when focus leaves
-        let opt_str_fn = &option_str_fn.read().0;
-        search_query.set(match state.get().get_value() {
-            Some(selected) => match options.read().get(selected) {
-                Some(option) => opt_str_fn(option).to_owned(),
-                None => String::new(),
-            },
-            None => String::new(),
-        });
-        dropdown_open.set(false);
-    });
-
     // TODO: `use_popup`?
     // let mut popup_node = use_signal(|| None);
 
@@ -811,78 +764,101 @@ where
           }
         }
 
-        div {
-          class: classes!("dioxico-select", format!("dioxico-select-{}", position.css_repr())),
-          onclick: select_node_onclick,
-
-          div { class: "dioxico-select-search-container",
-            div {
-              class: classes!(
-                  "dioxico-select-search", invalid.then_some("dioxico-select-search-invalid")
-              ),
-
-              input {
-                r#type: "text",
-                class: "dioxico-select-search-input",
-                id: "{id}",
-                disabled,
-                placeholder: "{null_label}",
-                value: search_query(),
-                onfocusin: move |_| {
-                    if !disabled {
-                        dropdown_open.set(true);
-                    }
-                },
-                onfocusout: move |_| {
-                    dropdown_open.set(false);
-                },
-                oninput: move |event| search_query.set(event.value()),
-                onkeydown: move |event| {
-                    if event.key() == Key::Enter {
-                        on_submit.call(query_matches());
-                    }
-                },
-                onmounted: on_mounted,
+        Popover {
+          state: dropdown_open,
+          popover_type: PopoverType::Auto,
+          close_on_dismiss: false,
+          on_dismiss: move || {
+              // Reset the query to the current state value when focus leaves
+              if !input_focused() {
+                  let opt_str_fn = &option_str_fn.read().0;
+                  search_query
+                      .set(
+                          match state.get().get_value() {
+                              Some(selected) => {
+                                  match options.read().get(selected) {
+                                      Some(option) => opt_str_fn(option).to_owned(),
+                                      None => String::new(),
+                                  }
+                              }
+                              None => String::new(),
+                          },
+                      );
+                  dropdown_open.set(false);
               }
+          },
+          anchored: true,
+          anchor_class: "dioxico-select",
+          anchor_content: rsx! {
+            div { class: "dioxico-select-search-container",
+              div {
+                class: classes!(
+                    "dioxico-select-search", invalid.then_some("dioxico-select-search-invalid")
+                ),
 
-              label { r#for: id,
-                Icon {
-                  icon: ANGLE_DOWN_ICON,
+                input {
+                  r#type: "text",
+                  class: "dioxico-select-search-input",
+                  id: "{id}",
                   disabled,
-                  class: "dioxico-select-button-icon",
+                  placeholder: "{null_label}",
+                  value: search_query(),
+                  onfocusin: move |_| {
+                      if !disabled {
+                          dropdown_open.set(true);
+                          input_focused.set(true);
+                      }
+                  },
+                  onfocusout: move |_| {
+                      input_focused.set(false);
+                  },
+                  oninput: move |event| search_query.set(event.value()),
+                  onkeydown: move |event| {
+                      if event.key() == Key::Enter {
+                          on_submit.call(query_matches());
+                      }
+                  },
+                  onmounted: on_mounted,
+                }
+
+                label { r#for: "{id}",
+                  Icon {
+                    icon: ANGLE_DOWN_ICON,
+                    disabled,
+                    class: "dioxico-select-button-icon",
+                  }
                 }
               }
             }
+          },
+          position_x: PopoverPositionX::Center,
+          position_y: PopoverPositionY::Bottom,
+          class: "dioxico-select-dropdown",
+
+          // onmounted: move |element| {
+          //     popup_node.set(Some(element.data()));
+          // },
+          if S::HAS_NULL_OPTION {
+            div {
+              class: "dioxico-select-option",
+              onclick: move |_| {
+                  state.write().set_null_value();
+                  dropdown_open.set(false);
+              },
+
+              "{null_label}"
+            }
           }
 
-          div { class: "dioxico-select-dropdown",
-            div { class: "dioxico-select-popup",
-              // onmounted: move |element| {
-              //     popup_node.set(Some(element.data()));
-              // },
-              if S::HAS_NULL_OPTION {
-                div {
-                  class: "dioxico-select-option",
-                  onclick: move |_| {
-                      state.write().set_null_value();
-                      dropdown_open.set(false);
-                  },
+          for index in query_matches() {
+            div {
+              class: "dioxico-select-option",
+              onclick: move |_| {
+                  state.write().set_value(index);
+                  dropdown_open.set(false);
+              },
 
-                  "{null_label}"
-                }
-              }
-
-              for index in query_matches() {
-                div {
-                  class: "dioxico-select-option",
-                  onclick: move |_| {
-                      state.write().set_value(index);
-                      dropdown_open.set(false);
-                  },
-
-                  "{(option_str_fn.read().0)(&options.read()[index])}"
-                }
-              }
+              "{(option_str_fn.read().0)(&options.read()[index])}"
             }
           }
         }
@@ -919,9 +895,6 @@ pub fn SelectSearchable<T>(
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select input element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -949,7 +922,6 @@ where
         search_fn,
         on_submit,
         label,
-        position,
         on_mounted,
         required,
         disabled,
@@ -985,9 +957,6 @@ pub fn SelectSearchableNullable<T>(
     /// Select label element.
     #[props(default, into)]
     label: ElementLike,
-    /// Positioning of the popup.
-    #[props(default)]
-    position: SelectPopupPosition,
     /// Callback called when the select input element is mounted.
     #[props(default)]
     on_mounted: EventHandler<Event<MountedData>>,
@@ -1016,7 +985,6 @@ where
         on_submit,
         null_label,
         label,
-        position,
         on_mounted,
         required,
         disabled,
