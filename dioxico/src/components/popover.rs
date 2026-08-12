@@ -114,14 +114,11 @@ pub fn Popover(
 ) -> Element {
     let id = use_id();
 
-    use_effect({
-        let id = id.clone();
-        move || {
-            if state.get() {
-                open_popover(&id);
-            } else {
-                close_popover(&id);
-            }
+    use_effect(move || {
+        if state.get() {
+            open_popover(&id);
+        } else {
+            close_popover(&id);
         }
     });
 
@@ -168,21 +165,18 @@ pub fn Popover(
             format!("dioxico-popover-{}", pos.css_repr())), position_y.map(| pos |
             format!("dioxico-popover-{}", pos.css_repr())), class
         ),
-        id: "{id}",
-        ontoggle: move |_| {
-            let id = id.clone();
-            async move {
-                let open = is_popover_open(&id).await.unwrap();
+        id,
+        ontoggle: move |_| async move {
+            let open = is_popover_open(&id).await.unwrap();
 
-                if !open && state.get() {
-                    if close_on_dismiss {
-                        state.set(false);
-                    } else {
-                        open_popover(&id);
-                    }
-
-                    on_dismiss.call(());
+            if !open && state.get() {
+                if close_on_dismiss {
+                    state.set(false);
+                } else {
+                    open_popover(&id);
                 }
+
+                on_dismiss.call(());
             }
         },
         popover: popover_type.css_repr(),

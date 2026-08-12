@@ -167,7 +167,7 @@ pub fn Chips(
             .then_some("dioxico-chips-container-invalid"), class
         ),
         div { class: "dioxico-chips-label-container",
-          label { r#for: "{id}", class: "dioxico-chips-label", {label} }
+          label { r#for: id, class: "dioxico-chips-label", {label} }
         }
 
         Popover {
@@ -212,7 +212,7 @@ pub fn Chips(
                 input {
                   r#type: "text",
                   class: "dioxico-chips-input",
-                  id: "{id}",
+                  id,
                   value: next_chip,
                   oninput: move |event| next_chip.set(event.value()),
                   onkeydown: {

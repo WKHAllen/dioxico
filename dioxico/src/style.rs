@@ -1,7 +1,7 @@
 //! Utilities involving styling.
 
 use crate::util::*;
-use dioxus::document::{document, StyleProps};
+use dioxus::document::{StyleProps, document};
 use dioxus::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -24,7 +24,7 @@ pub fn DynamicStyle(
     // enough set of styles.
     document.create_style(
         StyleProps::builder()
-            .id(new_el_id.as_str())
+            .id(new_el_id)
             .children(children)
             .build(),
     );

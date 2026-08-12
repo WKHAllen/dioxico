@@ -71,7 +71,7 @@ pub fn Textarea(
         ),
 
         div { class: "dioxico-textarea-label-container",
-          label { class: "dioxico-textarea-label", r#for: "{id}",
+          label { class: "dioxico-textarea-label", r#for: id,
             {label}
 
             span { class: "dioxico-required-mark",

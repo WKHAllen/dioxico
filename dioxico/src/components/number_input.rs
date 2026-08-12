@@ -265,7 +265,7 @@ where
             .then_some("dioxico-input-container-disabled"), class
         ),
 
-        label { class: "dioxico-input-label", r#for: "{id}",
+        label { class: "dioxico-input-label", r#for: id,
           {label}
 
           span { class: "dioxico-required-mark",

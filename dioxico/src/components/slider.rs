@@ -51,7 +51,7 @@ where
             "dioxico-slider-container", disabled.then_some("dioxico-slider-disabled"), class
         ),
 
-        label { r#for: "{id}", class: "dioxico-slider-label", {label} }
+        label { r#for: id, class: "dioxico-slider-label", {label} }
 
         div { class: "dioxico-slider",
           div { class: "dioxico-slider-track",

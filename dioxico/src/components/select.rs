@@ -129,7 +129,7 @@ where
         ),
 
         div { class: "dioxico-select-label-container",
-          label { r#for: "{id}", class: "dioxico-select-label",
+          label { r#for: id, class: "dioxico-select-label",
             {label}
 
             span { class: "dioxico-required-mark",
@@ -151,7 +151,7 @@ where
               class: classes!(
                   "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
               ),
-              id: "{id}",
+              id,
               disabled,
               onclick: move |_| {
                   if !disabled {
@@ -363,7 +363,7 @@ where
         ),
 
         div { class: "dioxico-select-label-container",
-          label { r#for: "{id}", class: "dioxico-select-label",
+          label { r#for: id, class: "dioxico-select-label",
             {label}
 
             span { class: "dioxico-required-mark",
@@ -385,7 +385,7 @@ where
               class: classes!(
                   "dioxico-select-button", invalid.then_some("dioxico-select-button-invalid")
               ),
-              id: "{id}",
+              id,
               disabled,
               onclick: move |_| {
                   if !disabled {
@@ -753,7 +753,7 @@ where
         ),
 
         div { class: "dioxico-select-label-container",
-          label { r#for: "{id}", class: "dioxico-select-label",
+          label { r#for: id, class: "dioxico-select-label",
             {label}
 
             span { class: "dioxico-required-mark",
@@ -799,7 +799,7 @@ where
                 input {
                   r#type: "text",
                   class: "dioxico-select-search-input",
-                  id: "{id}",
+                  id,
                   disabled,
                   placeholder: "{null_label}",
                   value: search_query(),
@@ -821,7 +821,7 @@ where
                   onmounted: on_mounted,
                 }
 
-                label { r#for: "{id}",
+                label { r#for: id,
                   Icon {
                     icon: ANGLE_DOWN_ICON,
                     disabled,

@@ -64,11 +64,7 @@ pub fn FileSelect(
           disabled,
           onmounted: on_mounted_button,
 
-          label {
-            r#for: "{id}",
-            class: "dioxico-file-select-button-label",
-            {children}
-          }
+          label { r#for: id, class: "dioxico-file-select-button-label", {children} }
         }
 
         input {
@@ -150,7 +146,7 @@ pub fn FileDrop(
             }
         },
 
-        label { r#for: "{id}", class: "dioxico-file-drop-label",
+        label { r#for: id, class: "dioxico-file-drop-label",
           span { class: "dioxico-file-drop-label-text", {children} }
         }
 

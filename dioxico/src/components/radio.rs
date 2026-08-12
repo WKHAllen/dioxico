@@ -69,7 +69,7 @@ pub fn RadioGroup(
             input {
               r#type: "radio",
               class: "dioxico-radio-input",
-              id: "{id}",
+              id,
               name: "{name}",
               value: "{index}",
               oninput: move |_| state.set(Some(index)),
